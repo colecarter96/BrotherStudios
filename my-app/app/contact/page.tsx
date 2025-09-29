@@ -8,10 +8,8 @@ export default function Contact() {
   useEffect(() => {
     const initTypeform = () => {
       try {
-        // @ts-ignore
-        if (typeof window !== "undefined" && window.tf && typeof window.tf.load === "function") {
-          // @ts-ignore
-          window.tf.load();
+        if (typeof window !== "undefined" && (window as unknown as { tf?: { load?: () => void } }).tf?.load) {
+          (window as unknown as { tf?: { load?: () => void } }).tf?.load?.();
         }
       } catch {}
     };
@@ -30,7 +28,7 @@ export default function Contact() {
 
     return () => {
       clearTimeout(t);
-      existingScript?.removeEventListener("load", initTypeform as any);
+      existingScript?.removeEventListener("load", initTypeform as EventListener);
     };
   }, []);
   return (
@@ -45,11 +43,8 @@ export default function Contact() {
       </section>
       <Script src="https://embed.typeform.com/next/embed.js" strategy="afterInteractive" onLoad={() => {
         try {
-          // @ts-ignore
-          if (window.tf && typeof window.tf.load === "function") {
-            // @ts-ignore
-            window.tf.load();
-          }
+          const w = window as unknown as { tf?: { load?: () => void } };
+          w.tf?.load?.();
         } catch {}
       }} />
       <Footer />

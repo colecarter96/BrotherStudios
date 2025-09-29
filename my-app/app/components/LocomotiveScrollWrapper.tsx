@@ -11,7 +11,7 @@ export default function LocomotiveScrollWrapper({ children }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let scroll: any;
+    let scroll: { destroy: () => void } | null = null;
 
     (async () => {
       if (!containerRef.current) return;
@@ -30,6 +30,7 @@ export default function LocomotiveScrollWrapper({ children }: Props) {
 
     return () => {
       if (scroll) scroll.destroy();
+      scroll = null;
     };
   }, []);
 

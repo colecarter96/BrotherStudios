@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import type LocomotiveScroll from "locomotive-scroll";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const scrollRef = useRef<any>(null);
+  const scrollRef = useRef<LocomotiveScroll | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -24,13 +25,16 @@ export default function Header() {
         smooth: true,
       });
 
-      scrollRef.current.on("scroll", (obj: { scroll: { y: number } }) => {
-        setScrolled(obj.scroll.y > 0);
+      scrollRef.current.on("scroll", (...args: unknown[]) => {
+        const payload = (args && args[0] ? args[0] : {}) as { scroll?: { y?: number } };
+        const y = typeof payload?.scroll?.y === "number" ? payload.scroll.y : window.scrollY;
+        setScrolled(y > 0);
       });
     });
 
     return () => {
       scrollRef.current?.destroy();
+      scrollRef.current = null;
     };
   }, []);
 

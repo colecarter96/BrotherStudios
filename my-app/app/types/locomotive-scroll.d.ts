@@ -8,7 +8,7 @@ declare module "locomotive-scroll" {
       class?: string;
       smartphone?: { smooth: boolean };
       tablet?: { smooth: boolean };
-      [key: string]: any; // fallback for extra options
+      [key: string]: unknown; // fallback for extra options
     }
   
     export default class LocomotiveScroll {
@@ -19,8 +19,8 @@ declare module "locomotive-scroll" {
         target: string | HTMLElement | number,
         options?: { offset?: number; duration?: number; easing?: [number, number, number, number] }
       ): void;
-      on(event: string, callback: (...args: any[]) => void): void;
-      off(event: string, callback: (...args: any[]) => void): void;
+      on(event: string, callback: (...args: unknown[]) => void): void;
+      off(event: string, callback: (...args: unknown[]) => void): void;
     }
   }
   
