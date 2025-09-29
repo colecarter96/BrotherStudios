@@ -61,8 +61,8 @@ export default function About() {
                                 <p className="pt-10 font-medium tracking-tight text-xl">
                                     Bryce is really just about all things new and fun. He is 
                                     pursuing a degree in Computer Science at Miramar College and plans to transfer. He loves to longboard
-                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
-                                    In the colder months, dude has jeans on just about every day probably skating
+                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan and ocean/sunbleached hair.
+                                    In the colder months, dude has jeans on just about every day and is probably skating
                                     or maybe on his moped on the way to work. 
                                      
 

@@ -11,7 +11,7 @@ export default function Home() {
         // style={{ backgroundImage: "url('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max')" }}
       >
         <Image
-          src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max"
+          src="https://www.highsnobiety.com/static-assets/dato/1663200675-stussy-fw-19-campaign-003.jpg"
           alt="Background"
           fill
           className="object-cover"
