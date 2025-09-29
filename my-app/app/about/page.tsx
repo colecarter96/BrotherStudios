@@ -61,7 +61,7 @@ export default function About() {
                                 <p className="pt-10 font-medium tracking-tight text-xl">
                                     Bryce is really just about all things new and fun. He is 
                                     pursuing a degree in Computer Science at Miramar College and plans to transfer. He loves to longboard
-                                    and shortboard too. In the warmer months you'll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
+                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
                                     In the colder months, dude has jeans on just about every day probably skating
                                     or maybe on his moped on the way to work. 
                                      
@@ -71,7 +71,7 @@ export default function About() {
                                 <p className="pt-4 font-medium tracking-tight text-xl">
                                     He will never back down from trying something new, and he is a wizard 
                                     when it comes to hand eye coordination. If he could eat raw fish everyday he would
-                                    and if it wasn't raw fish, it would probably be ramen. His favorite show is the Office 
+                                    and if it wasn&apos;t raw fish, it would probably be ramen. His favorite show is the Office 
                                     and he probably knows all the lyrics to every song you can think of.
                                 </p>
                             </div>
@@ -83,7 +83,7 @@ export default function About() {
                                 <p className="pt-10 font-medium tracking-tight text-xl">
                                     Bryce is really just about all things new and fun. He is 
                                     pursuing a degree in Computer Science at Miramar College. He loves to longboard
-                                    and shortboard too. In the warmer months you'll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
+                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
                                     In the colder months, dude has jeans on just about every day probably skating
                                     or maybe on his moped on the way to work. 
                                     
@@ -93,7 +93,7 @@ export default function About() {
                                 <p className="pt-4 font-medium tracking-tight text-xl">
                                     He will never back down from trying something new, and he is a wizard 
                                     when it comes to hand eye coordination. If he could eat raw fish everyday he would
-                                    and if it wasn't raw fish, it would probably be ramen. His favorite show is the Office 
+                                    and if it wasn&apos;t raw fish, it would probably be ramen. His favorite show is the Office 
                                     and he probably knows all the lyrics to every song you can think of.
                                 </p>
                             </div>
@@ -117,7 +117,7 @@ export default function About() {
                                 <p className="pt-10 font-medium tracking-tight text-xl">
                                     Bryce is really just about all things new and fun. He is 
                                     pursuing a degree in Computer Science at Miramar College. He loves to longboard
-                                    and shortboard too. In the warmer months you'll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
+                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
                                     In the colder months, dude has jeans on just about every day probably skating
                                     or maybe on his moped on the way to work. 
                                      
@@ -127,7 +127,7 @@ export default function About() {
                                 <p className="pt-4 font-medium tracking-tight text-xl">
                                     He will never back down from trying something new, and he is a wizard 
                                     when it comes to hand eye coordination. If he could eat raw fish everyday he would
-                                    and if it wasn't raw fish, it would probably be ramen. His favorite show is the Office 
+                                    and if it wasn&apos;t raw fish, it would probably be ramen. His favorite show is the Office 
                                     and he probably knows all the lyrics to every song you can think of.
                                 </p>
                             </div>
@@ -139,7 +139,7 @@ export default function About() {
                                 <p className="pt-10 font-medium tracking-tight text-xl">
                                     Bryce is really just about all things new and fun. He is 
                                     pursuing a degree in Computer Science at Miramar College. He loves to longboard
-                                    and shortboard too. In the warmer months you'll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
+                                    and shortboard too. In the warmer months you&apos;ll find him with the gnarliest tan in the summer and ocean/sunbleached hair.
                                     In the colder months, dude has jeans on just about every day probably skating
                                     or maybe on his moped on the way to work. 
                                     
@@ -149,7 +149,7 @@ export default function About() {
                                 <p className="pt-4 font-medium tracking-tight text-xl">
                                     He will never back down from trying something new, and he is a wizard 
                                     when it comes to hand eye coordination. If he could eat raw fish everyday he would
-                                    and if it wasn't raw fish, it would probably be ramen. His favorite show is the Office 
+                                    and if it wasn&apos;t raw fish, it would probably be ramen. His favorite show is the Office 
                                     and he probably knows all the lyrics to every song you can think of.
                                 </p>
                             </div>
