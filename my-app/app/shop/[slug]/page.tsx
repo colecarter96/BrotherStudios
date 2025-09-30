@@ -7,8 +7,9 @@ export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = products.find((p) => p.slug === params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
   if (!product) return {};
   return {
     title: `${product.title} | Shop`,
@@ -17,8 +18,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = products.find((p) => p.slug === params.slug);
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
 
   return (
@@ -28,9 +30,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <Image src={product.images[0]} alt={product.title} fill className="object-contain" />
         </div>
         <div>
-          <h1 className="md:mt-10 text-3xl md:text-4xl font-semibold tracking-titter">{product.title}</h1>
-          <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-titter">${product.price.toFixed(2)}</p>
-          <p className="mt-10 text-3xl md:text-4xl font-semibold tracking-titter ">{product.description}</p>
+          <h1 className="md:mt-10 text-3xl md:text-4xl font-semibold tracking-tighter">{product.title}</h1>
+          <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
+          <p className="mt-10 text-3xl md:text-4xl font-semibold tracking-tighter ">{product.description}</p>
         </div>
       </section>
       <Footer />
