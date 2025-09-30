@@ -4,22 +4,25 @@ import { useEffect, useState, useRef } from "react";
 import type LocomotiveScroll from "locomotive-scroll";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const scrollRef = useRef<LocomotiveScroll | null>(null);
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // lazy import to avoid SSR errors
-    import("locomotive-scroll").then((LocomotiveScrollModule) => {
-      const LocomotiveScroll = LocomotiveScrollModule.default;
-
+    // lazy import and init if container exists
+    const tryInit = async () => {
       const container = document.querySelector("[data-scroll-container]");
       if (!(container instanceof HTMLElement)) return;
 
+      if (scrollRef.current) return; // already initialized
+
+      const LocomotiveScroll = (await import("locomotive-scroll")).default;
       scrollRef.current = new LocomotiveScroll({
         el: container,
         smooth: true,
@@ -30,12 +33,49 @@ export default function Header() {
         const y = typeof payload?.scroll?.y === "number" ? payload.scroll.y : window.scrollY;
         setScrolled(y > 0);
       });
-    });
+    };
+
+    tryInit();
 
     return () => {
       scrollRef.current?.destroy();
       scrollRef.current = null;
     };
+  }, []);
+
+  // On route changes, sync blur with current scroll position
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setScrolled(window.scrollY > 0);
+    }
+    // Re-init or destroy Locomotive based on presence of container
+    (async () => {
+      const container = document.querySelector("[data-scroll-container]");
+      const hasContainer = container instanceof HTMLElement;
+      if (hasContainer && !scrollRef.current) {
+        const LocomotiveScroll = (await import("locomotive-scroll")).default;
+        scrollRef.current = new LocomotiveScroll({ el: container as HTMLElement, smooth: true });
+        scrollRef.current.on("scroll", (...args: unknown[]) => {
+          const payload = (args && args[0] ? args[0] : {}) as { scroll?: { y?: number } };
+          const y = typeof payload?.scroll?.y === "number" ? payload.scroll.y : window.scrollY;
+          setScrolled(y > 0);
+        });
+      } else if (!hasContainer && scrollRef.current) {
+        scrollRef.current.destroy();
+        scrollRef.current = null;
+      }
+    })();
+  }, [pathname]);
+
+  // Always provide a native scroll fallback when Locomotive isn't active
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onScroll = () => {
+      if (scrollRef.current) return; // Locomotive will handle
+      setScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

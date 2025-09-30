@@ -16,7 +16,7 @@ export default function Home() {
           fill
           className="object-cover"
         />
-        <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-gray-200" data-scroll data-scroll-speed="5">
+        <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-gray-200" data-scroll data-scroll-speed="5">
           Two Brothers
         </h1>
       </section>
@@ -27,7 +27,7 @@ export default function Home() {
         className="h-[60dvh] flex items-center justify-center bg-white"
         data-scroll-section
       >
-        <h1 className="text-3xl md:text-6xl font-bold mx-[5%] md:mx-[15%]" data-scroll data-scroll-speed="-4">
+        <h1 className="text-3xl md:text-6xl font-bold mx-[5%] md:mx-[15%]" data-scroll data-scroll-speed="-3">
           A lifestyle brand born from brotherhood - digital stories and apparel that is built to last
         </h1>
       </section>
