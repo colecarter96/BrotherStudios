@@ -48,9 +48,10 @@ export default function Home() {
           <div
             data-scroll
             data-scroll-speed="2"
+            className="flex flex-col items-end md:items-start mr-2 md:mr-0 md:ml-2"
           >
             <h1 
-              className="font-semibold text-2xl md:text-4xl mb-6 pt-10 md:pt-10 text-right items-end text-blakc mix-blend-difference transition-all duration-300"
+              className="font-semibold text-2xl md:text-4xl mb-6 pt-2 md:pt-10 text-blakc mix-blend-difference transition-all duration-300"
               
             >
               Two Man Sticker
@@ -60,7 +61,7 @@ export default function Home() {
               href="/shop"
               className="font-semibold rounded-sm text-xl outline-4 outline-black px-3 py-2 w-fit 
                         text-black bg-white 
-                        mix-blend-difference transition-all duration-300"
+                        mix-blend-difference transition-all duration-300 items-end"
             >
               View Now 
             </Link>
