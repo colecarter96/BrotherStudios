@@ -62,7 +62,7 @@ export default function Home() {
                         text-black bg-white 
                         mix-blend-difference transition-all duration-300"
             >
-              View Now
+              View Now 
             </Link>
 
           </div>
