@@ -47,7 +47,7 @@ export default function Home() {
 
           <div
             data-scroll
-            data-scroll-speed="2"
+            data-scroll-speed="3"
             className="flex flex-col items-end md:items-start mr-2 md:mr-0 md:ml-2"
           >
             <h1 
