@@ -2,8 +2,11 @@ import Footer from "../components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { products } from "./products";
+import { redirect } from "next/navigation";
 
 export default function Shop() {
+    // Temporary: redirect /shop to the sticker product page
+    redirect('/shop/2-man-sticker');
     return (
     <>
         <div className="max-w-7xl mx-auto px-4 md:px-8">

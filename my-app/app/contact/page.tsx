@@ -35,7 +35,7 @@ export default function Contact() {
     <>
       <section className="py-40">
         <div className="w-[90vw] md:w-[80vw] max-w-5xl mx-auto px-0 md:px-4">
-          <p className="text-center text-sm md:text-base mb-6 font-medium">colescarter@gmail.com</p>
+          <p className="text-center text-sm md:text-base mb-6 font-medium">the.twobrothers.studios@gmail.com</p>
           <div className="w-full">
             <div data-tf-live="01K69JWTZAXPY11G6BMQR5Z2RQ" className="w-full" />
           </div>

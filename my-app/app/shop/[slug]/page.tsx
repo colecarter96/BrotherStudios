@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { products } from "../products";
 import Footer from "@/app/components/Footer";
+import BuyNowButton from "@/app/components/BuyNowButton";
 
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -32,7 +33,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div>
           <h1 className="md:mt-10 text-3xl md:text-4xl font-semibold tracking-tighter">{product.title}</h1>
           <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
+          {product.stripePriceId && (
+            <BuyNowButton priceId={product.stripePriceId} slug={product.slug} />
+          )}
           <p className="mt-10 text-3xl md:text-4xl font-semibold tracking-tighter ">{product.description}</p>
+          
         </div>
       </section>
       <Footer />
