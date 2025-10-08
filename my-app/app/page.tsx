@@ -32,8 +32,8 @@ export default function Home() {
         data-scroll-section
         className=" h-[70dvh] mx-2 md:mx-20"
       >
-        <div className="pt-26 flex flex-col md:flex-row justify-center space-x-0 md:space-x-8">
-          <div className="relative  w-[300px] lg:w-[500px] h-[300px] lg:h-[500px]"
+        <div className="pt-26 flex flex-row justify-center space-x-2 md:space-x-8">
+          <div className="relative  w-[150px] md:w-[300px] lg:w-[500px] h-[150px] md:h-[300px] lg:h-[500px]"
             data-scroll
             data-scroll-speed="4"
           >
