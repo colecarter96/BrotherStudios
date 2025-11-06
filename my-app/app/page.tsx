@@ -30,10 +30,10 @@ export default function Home() {
 
       <section
         data-scroll-section
-        className="relative overflow-hidden h-[70dvh] mx-2 md:mx-20"
+        className="relative z-50 overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
       >
-        <div className="pt-26 flex flex-col md:flex-row justify-center space-x-2 md:space-x-8">
-          <div className="relative  w-[300px] md:w-[300px] lg:w-[500px] h-[300px] md:h-[300px] lg:h-[500px]"
+        <div className="pt-26   flex flex-col md:flex-row justify-center space-x-2 md:space-x-8">
+          <div className="relative   w-[300px] md:w-[300px] lg:w-[500px] h-[300px] md:h-[300px] lg:h-[500px]"
             data-scroll
             data-scroll-speed="4"
           >
@@ -48,7 +48,7 @@ export default function Home() {
           <div
             data-scroll
             data-scroll-speed="3"
-            className="flex flex-col items-end md:items-start mr-2 md:mr-0 md:ml-2"
+            className="relative z-10 flex flex-col items-end md:items-start mr-2 md:mr-0 md:ml-2"
           >
             <h1 
               className="font-semibold text-2xl md:text-4xl mb-6 mr-8 md:mr-0 pt-2 md:pt-10 text-black mix-blend-difference transition-all duration-300"
@@ -75,14 +75,11 @@ export default function Home() {
 
       <section
         id="brand"
-        className="relative overflow-hidden h-[60dvh] flex items-center justify-center bg-white"
+        className="relative z-0 overflow-hidden h-[60dvh] flex items-center justify-center bg-white"
         data-scroll-section
       >
         <h1
-          className="text-3xl md:text-6xl pt-10 font-bold mx-[5%] md:mx-[15%]"
-          data-scroll
-          data-scroll-speed="1"
-          data-scroll-target="#brand"
+          className="text-3xl md:text-6xl pt-10 md:pt-0 font-bold mx-[5%] md:mx-[15%]"
         >
           A lifestyle brand born from brotherhood - digital stories and apparel that is built to last
         </h1>

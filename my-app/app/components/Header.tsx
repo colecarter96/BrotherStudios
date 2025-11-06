@@ -81,7 +81,7 @@ export default function Header() {
   return (
     <>
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-4 left-0 right-0 z-[70] px-4">
+      <div className="md:hidden fixed top-4 left-0 right-0 z-70 px-4">
         <div className={`flex items-center justify-between h-14 rounded-2xl px-4 `}>
           <Link href="/" aria-label="Home">
             <Image src="/logo.svg" alt="Logo" width={80} height={32} />
