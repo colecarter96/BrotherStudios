@@ -3,11 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 type CheckoutRequestBody = {
   priceId: string;
   quantity?: number;
+  metadata?: Record<string, string | number | boolean | null | undefined>;
 };
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as CheckoutRequestBody;
-  const { priceId, quantity = 1 } = body;
+  const { priceId, quantity = 1, metadata } = body;
 
   if (!priceId) {
     return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
 
     const shippingRateId = process.env.STRIPE_SHIPPING_RATE_ID; // optional
 
+    const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [
@@ -56,6 +58,23 @@ export async function POST(req: NextRequest) {
       ],
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+      metadata: {
+        slug,
+        ...(metadata || {}),
+      },
+      payment_intent_data: {
+        metadata: {
+          slug,
+          ...(metadata || {}),
+        },
+      },
+      ...(size
+        ? {
+            custom_text: {
+              submit: { message: `Selected size: ${size}` },
+            },
+          }
+        : {}),
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
