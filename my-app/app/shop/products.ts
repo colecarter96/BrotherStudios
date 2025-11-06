@@ -50,7 +50,7 @@ export const products: Product[] = [
     slug: "la-apparel-tee",
     title: "LA Apparel Tee",
     price: 32,
-    images: ["https://cdn.dtlaprint.com/wp-content/uploads/local/products/LA/LAA1201WGD-3038666-front.jpg"],
+    images: ["https://skysportswear.com/cdn/shop/files/VintageBlack_Front.png?v=1755915444&width=1445"],
     description: "Placeholder tee. Product details coming soon.",
   },
 ];
