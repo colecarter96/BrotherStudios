@@ -45,7 +45,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const shippingRateId = process.env.STRIPE_SHIPPING_RATE_ID; // optional
+    const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
+    const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
+    const shippingRateId = slug === "2-man-sticker" && shippingRateSticker
+      ? shippingRateSticker
+      : shippingRateDefault;
 
     const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
     const session = await stripe.checkout.sessions.create({
