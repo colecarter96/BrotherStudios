@@ -16,12 +16,14 @@ export const products: Product[] = [
     description: "2x2in Vinyl Sticker. Stick it wherever you want...",
     stripePriceId: "price_1SFmIeP6lKVtJIIMWxLCJ91R",
   },
+  // Dog Tee (second in list)
   {
     slug: "dog-tee",
     title: "Dog Tee",
-    price: 28,
-    images: ["/2manblackstickimg.svg"],
-    description: "Placeholder tee. Product details coming soon.",
+    price: 20,
+    images: ["/dogTeeFront.png", "/dogTeeBack.png"],
+    description: "Premium cotton tee with our dog graphic.",
+    stripePriceId: "price_1SQXfCP6lKVtJIIMGcbd7Pf6",
   },
   {
     slug: "plus-hoodie",

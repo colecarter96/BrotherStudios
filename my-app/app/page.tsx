@@ -32,13 +32,13 @@ export default function Home() {
         data-scroll-section
         className="relative overflow-hidden h-[70dvh] mx-2 md:mx-20"
       >
-        <div className="pt-26 flex flex-row justify-center space-x-2 md:space-x-8">
-          <div className="relative  w-[150px] md:w-[300px] lg:w-[500px] h-[150px] md:h-[300px] lg:h-[500px]"
+        <div className="pt-26 flex flex-col md:flex-row justify-center space-x-2 md:space-x-8">
+          <div className="relative  w-[300px] md:w-[300px] lg:w-[500px] h-[300px] md:h-[300px] lg:h-[500px]"
             data-scroll
             data-scroll-speed="4"
           >
             <Image
-              src="/2manblackstickimg.svg"
+              src="/dogTeeBack.png"
               alt="Background"
               fill
               className="object-cover"
@@ -51,15 +51,15 @@ export default function Home() {
             className="flex flex-col items-end md:items-start mr-2 md:mr-0 md:ml-2"
           >
             <h1 
-              className="font-semibold text-2xl md:text-4xl mb-6 pt-2 md:pt-10 text-blakc mix-blend-difference transition-all duration-300"
+              className="font-semibold text-2xl md:text-4xl mb-6 mr-8 md:mr-0 pt-2 md:pt-10 text-black mix-blend-difference transition-all duration-300"
               
             >
-              Two Man Sticker
+              Dog Tee
             </h1>
             
             <Link
               href="/shop"
-              className="font-semibold rounded-sm text-xl outline-4 outline-black px-3 py-2 w-fit 
+              className="font-semibold rounded-sm text-xl mr-8 md:mr-0 outline-4 outline-black px-3 py-2 w-fit 
                         text-black bg-white 
                         mix-blend-difference transition-all duration-300 items-end"
             >
