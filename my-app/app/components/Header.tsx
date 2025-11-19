@@ -108,7 +108,7 @@ export default function Header() {
 
       {/* Mobile Fullscreen Menu */}
       {menuOpen && (
-        <div className="md:hidden fixed inset-0 z-[60] bg-white/10 backdrop-blur-lg transition-all duration-300 animate-[fade-in_0.25s_ease-out]">
+        <div className="md:hidden fixed inset-0 z-[100] bg-white/10 backdrop-blur-lg transition-all duration-300 animate-[fade-in_0.25s_ease-out]">
           <nav className="h-full w-full flex items-center">
             <ul className="text-5xl font-semibold tracking-tighter space-y-4 text-left px-8">
               <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards]">
@@ -132,7 +132,7 @@ export default function Header() {
       <header
         className={`hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 w-[95vw] rounded-3xl z-50 transition-colors duration-300 ${
           scrolled ? "bg-white/10 backdrop-blur-lg" : "bg-transparent"
-        } items-center justify-between px-6 h-20 text-lg font-bold`}
+        } items-center justify-between px-6 h-20 text-xl font-semibold`}
       >
         <div className="flex ml-10 space-x-8">
           <button><Link href="/shop">Shop</Link></button>

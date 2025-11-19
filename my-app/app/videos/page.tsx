@@ -9,11 +9,18 @@ type VideoItem = {
 
 const videos: VideoItem[] = [
   {
+    id:"bQBR0hCGSFI",
+    title: "Baking Saucies",
+    date: "Nov 6, 2025",
+    description: "Bryce and Cole try and bake brownies with no cocoa poweder or brownie mix",
+  },
+  {
     id: "LWMs_Pztv_0",
     title: "That's Embarrasing - Obama Batman",
     date: "Oct 6, 2025",
     description: "Bryce and Cole tell stories that still haunt and embarrass them.",
   },
+  
 ];
 
 export default function Videos() {

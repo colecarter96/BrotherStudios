@@ -30,7 +30,7 @@ export default function Home() {
 
       <section
         data-scroll-section
-        className="relative z-50 overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
+        className="relative z-[50] overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
       >
         <div className="pt-26   flex flex-col md:flex-row justify-center space-x-2 md:space-x-8">
           <div className="relative   w-[300px] md:w-[300px] lg:w-[500px] h-[300px] md:h-[300px] lg:h-[500px]"

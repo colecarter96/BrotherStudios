@@ -20,38 +20,18 @@ export const products: Product[] = [
   {
     slug: "dog-tee",
     title: "Dog Tee",
-    price: 20,
+    price: 25,
     images: ["/dogTeeFront.png", "/dogTeeBack.png"],
     description: "Premium cotton tee with our dog graphic.",
     stripePriceId: "price_1SQXfCP6lKVtJIIMGcbd7Pf6",
   },
   {
     slug: "plus-hoodie",
-    title: "Plus Hoodie",
-    price: 78,
-    images: ["/2manblackstickimg.svg"],
-    description: "Placeholder hoodie. Product details coming soon.",
+    title: "TBS Snap Plus Hoodie",
+    price: 55,
+    images: ["/plusHoodieBack.png", "/plusHoodieFront.png"],
+    description: "Snap Closure with Blue plus on the back and TBS Oval Logo on the Front. Email or fill out contact form to order!",
   },
-  {
-    slug: "dickies-double-knee",
-    title: "Dickies Double Knee",
-    price: 68,
-    images: ["https://510skateboarding.com/cdn/shop/files/dickies-double-knee-black_600x.jpg?v=1685579969"],
-    description: "Placeholder pants. Product details coming soon.",
-  },
-  {
-    slug: "la-apparel-hoodie",
-    title: "LA Apparel Hoodie",
-    price: 64,
-    images: ["https://losangelesapparel.net/cdn/shop/files/Hf_09BlackFlat.jpg?v=1745000864&width=3000"],
-    description: "Placeholder hoodie. Product details coming soon.",
-  },
-  {
-    slug: "la-apparel-tee",
-    title: "LA Apparel Tee",
-    price: 32,
-    images: ["https://skysportswear.com/cdn/shop/files/VintageBlack_Front.png?v=1755915444&width=1445"],
-    description: "Placeholder tee. Product details coming soon.",
-  },
+  
 ];
 

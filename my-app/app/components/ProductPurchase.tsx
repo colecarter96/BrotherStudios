@@ -19,7 +19,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
     <div className="mt-8">
       {showSize && (
         <div className="mb-4">
-          <label htmlFor="size" className="block text-sm font-semibold mb-2">Size</label>
+          <label htmlFor="size" className="block text-base md:text-lg font-semibold mb-2">Size</label>
           <select
             id="size"
             className="border border-black/20 rounded-md px-3 py-2 w-full max-w-xs"
