@@ -5,8 +5,11 @@ import Header from './components/Header';
 
 
 export const metadata: Metadata = {
-  title: "Brother Studios",
-  description: "Two Brothers Making Stuff",
+  title: "Two Brothers Steetwear",
+  description: "Two Brothers is a modern streetwear brand rooted in the past, built on minimalist silhouettes, functional designs, and off-white/off-black aesthetics. Explore our hoodies, tees, and more!",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
