@@ -17,6 +17,7 @@ export default function Home() {
           fill
           className="object-cover"
         />
+        <h1 className="hidden">Two Brothers Streetwear</h1>
         <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-black" data-scroll data-scroll-speed="5">
           Two Brothers
         </h1>
