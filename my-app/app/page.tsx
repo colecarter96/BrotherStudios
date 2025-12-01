@@ -37,13 +37,9 @@ export default function Home() {
           </video>
           {/* Mobile: stationary overlay (no Locomotive) */}
           <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
-            <Image
-              src="/twoBrothersCapitalDark.svg"
-              alt="Two Brothers Logo"
-              width={1400}
-              height={800}
-              className="w-3/4 md:w-2/3 h-auto object-contain"
-            />
+            <span className="block text-[#333333] font-bold text-5xl sm:text-6xl tracking-tight text-center">
+              TWO BROTHERS
+            </span>
           </div>
           {/* Desktop: parallax overlay */}
           <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-5">
