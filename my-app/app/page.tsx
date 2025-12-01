@@ -37,7 +37,7 @@ export default function Home() {
           </video>
           {/* Mobile: stationary overlay (no Locomotive) */}
           <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
-            <span className="block text-[#333333] font-bold text-5xl sm:text-6xl tracking-tight text-center">
+            <span className="block text-[#333333] font-bold text-3xl sm:text-4xl tracking-tighter text-center">
               TWO BROTHERS
             </span>
           </div>

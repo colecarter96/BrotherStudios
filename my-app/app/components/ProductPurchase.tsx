@@ -13,6 +13,7 @@ interface ProductPurchaseProps {
 export default function ProductPurchase({ slug, stripePriceId, enableSizes }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
+  const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" });
   const { addItem } = useCart();
 
   const showSize = !!enableSizes;
@@ -36,6 +37,9 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
             <option value="L">Large</option>
             <option value="XL">X-Large</option>
           </select>
+          {!sizeValid && (
+            <div className="mt-2 text-sm text-red-600">Please select a size.</div>
+          )}
         </div>
       )}
 
@@ -55,20 +59,49 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
         <button
           disabled={!canAdd}
           onClick={() => {
-            if (!stripePriceId) return;
-            addItem({
-              priceId: stripePriceId,
-              quantity,
-              size: showSize ? size : undefined,
-              slug,
-            });
+            setMessage({ type: "", text: "" });
+            if (!stripePriceId) {
+              setMessage({ type: "error", text: "This product is not available right now." });
+              return;
+            }
+            if (showSize && !size) {
+              setMessage({ type: "error", text: "Please select a size." });
+              return;
+            }
+            try {
+              addItem({
+                priceId: stripePriceId,
+                quantity,
+                size: showSize ? size : undefined,
+                slug,
+              });
+              setMessage({ type: "success", text: "Added to bag." });
+              setTimeout(() => setMessage({ type: "", text: "" }), 1800);
+            } catch {
+              setMessage({ type: "error", text: "Could not add to bag. Please try again." });
+            }
           }}
-          className="mt-6 inline-flex items-center justify-center outline-solid outline-3 rounded-xs px-4 py-1 w-full  bg-white text-black font-semibold text-sm md:text-lg"
+          className="mt-6 inline-flex items-center justify-center outline-solid outline-3 rounded-xs px-4 py-1 w-full  bg-white text-black font-semibold text-sm md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Add to Bag
         </button>
 
-        <BuyNowButton priceId={stripePriceId || ""} slug={slug} metadata={showSize ? { size } : undefined} disabled={!sizeValid} />
+        <BuyNowButton
+          priceId={stripePriceId || ""}
+          slug={slug}
+          metadata={showSize ? { size } : undefined}
+          disabled={!sizeValid}
+        />
+
+        {message.text && (
+          <div
+            className={`mt-3 text-sm ${message.type === "success" ? "text-green-700" : "text-red-600"}`}
+            role="status"
+            aria-live="polite"
+          >
+            {message.text}
+          </div>
+        )}
       </div>
     </div>
   );

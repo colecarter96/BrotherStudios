@@ -10,13 +10,13 @@ type VideoItem = {
 const videos: VideoItem[] = [
   {
     id:"bQBR0hCGSFI",
-    title: "Baking Saucies",
+    title: "BAKING SAUCIES",
     date: "Nov 6, 2025",
     description: "Bryce and Cole try and bake brownies with no cocoa poweder or brownie mix",
   },
   {
     id: "LWMs_Pztv_0",
-    title: "That's Embarrasing - Obama Batman",
+    title: "THAT'S EMBARASSING - OBAMA BATMAN",
     date: "Oct 6, 2025",
     description: "Bryce and Cole tell stories that still haunt and embarrass them.",
   },
@@ -43,9 +43,9 @@ export default function Videos() {
                 </div>
               </div>
               <div className="md:col-span-3">
-                <h2 className="text-2xl md:text-3xl font-semibold tracking-tighter">{v.title}</h2>
-                <p className="mt-2 text-sm font-medium opacity-70">{v.date}</p>
-                <p className="mt-4 text-base md:text-lg">{v.description}</p>
+                <h2 className="text-xl md:text-2xl font-semibold tracking-tighter">{v.title}</h2>
+                <p className="mt-0 text-sm font-medium opacity-70">{v.date}</p>
+                <p className="mt-2 text-base md:text-md">{v.description}</p>
               </div>
             </article>
           ))}

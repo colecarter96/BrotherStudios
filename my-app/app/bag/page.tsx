@@ -20,7 +20,7 @@ export default function BagPage() {
 
   return (
     <section className="max-w-4xl mx-auto px-6 pt-36 pb-16">
-      <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter mb-8">Your Bag</h1>
+      <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter mb-8">YOUR SWAG</h1>
 
       {!hasItems && (
         <div className="text-lg">
@@ -90,7 +90,7 @@ export default function BagPage() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
               onClick={checkout}
-              className="inline-flex items-center justify-center outline-solid outline-4 rounded-sm px-6 py-2 md:hover:bg-black md:hover:text-white bg-white text-black font-semibold text-sm md:text-lg"
+              className="inline-flex items-center justify-center rounded-xs px-6 py-2 bg-black text-white font-semibold text-sm md:text-lg"
             >
               Checkout
             </button>

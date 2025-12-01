@@ -10,7 +10,7 @@ export type Product = {
 export const products: Product[] = [
   {
     slug: "2-man-sticker",
-    title: "Two Man Sticker",
+    title: "TWO MAN STICKER",
     price: 2.0,
     images: ["/2manblackstickimg.svg"],
     description: "2x2in Vinyl Sticker. Stick it wherever you want...",
@@ -19,7 +19,7 @@ export const products: Product[] = [
   // Dog Tee (second in list)
   {
     slug: "dog-tee",
-    title: "Dog Tee",
+    title: "DOG TEE",
     price: 25,
     images: ["/dogTeeFront.png", "/dogTeeBack.png"],
     description: "Premium cotton tee with our dog graphic.",
@@ -27,7 +27,7 @@ export const products: Product[] = [
   },
   {
     slug: "plus-hoodie",
-    title: "TBS Snap Plus Hoodie",
+    title: "TBS SNAP PLUS HOODIE",
     price: 55,
     images: ["/plusHoodieBack.png", "/plusHoodieFront.png"],
     description: "Snap Closure with Blue plus on the back and TBS Oval Logo on the Front. Email or fill out contact form to order!",
