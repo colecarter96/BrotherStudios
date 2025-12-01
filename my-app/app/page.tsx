@@ -22,7 +22,7 @@ export default function Home() {
           Two Brothers
         </h1> */}
 
-        <div className="relative mx-auto w-[90vw] md:w-[80vw] h-[80vh] max-w-[1400px]" data-scroll data-scroll-speed="-2">
+        <div className="relative mx-auto w-[90vw] md:w-[80vw] h-[80vh] max-w-[1400px]">
           <video
             className="w-full h-full object-contain"
             autoPlay
@@ -35,7 +35,18 @@ export default function Home() {
             <source src="/output_6s.webm" type="video/webm" />
             <source src="/output_6s.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 z-10 flex items-center justify-center" data-scroll data-scroll-speed="-5">
+          {/* Mobile: stationary overlay (no Locomotive) */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
+            <Image
+              src="/twoBrothersCapitalDark.svg"
+              alt="Two Brothers Logo"
+              width={1400}
+              height={800}
+              className="w-3/4 md:w-2/3 h-auto object-contain"
+            />
+          </div>
+          {/* Desktop: parallax overlay */}
+          <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-5">
             <Image
               src="/twoBrothersCapitalDark.svg"
               alt="Two Brothers Logo"
@@ -101,11 +112,11 @@ export default function Home() {
 
       <section
         id="brand"
-        className="relative z-0 overflow-hidden h-[60dvh] flex items-center justify-center bg-white"
+        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center justify-center bg-white"
         data-scroll-section
       >
         <h1
-          className="text-3xl lg:text-5xl xl:text-6xl pt-10 md:pt-0 font-bold mx-[5%] md:mx-[15%]"
+          className="text-3xl lg:text-5xl xl:text-6xl pt-0 font-bold mx-[5%] md:mx-[15%]"
         >
           A lifestyle brand born from brotherhood - digital stories and apparel that is built to last
         </h1>
