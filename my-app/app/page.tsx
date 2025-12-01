@@ -11,16 +11,27 @@ export default function Home() {
         data-scroll-section
         // style={{ backgroundImage: "url('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max')" }}
       >
-        <Image
+        {/* <Image
           src="https://static.vecteezy.com/system/resources/previews/002/223/740/large_2x/horizontal-cement-and-concrete-texture-for-pattern-and-design-free-photo.jpg"
           alt="Background"
           fill
           className="object-cover"
-        />
+        /> */}
         <h1 className="hidden">Two Brothers Streetwear</h1>
-        <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-black" data-scroll data-scroll-speed="5">
+        {/* <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-black" data-scroll data-scroll-speed="5">
           Two Brothers
-        </h1>
+        </h1> */}
+
+        <div className="w-3/4 md:w-1/2 mx-auto" data-scroll data-scroll-speed="-5">
+          <Image
+            src="/twoBrothersCapitalDark.svg"
+            alt="Two Brothers Logo"
+            width={1400}
+            height={800}
+            className="w-full h-auto object-contain"
+          />
+        </div>
+        
       </section>
 
 
@@ -31,7 +42,7 @@ export default function Home() {
 
       <section
         data-scroll-section
-        className="relative z-[50] overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
+        className="relative z-[10] overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
       >
         <div className="pt-26   flex flex-col md:flex-row justify-center space-x-2 md:space-x-8">
           <div className="relative   w-[300px] md:w-[300px] lg:w-[500px] h-[300px] md:h-[300px] lg:h-[500px]"

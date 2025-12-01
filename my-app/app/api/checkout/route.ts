@@ -1,23 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 
-type CheckoutRequestBody = {
+type CheckoutLineItem = {
   priceId: string;
   quantity?: number;
   metadata?: Record<string, string | number | boolean | null | undefined>;
 };
 
+type CheckoutRequestBody =
+  | {
+      priceId: string;
+      quantity?: number;
+      metadata?: Record<string, string | number | boolean | null | undefined>;
+    }
+  | {
+      items: CheckoutLineItem[];
+      metadata?: Record<string, string | number | boolean | null | undefined>;
+    };
+
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as CheckoutRequestBody;
-  const { priceId, quantity = 1, metadata } = body;
-
-  if (!priceId) {
-    return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
-  }
+  const isBatch = "items" in body;
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const slug = req.nextUrl.searchParams.get("slug") || "";
-  const successUrl = process.env.NEXT_PUBLIC_STRIPE_SUCCESS_URL || `${req.nextUrl.origin}/shop/${slug}?success=1`;
-  const cancelUrl = process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL || `${req.nextUrl.origin}/shop/${slug}?canceled=1`;
+  const successUrl =
+    process.env.NEXT_PUBLIC_STRIPE_SUCCESS_URL ||
+    `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?success=1`;
+  const cancelUrl =
+    process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL ||
+    `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?canceled=1`;
 
   if (!stripeSecretKey) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
@@ -27,23 +38,21 @@ export async function POST(req: NextRequest) {
   const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
 
   try {
-    // Allow passing either a Price ID (price_...) or Product ID (prod_...)
-    let resolvedPriceId = priceId;
-    if (priceId.startsWith("prod_")) {
-      const product = await stripe.products.retrieve(priceId);
-      const dp = product.default_price;
-      if (typeof dp === "string" && dp.startsWith("price_")) {
-        resolvedPriceId = dp;
-      } else {
-        // Fallback to first active price for the product
+    const resolvePriceId = async (maybeProductOrPriceId: string) => {
+      if (maybeProductOrPriceId.startsWith("prod_")) {
+        const product = await stripe.products.retrieve(maybeProductOrPriceId);
+        const dp = product.default_price;
+        if (typeof dp === "string" && dp.startsWith("price_")) {
+          return dp;
+        }
         const prices = await stripe.prices.list({ product: product.id, active: true, limit: 1 });
         if (prices.data[0]?.id) {
-          resolvedPriceId = prices.data[0].id;
-        } else {
-          return NextResponse.json({ error: "No active price found for product" }, { status: 400 });
+          return prices.data[0].id;
         }
+        throw new Error("No active price found for product");
       }
-    }
+      return maybeProductOrPriceId;
+    };
 
     const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
     const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
@@ -51,34 +60,83 @@ export async function POST(req: NextRequest) {
       ? shippingRateSticker
       : shippingRateDefault;
 
-    const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
+    if (!isBatch) {
+      const { priceId, quantity = 1, metadata } = body as Extract<CheckoutRequestBody, { priceId: string }>;
+      if (!priceId) {
+        return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+      }
+      const resolvedPriceId = await resolvePriceId(priceId);
+      const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [
+          {
+            price: resolvedPriceId,
+            quantity,
+          },
+        ],
+        shipping_address_collection: { allowed_countries: ["US"] },
+        shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+        metadata: {
+          slug,
+          ...(metadata || {}),
+        },
+        payment_intent_data: {
+          metadata: {
+            slug,
+            ...(metadata || {}),
+          },
+        },
+        ...(size
+          ? {
+              custom_text: {
+                submit: { message: `Selected size: ${size}` },
+              },
+            }
+          : {}),
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+      });
+      return NextResponse.json({ url: session.url }, { status: 200 });
+    }
+
+    // Batch mode
+    const { items, metadata } = body as Extract<CheckoutRequestBody, { items: CheckoutLineItem[] }>;
+    if (!Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: "No items provided" }, { status: 400 });
+    }
+
+    const lineItems: { price: string; quantity?: number }[] = [];
+    const cartMetaCompact: Array<{ size?: string | null; quantity?: number | null }> = [];
+    for (const item of items) {
+      const resolvedPriceId = await resolvePriceId(item.priceId);
+      lineItems.push({ price: resolvedPriceId, quantity: item.quantity ?? 1 });
+      cartMetaCompact.push({
+        size: typeof item.metadata?.size === "string" ? item.metadata.size : null,
+        quantity: typeof item.quantity === "number" ? item.quantity : 1,
+      });
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [
-        {
-          price: resolvedPriceId,
-          quantity,
-        },
-      ],
+      line_items: lineItems,
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
       metadata: {
         slug,
         ...(metadata || {}),
+        cart: JSON.stringify(cartMetaCompact),
       },
       payment_intent_data: {
         metadata: {
           slug,
           ...(metadata || {}),
+          cart: JSON.stringify(cartMetaCompact),
         },
       },
-      ...(size
-        ? {
-            custom_text: {
-              submit: { message: `Selected size: ${size}` },
-            },
-          }
-        : {}),
+      custom_text: {
+        submit: { message: `Thanks! Your selected sizes are saved with the order.` },
+      },
       success_url: successUrl,
       cancel_url: cancelUrl,
     });

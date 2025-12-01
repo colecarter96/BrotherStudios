@@ -5,6 +5,7 @@ import type LocomotiveScroll from "locomotive-scroll";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import BagButton from "./BagButton";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -86,23 +87,26 @@ export default function Header() {
           <Link href="/" aria-label="Home">
             <Image src="/logo.svg" alt="Logo" width={80} height={32} />
           </Link>
-          <button
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-            className="relative w-8 h-6 flex items-center justify-center"
-          >
-            <span
-              className={`absolute block h-[3px] w-12 bg-black transition-transform duration-300 ${
-                menuOpen ? "rotate-45 translate-y-[0px]" : "-translate-y-[5px]"
-              }`}
-            />
-            <span
-              className={`absolute block h-[3px] w-12 bg-black transition-transform duration-300 ${
-                menuOpen ? "-rotate-45 -translate-y-[0px]" : "translate-y-[5px]"
-              }`}
-            />
-          </button>
+          <div className="flex items-center gap-3">
+            <BagButton />
+            <button
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((v) => !v)}
+              className="relative w-8 h-6 flex items-center justify-center"
+            >
+              <span
+                className={`absolute block h-[3px] w-12 bg-black transition-transform duration-300 ${
+                  menuOpen ? "rotate-45 translate-y-[0px]" : "-translate-y-[5px]"
+                }`}
+              />
+              <span
+                className={`absolute block h-[3px] w-12 bg-black transition-transform duration-300 ${
+                  menuOpen ? "-rotate-45 -translate-y-[0px]" : "translate-y-[5px]"
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -129,23 +133,19 @@ export default function Header() {
       )}
 
       {/* Desktop Header */}
-      <header
-        className={`hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 w-[95vw] rounded-3xl z-50 transition-colors duration-300 ${
-          scrolled ? "bg-white/10 backdrop-blur-lg" : "bg-transparent"
-        } items-center justify-between px-6 h-20 text-xl font-semibold`}
-      >
-        <div className="flex ml-10 space-x-8">
-          <button><Link href="/shop">Shop</Link></button>
-          <button><Link href="/about">About</Link></button>
-        </div>
+      <header className={`hidden md:flex fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? "bg-white/70 backdrop-blur-md" : "bg-transparent"} h-16`}>
+        <div className="mx-auto w-[90vw] flex items-center justify-between">
+          {/* Left: Two-man logo -> home */}
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.svg" alt="Two Brothers" width={60} height={60} />
+          </Link>
 
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <Link href="/"><Image src="/logo.svg" alt="Logo" width={100} height={40} /></Link>
-        </div>
-
-        <div className="flex mr-10 space-x-8">
-          <button><Link href="/contact">Contact</Link></button>
-          <button><Link href="/videos">Videos</Link></button>
+          {/* Right: Shop and Bag */}
+          <nav className="flex items-center gap-6 text-md font-semibold">
+            <Link href="/shop" className="hover:opacity-80 transition">SHOP</Link>
+            <Link href="/videos" className="hover:opacity-80 transition">VIDEOS</Link>
+            <BagButton />
+          </nav>
         </div>
       </header>
     </>

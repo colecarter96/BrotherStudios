@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import BuyNowButton from "@/app/components/BuyNowButton";
+import { useCart } from "@/app/components/useCart";
 
 interface ProductPurchaseProps {
   slug: string;
@@ -11,9 +12,12 @@ interface ProductPurchaseProps {
 
 export default function ProductPurchase({ slug, stripePriceId, enableSizes }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(1);
+  const { addItem } = useCart();
 
   const showSize = !!enableSizes;
   const sizeValid = !showSize || Boolean(size);
+  const canAdd = Boolean(stripePriceId) && sizeValid && quantity >= 1;
 
   return (
     <div className="mt-8">
@@ -35,7 +39,37 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
         </div>
       )}
 
-      <BuyNowButton priceId={stripePriceId || ""} slug={slug} metadata={showSize ? { size } : undefined} disabled={!sizeValid} />
+      <div className="flex items-end gap-3">
+        <div>
+          <label htmlFor="qty" className="block text-base md:text-lg font-semibold mb-2">Quantity</label>
+          <input
+            id="qty"
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))}
+            className="border border-black/20 rounded-md px-3 py-2 w-24"
+          />
+        </div>
+
+        <button
+          disabled={!canAdd}
+          onClick={() => {
+            if (!stripePriceId) return;
+            addItem({
+              priceId: stripePriceId,
+              quantity,
+              size: showSize ? size : undefined,
+              slug,
+            });
+          }}
+          className="mt-6 inline-flex items-center justify-center outline-solid outline-4 rounded-sm px-6 py-2 md:hover:bg-black md:hover:text-white bg-white text-black font-semibold text-sm md:text-lg disabled:opacity-50"
+        >
+          Add to Bag
+        </button>
+
+        <BuyNowButton priceId={stripePriceId || ""} slug={slug} metadata={showSize ? { size } : undefined} disabled={!sizeValid} />
+      </div>
     </div>
   );
 }
