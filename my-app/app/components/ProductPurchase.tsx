@@ -39,7 +39,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
         </div>
       )}
 
-      <div className="flex items-end gap-3">
+      <div className="flex items-start flex-col">
         <div>
           <label htmlFor="qty" className="block text-base md:text-lg font-semibold mb-2">Quantity</label>
           <input
@@ -63,7 +63,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
               slug,
             });
           }}
-          className="mt-6 inline-flex items-center justify-center outline-solid outline-4 rounded-sm px-6 py-2 md:hover:bg-black md:hover:text-white bg-white text-black font-semibold text-sm md:text-lg disabled:opacity-50"
+          className="mt-6 inline-flex items-center justify-center outline-solid outline-3 rounded-xs px-4 py-1 w-full  bg-white text-black font-semibold text-sm md:text-lg"
         >
           Add to Bag
         </button>

@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <LocomotiveScrollWrapper>
       <section
-        className="h-[90dvh] flex items-center justify-center bg-white"
+        className="h-[100dvh] flex items-center justify-center bg-white"
         data-scroll-section
         // style={{ backgroundImage: "url('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max')" }}
       >
@@ -22,14 +22,28 @@ export default function Home() {
           Two Brothers
         </h1> */}
 
-        <div className="w-3/4 md:w-1/2 mx-auto" data-scroll data-scroll-speed="-5">
-          <Image
-            src="/twoBrothersCapitalDark.svg"
-            alt="Two Brothers Logo"
-            width={1400}
-            height={800}
-            className="w-full h-auto object-contain"
-          />
+        <div className="relative mx-auto w-[90vw] md:w-[80vw] h-[80vh] max-w-[1400px]" data-scroll data-scroll-speed="-2">
+          <video
+            className="w-full h-full object-contain"
+            autoPlay
+            muted
+            playsInline
+            loop
+            preload="metadata"
+            aria-label="Brand hero video"
+          >
+            <source src="/output_6s.webm" type="video/webm" />
+            <source src="/output_6s.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 z-10 flex items-center justify-center" data-scroll data-scroll-speed="-5">
+            <Image
+              src="/twoBrothersCapitalDark.svg"
+              alt="Two Brothers Logo"
+              width={1400}
+              height={800}
+              className="w-3/4 md:w-2/3 h-auto object-contain"
+            />
+          </div>
         </div>
         
       </section>
@@ -40,7 +54,7 @@ export default function Home() {
 
       
 
-      <section
+      {/* <section
         data-scroll-section
         className="relative z-[10] overflow-hidden min-h-[80dvh] mx-2 md:mx-20 py-10 pb-16 md:pb-5"
       >
@@ -83,7 +97,7 @@ export default function Home() {
         
         
 
-      </section>
+      </section> */}
 
       <section
         id="brand"
@@ -91,7 +105,7 @@ export default function Home() {
         data-scroll-section
       >
         <h1
-          className="text-3xl md:text-6xl pt-10 md:pt-0 font-bold mx-[5%] md:mx-[15%]"
+          className="text-3xl lg:text-5xl xl:text-6xl pt-10 md:pt-0 font-bold mx-[5%] md:mx-[15%]"
         >
           A lifestyle brand born from brotherhood - digital stories and apparel that is built to last
         </h1>

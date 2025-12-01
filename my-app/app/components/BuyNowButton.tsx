@@ -36,7 +36,7 @@ export default function BuyNowButton({ priceId, slug, metadata, disabled }: BuyN
     <button
       onClick={onClick}
       disabled={disabled || loading || !priceId}
-      className="mt-6 inline-flex items-center justify-center outline-solid outline-4 rounded-sm px-6 py-2 md:hover:bg-black md:hover:text-white bg-white text-black font-semibold text-sm md:text-lg disabled:opacity-50"
+      className="mt-3 inline-flex items-center justify-center outline-solid outline-4 rounded-xs px-4 py-2 w-full  bg-black text-white font-semibold text-sm md:text-lg"
     >
       {loading ? "Redirecting…" : "Buy Now"}
     </button>
