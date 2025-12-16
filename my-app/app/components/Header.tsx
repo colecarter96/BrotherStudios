@@ -127,6 +127,9 @@ export default function Header() {
               <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:280ms]">
                 <Link href="/videos" onClick={() => setMenuOpen(false)}>Videos</Link>
               </li>
+              <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:360ms]">
+                <Link href="/magazine" onClick={() => setMenuOpen(false)}>Magazine</Link>
+              </li>
             </ul>
           </nav>
         </div>
@@ -143,6 +146,7 @@ export default function Header() {
           {/* Right: Shop and Bag */}
           <nav className="flex items-center gap-6 text-md font-semibold">
             <Link href="/shop" className="hover:opacity-80 transition">SHOP</Link>
+            {/* <Link href="/magazine" className="hover:opacity-80 transition">MAGAZINE</Link> */}
             <Link href="/videos" className="hover:opacity-80 transition">VIDEOS</Link>
             <BagButton />
           </nav>
