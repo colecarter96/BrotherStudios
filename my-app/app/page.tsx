@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import LocomotiveScrollWrapper from "./components/LocomotiveScrollWrapper";
+import HeroSwapImage from "./components/HeroSwapImage";
 import Footer from './components/Footer';
 import Link from 'next/link';
 
@@ -37,18 +38,15 @@ export default function Home() {
           </video>
           {/* Mobile: stationary overlay (no Locomotive) */}
           <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
-            <span className="block text-[#333333] font-bold text-3xl sm:text-4xl tracking-tighter text-center">
-              TWO BROTHERS
+            <span className="block text-black font-bold text-5xl sm:text-6xl tracking-tighter text-center">
+              TWO
             </span>
           </div>
           {/* Desktop: parallax overlay */}
           <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-5">
-            <Image
-              src="/twoBrothersCapitalDark.svg"
-              alt="Two Brothers Logo"
-              width={1400}
-              height={800}
-              className="w-3/4 md:w-2/3 h-auto object-contain"
+            <HeroSwapImage
+              alt="Two Brothers Artwork"
+              className="w-1/3 md:w-1/3 h-auto object-contain"
             />
           </div>
         </div>
