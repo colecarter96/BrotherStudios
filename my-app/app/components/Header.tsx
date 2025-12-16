@@ -146,7 +146,7 @@ export default function Header() {
           {/* Right: Shop and Bag */}
           <nav className="flex items-center gap-6 text-md font-semibold">
             <Link href="/shop" className="hover:opacity-80 transition">SHOP</Link>
-            <Link href="/magazine" className="hover:opacity-80 transition">MAGAZINE</Link>
+            {/* <Link href="/magazine" className="hover:opacity-80 transition">MAGAZINE</Link> */}
             <Link href="/videos" className="hover:opacity-80 transition">VIDEOS</Link>
             <BagButton />
           </nav>

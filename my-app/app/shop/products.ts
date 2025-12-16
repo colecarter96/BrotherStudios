@@ -27,10 +27,10 @@ export const products: Product[] = [
   },
   {
     slug: "plus-hoodie",
-    title: "TBS SNAP PLUS HOODIE",
+    title: "TWO STAMP HOODIE",
     price: 55,
-    images: ["/plusHoodieBack.png", "/plusHoodieFront.png"],
-    description: "Snap Closure with Blue plus on the back and TBS Oval Logo on the Front. Email or fill out contact form to order!",
+    images: ["/printHoodie.png"],
+    description: "This hoodie features a plus stamp on the hood, a \'TWO\' stamp on the left chest, and a sword stamp on the right forearm. All stamped on a Champion Reverse Weave Gray Blank. Email to order!",
   },
   
 ];

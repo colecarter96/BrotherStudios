@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
             <ul className="text-2xl font-semibold space-y-2">
               <li className="flex">
                 <span className="">E: </span>{" "}
-                <span className="font-medium"> colescarter@gmail.com</span>
+                <span className="font-medium"> the.twobrothers.studios@gmail.com</span>
               </li>
               <li className="flex">
                 <span className="">M: </span>{" "}
@@ -76,9 +76,9 @@ const Footer: React.FC = () => {
 
         {/* Column 2 */}
         <div className="flex flex-col text-md font-semibold mb-4 md:mb-0">
-          <p><a href="https://www.linkedin.com/in/cole-carter13/" target="_blank">YOUTUBE</a></p>
-          <p><a href="https://www.instagram.com/colecartr/?hl=en" target="_blank">INSTAGRAM</a></p>
-          <p><a href="https://www.instagram.com/colecartr/?hl=en" target="_blank">TIKTOK</a></p>
+          <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">YOUTUBE</a></p>
+          <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">INSTAGRAM</a></p>
+          <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">TIKTOK</a></p>
         </div>
 
         {/* Column 3 */}
