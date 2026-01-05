@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
             quantity,
           },
         ],
+        allow_promotion_codes: true,
         shipping_address_collection: { allowed_countries: ["US"] },
         shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
         metadata: {
@@ -120,6 +121,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
+      allow_promotion_codes: true,
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
       metadata: {
