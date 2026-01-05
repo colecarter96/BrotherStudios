@@ -8,9 +8,10 @@ interface ProductPurchaseProps {
   slug: string;
   stripePriceId?: string;
   enableSizes?: boolean;
+  title: string;
 }
 
-export default function ProductPurchase({ slug, stripePriceId, enableSizes }: ProductPurchaseProps) {
+export default function ProductPurchase({ slug, stripePriceId, enableSizes, title }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" });
@@ -74,6 +75,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes }: Pr
                 quantity,
                 size: showSize ? size : undefined,
                 slug,
+                title,
               });
               setMessage({ type: "success", text: "Added to bag." });
               setTimeout(() => setMessage({ type: "", text: "" }), 1800);

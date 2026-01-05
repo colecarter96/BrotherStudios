@@ -40,7 +40,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="md:pt-10 lg:pt-16">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter">{product.title}</h1>
           <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
-          <ProductPurchase slug={product.slug} stripePriceId={product.stripePriceId} enableSizes={product.slug === "dog-tee"} />
+          <ProductPurchase
+            slug={product.slug}
+            stripePriceId={product.stripePriceId}
+            enableSizes={product.slug === "dog-tee"}
+            title={product.title}
+          />
           <p className="mt-10 text-base md:text-lg font-semibold tracking-titter ">{product.description}</p>
           
         </div>
