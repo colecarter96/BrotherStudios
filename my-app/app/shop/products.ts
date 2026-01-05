@@ -20,10 +20,10 @@ export const products: Product[] = [
   {
     slug: "dog-tee",
     title: "DOG TEE",
-    price: 25,
+    price: 32,
     images: ["/dogTeeFront.png", "/dogTeeBack.png"],
     description: "Premium cotton tee with our dog graphic.",
-    stripePriceId: "price_1SQXfCP6lKVtJIIMGcbd7Pf6",
+    stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
   },
   {
     slug: "plus-hoodie",

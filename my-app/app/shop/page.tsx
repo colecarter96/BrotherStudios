@@ -7,9 +7,13 @@ export default function Shop() {
     return (
     <>
         <div className="px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-40 justify-items-stretch min-h-[80dvh] mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:mx-[10%] gap-8 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
           {products.map((p) => (
-            <Link key={p.slug} href={`/shop/${p.slug}`} className="group block">
+            <Link
+              key={p.slug}
+              href={`/shop/${p.slug}`}
+              className="group block border-2 border-transparent hover:border-gray-600 transition-colors px-2"
+            >
               <div className="relative w-full aspect-square">
                 <Image src={p.images[0]} alt={p.title} fill className="object-contain" />
               </div>

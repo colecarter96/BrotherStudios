@@ -53,6 +53,77 @@ export default function Home() {
         
       </section>
 
+      <section
+        id="brand"
+        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center justify-center bg-white"
+        data-scroll-section
+      >
+        <h1
+          className="text-3xl lg:text-5xl xl:text-6xl pt-0 font-bold mx-[5%] md:mx-[15%] tracking-tighter"
+        >
+          TWO BROTHERS STUDIOS - CALIFORNIA - 2005
+        </h1>
+      </section>
+
+      <section
+        data-scroll-section
+        className="bg-white text-black"
+      >
+        <div className="mx-auto w-[80vw] max-w-[1400px] my-10 pb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {/* Item 1 */}
+            <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
+              {/* <Image
+                src="https://www.stussy.com/cdn/shop/files/118584_FADB_1.jpg?v=1760550554&width=1920"
+                alt="Shop placeholder"
+                fill
+                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+                priority
+              /> */}
+              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                SHOP NOW
+              </span>
+            </Link>
+            {/* Item 2 */}
+            <Link href="/shop" className="group relative aspect-square overflow-hidden">
+              <Image
+                src="/printHoodie.png"
+                alt="Shop placeholder"
+                fill
+                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+              />
+              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                SHOP NOW
+              </span>
+            </Link>
+            {/* Item 3 */}
+            <Link href="/shop" className="group relative aspect-square overflow-hidden">
+              <Image
+                src="/dogTeeBack.png"
+                alt="Shop placeholder"
+                fill
+                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+              />
+              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                SHOP NOW
+              </span>
+            </Link>
+            {/* Item 4 */}
+            <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
+              {/* <Image
+                src="https://www.stussy.com/cdn/shop/files/118584_FADB_1.jpg?v=1760550554&width=1920"
+                alt="Shop placeholder"
+                fill
+                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+              /> */}
+              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                SHOP NOW
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
 
 
       
@@ -104,17 +175,7 @@ export default function Home() {
 
       </section> */}
 
-      <section
-        id="brand"
-        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center justify-center bg-white"
-        data-scroll-section
-      >
-        <h1
-          className="text-3xl lg:text-5xl xl:text-6xl pt-0 font-bold mx-[5%] md:mx-[15%]"
-        >
-          A lifestyle brand born from brotherhood - digital stories and apparel that is built to last
-        </h1>
-      </section>
+      
       
       <section className="text-black bg-white" data-scroll-section>
         <Footer />
