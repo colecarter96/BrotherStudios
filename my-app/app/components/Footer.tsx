@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         {/* Image and Initials */}
         <div className="flex flex-col items-center mb-6 md:mb-0 ">
           <Image
-            src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max"
+            src="/tbsMillion.png"
             alt="Your Initials"
             width={340} // adjust as needed
             height={120} // adjust as needed
@@ -77,8 +77,8 @@ const Footer: React.FC = () => {
         {/* Column 2 */}
         <div className="flex flex-col text-md font-semibold mb-4 md:mb-0">
           <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">YOUTUBE</a></p>
-          <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">INSTAGRAM</a></p>
-          <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">TIKTOK</a></p>
+          <p><a href="https://www.instagram.com/twobrothers.digital/?hl=en" target="_blank">INSTAGRAM</a></p>
+          {/* <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">TIKTOK</a></p> */}
         </div>
 
         {/* Column 3 */}

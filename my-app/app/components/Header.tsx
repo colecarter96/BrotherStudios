@@ -127,9 +127,9 @@ export default function Header() {
               <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:280ms]">
                 <Link href="/videos" onClick={() => setMenuOpen(false)}>Videos</Link>
               </li>
-              <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:360ms]">
+              {/* <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:360ms]">
                 <Link href="/magazine" onClick={() => setMenuOpen(false)}>Magazine</Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </div>

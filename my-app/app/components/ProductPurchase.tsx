@@ -1,43 +1,51 @@
 "use client";
 
 import { useState } from "react";
-import BuyNowButton from "@/app/components/BuyNowButton";
 import { useCart } from "@/app/components/useCart";
 
 interface ProductPurchaseProps {
   slug: string;
   stripePriceId?: string;
   enableSizes?: boolean;
-  title: string;
+  title?: string;
+  image?: string;
 }
 
-export default function ProductPurchase({ slug, stripePriceId, enableSizes, title }: ProductPurchaseProps) {
+export default function ProductPurchase({ slug, stripePriceId, enableSizes, title, image }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>(1);
   const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" });
+  const [justAdded, setJustAdded] = useState<boolean>(false);
   const { addItem } = useCart();
 
   const showSize = !!enableSizes;
   const sizeValid = !showSize || Boolean(size);
-  const canAdd = Boolean(stripePriceId) && sizeValid && quantity >= 1;
+  const canAdd = Boolean(stripePriceId) && sizeValid;
+  const buttonLabel = showSize && !size ? "SELECT A SIZE" : justAdded ? "SUCCESS" : "ADD TO BAG";
 
   return (
     <div className="mt-8">
       {showSize && (
         <div className="mb-4">
-          <label htmlFor="size" className="block text-base md:text-lg font-semibold mb-2">Size</label>
-          <select
-            id="size"
-            className="border border-black/20 rounded-md px-3 py-2 w-full max-w-xs"
-            value={size}
-            onChange={(e) => setSize(e.target.value)}
-          >
-            <option value="">Select size</option>
-            <option value="S">Small</option>
-            <option value="M">Medium</option>
-            <option value="L">Large</option>
-            <option value="XL">X-Large</option>
-          </select>
+          <div className="block text-base md:text-lg font-semibold mb-2">Size</div>
+          <div role="radiogroup" aria-label="Size" className="grid grid-cols-4 gap-2 max-w-xs">
+            {["S", "M", "L", "XL"].map((opt) => {
+              const selected = size === opt;
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setSize(opt)}
+                  className={`px-3 py-2 text-sm md:text-base border ${
+                    selected ? "border border-black" : "border-black/20"
+                  } hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
           {!sizeValid && (
             <div className="mt-2 text-sm text-red-600">Please select a size.</div>
           )}
@@ -45,17 +53,6 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
       )}
 
       <div className="flex items-start flex-col">
-        <div>
-          <label htmlFor="qty" className="block text-base md:text-lg font-semibold mb-2">Quantity</label>
-          <input
-            id="qty"
-            type="number"
-            min={1}
-            value={quantity}
-            onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))}
-            className="border border-black/20 rounded-md px-3 py-2 w-24"
-          />
-        </div>
 
         <button
           disabled={!canAdd}
@@ -72,35 +69,25 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
             try {
               addItem({
                 priceId: stripePriceId,
-                quantity,
+                quantity: 1,
                 size: showSize ? size : undefined,
                 slug,
                 title,
+                image,
               });
-              setMessage({ type: "success", text: "Added to bag." });
-              setTimeout(() => setMessage({ type: "", text: "" }), 1800);
+              setJustAdded(true);
+              setTimeout(() => setJustAdded(false), 1800);
             } catch {
               setMessage({ type: "error", text: "Could not add to bag. Please try again." });
             }
           }}
-          className="mt-6 inline-flex items-center justify-center outline-solid outline-3 rounded-xs px-4 py-1 w-full  bg-white text-black font-semibold text-sm md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`mt-6 inline-flex items-center justify-center px-4 py-2 w-full  ${justAdded ? "bg-green-800" : "bg-black"} text-white font-semibold text-sm md:text-lg disabled:cursor-not-allowed transition-colors duration-200`}
         >
-          Add to Bag
+          {buttonLabel}
         </button>
 
-        <BuyNowButton
-          priceId={stripePriceId || ""}
-          slug={slug}
-          metadata={showSize ? { size } : undefined}
-          disabled={!sizeValid}
-        />
-
-        {message.text && (
-          <div
-            className={`mt-3 text-sm ${message.type === "success" ? "text-green-700" : "text-red-600"}`}
-            role="status"
-            aria-live="polite"
-          >
+        {message.type === "error" && message.text && (
+          <div className="mt-3 text-sm text-red-600" role="status" aria-live="polite">
             {message.text}
           </div>
         )}

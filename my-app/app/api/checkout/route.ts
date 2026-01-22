@@ -54,12 +54,6 @@ export async function POST(req: NextRequest) {
       return maybeProductOrPriceId;
     };
 
-    const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
-    const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
-    const shippingRateId = slug === "2-man-sticker" && shippingRateSticker
-      ? shippingRateSticker
-      : shippingRateDefault;
-
     if (!isBatch) {
       const { priceId, quantity = 1, metadata } = body as Extract<CheckoutRequestBody, { priceId: string }>;
       if (!priceId) {
@@ -67,6 +61,11 @@ export async function POST(req: NextRequest) {
       }
       const resolvedPriceId = await resolvePriceId(priceId);
       const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
+      const itemSlug = typeof metadata?.slug === "string" && metadata.slug ? String(metadata.slug) : slug;
+      const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
+      const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
+      const shippingRateId =
+        itemSlug === "2-man-sticker" && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         line_items: [
@@ -75,7 +74,6 @@ export async function POST(req: NextRequest) {
             quantity,
           },
         ],
-        allow_promotion_codes: true,
         shipping_address_collection: { allowed_countries: ["US"] },
         shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
         metadata: {
@@ -109,6 +107,7 @@ export async function POST(req: NextRequest) {
 
     const lineItems: { price: string; quantity?: number }[] = [];
     const cartMetaCompact: Array<{ size?: string | null; quantity?: number | null }> = [];
+    let allStickers = true;
     for (const item of items) {
       const resolvedPriceId = await resolvePriceId(item.priceId);
       lineItems.push({ price: resolvedPriceId, quantity: item.quantity ?? 1 });
@@ -116,12 +115,20 @@ export async function POST(req: NextRequest) {
         size: typeof item.metadata?.size === "string" ? item.metadata.size : null,
         quantity: typeof item.quantity === "number" ? item.quantity : 1,
       });
+      const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
+      if (itemSlug !== "2-man-sticker") {
+        allStickers = false;
+      }
     }
+
+    const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
+    const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
+    const shippingRateId =
+      allStickers && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
-      allow_promotion_codes: true,
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
       metadata: {
