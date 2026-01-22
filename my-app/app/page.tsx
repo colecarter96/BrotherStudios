@@ -69,7 +69,7 @@ export default function Home() {
         data-scroll-section
         className="bg-white text-black"
       >
-        <div className="mx-auto w-[50vw] md:w-[60vw] lg:w-[70vw] max-w-[1400px] mb-10 pb-10">
+        <div className="mx-auto w-[80vw] md:w-[60vw] lg:w-[70vw] max-w-[1400px] mb-10 pb-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {/* Item 1 */}
             <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
