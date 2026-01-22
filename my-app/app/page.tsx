@@ -55,7 +55,7 @@ export default function Home() {
 
       <section
         id="brand"
-        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center justify-center bg-white"
+        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center mt-0 justify-center bg-white"
         data-scroll-section
       >
         <h1
@@ -69,17 +69,16 @@ export default function Home() {
         data-scroll-section
         className="bg-white text-black"
       >
-        <div className="mx-auto w-[80vw] max-w-[1400px] my-10 pb-10">
+        <div className="mx-auto w-[50vw] md:w-[60vw] lg:w-[70vw] max-w-[1400px] mb-10 pb-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {/* Item 1 */}
             <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
-              {/* <Image
-                src="https://www.stussy.com/cdn/shop/files/118584_FADB_1.jpg?v=1760550554&width=1920"
+            <Image
+                src="/homePoster1.png"
                 alt="Shop placeholder"
                 fill
-                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
-                priority
-              /> */}
+                className="object-cover"
+              />
               <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 SHOP NOW
               </span>
@@ -87,10 +86,10 @@ export default function Home() {
             {/* Item 2 */}
             <Link href="/shop" className="group relative aspect-square overflow-hidden">
               <Image
-                src="/printHoodie.png"
+                src="/dogTeeBack.png"
                 alt="Shop placeholder"
                 fill
-                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+                className="object-cover"
               />
               <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 SHOP NOW
@@ -99,10 +98,10 @@ export default function Home() {
             {/* Item 3 */}
             <Link href="/shop" className="group relative aspect-square overflow-hidden">
               <Image
-                src="/dogTeeBack.png"
+                src="/2manblackstickimg.svg"
                 alt="Shop placeholder"
                 fill
-                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
+                className="object-cover"
               />
               <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 SHOP NOW
@@ -110,12 +109,12 @@ export default function Home() {
             </Link>
             {/* Item 4 */}
             <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
-              {/* <Image
-                src="https://www.stussy.com/cdn/shop/files/118584_FADB_1.jpg?v=1760550554&width=1920"
+            <Image
+                src="/homePoster2.png"
                 alt="Shop placeholder"
                 fill
-                className="object-cover transition-transform duration-300 md:group-hover:scale-101"
-              /> */}
+                className="object-cover "
+              />
               <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 SHOP NOW
               </span>

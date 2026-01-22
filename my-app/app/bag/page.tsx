@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/app/components/useCart";
 import { useState } from "react";
 
@@ -38,13 +39,22 @@ export default function BagPage() {
           <ul className="divide-y divide-black/10 border-t border-b border-black/10">
             {items.map((item, index) => (
               <li key={`${item.priceId}-${index}`} className="py-5">
-                <div className="font-semibold text-xl">
-                  {item.title || "Product"}
+                <div className="flex items-start gap-4">
+                  {item.image && (
+                    <div className="relative w-40 h-40 md:w-70 md:h-70 shrink-0 overflow-hidden rounded-sm border border-black/10 bg-white">
+                      <Image src={item.image} alt={item.title || "Product"} fill className="object-contain" />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-2xl truncate">
+                      {item.title || "Product"}
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-2 flex flex-wrap items-center gap-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   {(item.size || item.slug === "dog-tee") && (
                     <label className="flex items-center gap-2">
-                      <span className="text-sm">Size</span>
+                      <span className="text-md">Size</span>
                       <select
                         className="border border-black/20 rounded-md px-2 py-1"
                         value={item.size || ""}
@@ -59,7 +69,7 @@ export default function BagPage() {
                     </label>
                   )}
                   <label className="flex items-center gap-2">
-                    <span className="text-sm">Qty</span>
+                    <span className="text-md">Qty</span>
                     <input
                       type="number"
                       min={1}
