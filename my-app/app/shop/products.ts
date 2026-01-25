@@ -6,6 +6,9 @@ export type Product = {
   description: string;
   stripePriceId?: string;
   details?: ProductDetails;
+  oneOfOne?: boolean;
+  waistOptions?: string[];
+  inseamOptions?: string[];
 };
 
 export type ProductDetails = {
@@ -20,10 +23,13 @@ export const products: Product[] = [
   {
     slug: "dickies-pants",
     title: "TWO Dickies",
-    price: 40,
+    price: 45,
     images: ["/dickiesFront.jpeg", "/dickiesBack.jpeg", "/dickiesVisual3.jpeg", "/dickiesVisual2.jpeg"],
     description: "The \`TWO\` Dickies feature a creme \"Dickies\" patch and or TWO print above the back right pocket \n This pair is a size 34x34, please contact us separate if you want a different size and we will do our best to make one for you!",
-    stripePriceId: "price_1Stby5P6lKVtJIIMB6jb5QEV",
+    stripePriceId: "price_1Stc7yP6lKVtJIIMMlAy828q",
+    oneOfOne: true,
+    waistOptions: ["34"],
+    inseamOptions: ["34"],
     details: {  
       fabric: "65% Poly/35% Cotton",
       color: ["Black", "White"],

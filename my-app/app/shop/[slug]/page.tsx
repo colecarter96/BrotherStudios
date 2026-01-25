@@ -6,6 +6,25 @@ import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductDetails from "@/app/components/ProductDetails";
 
+export const dynamic = "force-dynamic";
+
+async function isSoldOut(slug: string, oneOfOne?: boolean): Promise<boolean> {
+  if (!oneOfOne) return false;
+  try {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) return false;
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
+    const result = await stripe.paymentIntents.search({
+      query: `status:'succeeded' AND metadata['slug']:'${slug}'`,
+      limit: 1,
+    });
+    return (result?.data?.length || 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
@@ -25,6 +44,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
+  const soldOut = await isSoldOut(product.slug, product.oneOfOne);
 
   return (
     <>
@@ -60,6 +80,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             enableSizes={product.slug === "dog-tee"}
             title={product.title}
             image={product.images[0]}
+            waistOptions={product.waistOptions}
+            inseamOptions={product.inseamOptions}
+            soldOut={soldOut}
           />
           <p className="mt-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
           <ProductDetails details={product.details} />

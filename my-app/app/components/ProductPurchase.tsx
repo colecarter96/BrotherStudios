@@ -9,21 +9,74 @@ interface ProductPurchaseProps {
   enableSizes?: boolean;
   title?: string;
   image?: string;
+  waistOptions?: string[];
+  inseamOptions?: string[];
+  soldOut?: boolean;
 }
 
-export default function ProductPurchase({ slug, stripePriceId, enableSizes, title, image }: ProductPurchaseProps) {
+export default function ProductPurchase({ slug, stripePriceId, enableSizes, title, image, waistOptions, inseamOptions, soldOut }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
+  const [waist, setWaist] = useState<string>("");
+  const [inseam, setInseam] = useState<string>("");
   const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" });
   const [justAdded, setJustAdded] = useState<boolean>(false);
   const { addItem } = useCart();
 
-  const showSize = !!enableSizes;
-  const sizeValid = !showSize || Boolean(size);
-  const canAdd = Boolean(stripePriceId) && sizeValid;
-  const buttonLabel = showSize && !size ? "SELECT A SIZE" : justAdded ? "SUCCESS" : "ADD TO BAG";
+  const isPants = Array.isArray(waistOptions) || Array.isArray(inseamOptions);
+  const showSize = !!enableSizes && !isPants;
+  const sizeValid = isPants ? Boolean(waist) && Boolean(inseam) : (!showSize || Boolean(size));
+  const canAdd = Boolean(stripePriceId) && sizeValid && !soldOut;
+  const buttonLabel =
+    soldOut ? "SOLD OUT" :
+    isPants && (!waist || !inseam) ? "SELECT SIZE" :
+    (showSize && !size ? "SELECT A SIZE" : justAdded ? "SUCCESS" : "ADD TO BAG");
 
   return (
     <div className="mt-8">
+      {isPants && (
+        <div className="mb-4">
+          <div className="block text-base md:text-lg font-semibold mb-2">Waist</div>
+          <div role="radiogroup" aria-label="Waist" className="grid grid-cols-4 gap-2 max-w-xs">
+            {(waistOptions || []).map((opt) => {
+              const selected = waist === opt;
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setWaist(opt)}
+                  className={`px-3 py-2 text-sm md:text-base border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+          <div className="block text-base md:text-lg font-semibold mt-4 mb-2">Inseam</div>
+          <div role="radiogroup" aria-label="Inseam" className="grid grid-cols-4 gap-2 max-w-xs">
+            {(inseamOptions || []).map((opt) => {
+              const selected = inseam === opt;
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setInseam(opt)}
+                  className={`px-3 py-2 text-sm md:text-base border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+          {!sizeValid && (
+            <div className="mt-2 text-sm text-red-600">Please select waist and inseam.</div>
+          )}
+        </div>
+      )}
+
       {showSize && (
         <div className="mb-4">
           <div className="block text-base md:text-lg font-semibold mb-2">Size</div>
@@ -62,6 +115,14 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
               setMessage({ type: "error", text: "This product is not available right now." });
               return;
             }
+            if (soldOut) {
+              setMessage({ type: "error", text: "This product is sold out." });
+              return;
+            }
+            if (isPants && (!waist || !inseam)) {
+              setMessage({ type: "error", text: "Please select waist and inseam." });
+              return;
+            }
             if (showSize && !size) {
               setMessage({ type: "error", text: "Please select a size." });
               return;
@@ -70,7 +131,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
               addItem({
                 priceId: stripePriceId,
                 quantity: 1,
-                size: showSize ? size : undefined,
+                size: isPants ? `${waist}x${inseam}` : (showSize ? size : undefined),
                 slug,
                 title,
                 image,
