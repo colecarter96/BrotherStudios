@@ -3,7 +3,34 @@ import Image from "next/image";
 import Link from "next/link";
 import { products } from "./products";
 
-export default function Shop() {
+export const dynamic = "force-dynamic";
+
+async function getSoldOutSlugs(): Promise<Set<string>> {
+  const oneOfOneSlugs = products.filter((p) => p.oneOfOne).map((p) => p.slug);
+  if (oneOfOneSlugs.length === 0) return new Set();
+  try {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) return new Set();
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
+    const sold = new Set<string>();
+    for (const slug of oneOfOneSlugs) {
+      const result = await stripe.paymentIntents.search({
+        query: `status:'succeeded' AND metadata['slug']:'${slug}'`,
+        limit: 1,
+      });
+      if ((result?.data?.length || 0) > 0) {
+        sold.add(slug);
+      }
+    }
+    return sold;
+  } catch {
+    return new Set();
+  }
+}
+
+export default async function Shop() {
+    const soldOut = await getSoldOutSlugs();
     return (
     <>
         <div className="px-4 md:px-8">
@@ -16,6 +43,11 @@ export default function Shop() {
             >
               <div className="relative w-full aspect-square">
                 <Image src={p.images[0]} alt={p.title} fill className="object-contain" />
+                {soldOut.has(p.slug) && (
+                  <div className="absolute top-2 left-2 bg-black text-white text-xs md:text-sm font-semibold px-2 py-1">
+                    SOLD OUT
+                  </div>
+                )}
               </div>
               <h2 className="font-semibold text-lg md:text-xl mt-2">{p.title}</h2>
               <p className="font-semibold text-md md:text-lg -mt-1">${p.price.toFixed(2)}</p>

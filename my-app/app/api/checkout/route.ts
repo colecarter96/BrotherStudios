@@ -38,6 +38,21 @@ export async function POST(req: NextRequest) {
   const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
 
   try {
+    const isSoldOut = async (slugToCheck: string) => {
+      if (!slugToCheck) return false;
+      // Only enforce for known one-of-one item(s)
+      if (slugToCheck !== "dickies-pants") return false;
+      try {
+        const res = await stripe.paymentIntents.search({
+          query: `status:'succeeded' AND metadata['slug']:'${slugToCheck}'`,
+          limit: 1,
+        });
+        return (res?.data?.length || 0) > 0;
+      } catch {
+        return false;
+      }
+    };
+
     const resolvePriceId = async (maybeProductOrPriceId: string) => {
       if (maybeProductOrPriceId.startsWith("prod_")) {
         const product = await stripe.products.retrieve(maybeProductOrPriceId);
@@ -62,6 +77,9 @@ export async function POST(req: NextRequest) {
       const resolvedPriceId = await resolvePriceId(priceId);
       const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
       const itemSlug = typeof metadata?.slug === "string" && metadata.slug ? String(metadata.slug) : slug;
+      if (await isSoldOut(itemSlug)) {
+        return NextResponse.json({ error: "This item is sold out." }, { status: 409 });
+      }
       const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
       const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
       const shippingRateId =
@@ -108,6 +126,13 @@ export async function POST(req: NextRequest) {
     const lineItems: { price: string; quantity?: number }[] = [];
     const cartMetaCompact: Array<{ size?: string | null; quantity?: number | null }> = [];
     let allStickers = true;
+    // Prevent checkout for any sold-out one-of-one item
+    for (const item of items) {
+      const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
+      if (await isSoldOut(itemSlug)) {
+        return NextResponse.json({ error: "One or more items are sold out." }, { status: 409 });
+      }
+    }
     for (const item of items) {
       const resolvedPriceId = await resolvePriceId(item.priceId);
       lineItems.push({ price: resolvedPriceId, quantity: item.quantity ?? 1 });
