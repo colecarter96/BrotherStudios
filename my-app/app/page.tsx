@@ -24,7 +24,7 @@ export default function Home() {
         </h1> */}
 
         <div className="relative mx-auto w-[90vw] md:w-[80vw] h-[80vh] max-w-[1400px]">
-          <video
+          {/* <video
             className="w-full h-full object-contain"
             autoPlay
             muted
@@ -35,7 +35,7 @@ export default function Home() {
           >
             <source src="/output_6s.webm" type="video/webm" />
             <source src="/output_6s.mp4" type="video/mp4" />
-          </video>
+          </video> */}
           {/* Mobile: stationary overlay (no Locomotive) */}
           <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
             <span className="block text-black font-bold text-5xl sm:text-6xl tracking-tighter text-center">

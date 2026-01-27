@@ -19,6 +19,20 @@ export type ProductDetails = {
 };
 
 export const products: Product[] = [
+  {
+    slug: "sex-panthers-tee",
+    title: "SEX PANTHERS",
+    price: 40,
+    images: ["/sexPanthersFront.jpg", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
+    description: "The Sex Panthers Tee features our premium vintage cotton blank with a full front and back print depicting two panthers and implicated relevant locations and dates. \n Fits large, size down if between sizes.",
+    stripePriceId: "price_1Su4ptP6lKVtJIIMfQtnu739",
+    details: {
+      fabric: "100% cotton",
+      color: ["Black", "Cream", "Pink"],
+      care: "Machine wash, tumble dry low",
+      gsm: 250,
+    },
+  },
   
   {
     slug: "dickies-pants",

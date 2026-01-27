@@ -16,7 +16,7 @@ export default function HeroSwapImage({
 	width = 1400,
 	height = 800,
 	alt = 'Two Brothers Artwork',
-	intervalMs = 2000,
+	intervalMs = 900,
 }: HeroSwapImageProps) {
 	const [showPaintVariant, setShowPaintVariant] = useState(false);
 
