@@ -20,6 +20,20 @@ export type ProductDetails = {
 
 export const products: Product[] = [
   {
+    slug: "champion-reverse",
+    title: "\"TWO\" CHAMPION REVERSE",
+    price: 65,
+    images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    description: "The \`TWO\` Champion Reverse Weave features custom stamps on the chest, hood, and forarm. \n Designed to look better the more you wear it. 1 of 1.",
+    stripePriceId: "price_1SuoYmP6lKVtJIIMmc1vIDcw",
+    details: {
+      fabric: "82% cotton/18% polyester",
+      color: ["Gray", "Black"],
+      care: "Machine wash, tumble dry low",
+      gsm: 400,
+    },
+  },
+  {
     slug: "sex-panthers-tee",
     title: "SEX PANTHERS",
     price: 40,

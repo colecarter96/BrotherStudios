@@ -77,7 +77,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <ProductPurchase
             slug={product.slug}
             stripePriceId={product.stripePriceId}
-            enableSizes={product.slug === "dog-tee" || product.slug === "sex-panthers-tee"}
+            enableSizes={product.slug === "dog-tee" || product.slug === "sex-panthers-tee" || product.slug === "champion-reverse"}
             title={product.title}
             image={product.images[0]}
             waistOptions={product.waistOptions}
