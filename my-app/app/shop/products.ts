@@ -73,7 +73,7 @@ export const products: Product[] = [
   // Dog Tee (second in list)
   {
     slug: "two-tee",
-    title: "\`TWO\' TEE",
+    title: "TWO TEE",
     price: 25,
     images: ["/twoTeeStudio.png", "/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
     description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
