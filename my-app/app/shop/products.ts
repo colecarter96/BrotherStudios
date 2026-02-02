@@ -23,7 +23,8 @@ export const products: Product[] = [
     slug: "champion-reverse",
     title: "\"TWO\" CHAMPION REVERSE",
     price: 65,
-    images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    images: ["/championStudioFront.png", "/championBack.jpg", "/championVisual.jpg"],
+    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "The \`TWO\` Champion Reverse Weave features custom stamps on the chest, hood, and forarm. \n Designed to look better the more you wear it. 1 of 1.",
     stripePriceId: "price_1SuoYmP6lKVtJIIMmc1vIDcw",
     details: {
@@ -37,7 +38,9 @@ export const products: Product[] = [
     slug: "sex-panthers-tee",
     title: "SEX PANTHERS",
     price: 40,
-    images: ["/sexPanthersFront.jpg", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
+    images: ["/sexPanthersStudioFront.png", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
+
+    // images: ["/sexPanthersFront.jpg", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
     description: "The Sex Panthers Tee features our premium vintage cotton blank with a full front and back print depicting two panthers and implicated relevant locations and dates. \n Fits large, size down if between sizes.",
     stripePriceId: "price_1Su4ptP6lKVtJIIMfQtnu739",
     details: {
@@ -52,7 +55,9 @@ export const products: Product[] = [
     slug: "dickies-pants",
     title: "TWO Dickies",
     price: 45,
-    images: ["/dickiesFront.jpeg", "/dickiesBack.jpeg", "/dickiesVisual3.jpeg", "/dickiesVisual2.jpeg"],
+    images: ["/dickiesStudioFront.png", "/dickiesBack.jpeg", "/dickiesVisual3.jpeg", "/dickiesVisual2.jpeg"],
+
+    // images: ["/dickiesFront.jpeg", "/dickiesBack.jpeg", "/dickiesVisual3.jpeg", "/dickiesVisual2.jpeg"],
     description: "The \`TWO\` Dickies feature a creme \"Dickies\" patch and or TWO print above the back right pocket \n This pair is a size 34x34, please contact us separate if you want a different size and we will do our best to make one for you!",
     stripePriceId: "price_1Stc7yP6lKVtJIIMMlAy828q",
     oneOfOne: true,
@@ -66,6 +71,34 @@ export const products: Product[] = [
     },
   },
   // Dog Tee (second in list)
+  {
+    slug: "two-tee",
+    title: "\`TWO\' TEE",
+    price: 25,
+    images: ["/twoTeeStudio.png", "/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
+    description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
+    stripePriceId: "price_1SwAWKP6lKVtJIIMVbo8zq0h",
+    details: {
+      fabric: "100% cotton",
+      color: ["Black", "White"],
+      care: "Machine wash, tumble dry low",
+      gsm: 260,
+    },
+  },
+  {
+    slug: "brother-tee",
+    title: "BROTHER TEE",
+    price: 25,
+    images: ["/brotherStudio.png", "/brotherBack.png", "/brotherVisual.png"],
+    description: "The \'BROTHER\' Tee is a perfect boxy fit tee with our Brother stamp with a plus underneath. \n Printed on a shakwear blank.",
+    stripePriceId: "price_1SwAJaP6lKVtJIIMoADhnfrK",
+    details: {
+      fabric: "100% cotton",
+      color: ["Black", "White"],
+      care: "Machine wash, tumble dry low",
+      gsm: 260,
+    },
+  },
   {
     slug: "dog-tee",
     title: "DOG TEE",
@@ -84,7 +117,7 @@ export const products: Product[] = [
     slug: "2-man-sticker",
     title: "TWO MAN STICKER",
     price: 2.0,
-    images: ["/2manblackstickimg.svg"],
+    images: ["/stickerStudio.png"],
     description: "2in X 2in Vinyl Sticker depicting the Two Man Sticker.\n Ideal for water bottles, laptop shells, skateboards, surfboards, or your friends forehead.",
     stripePriceId: "price_1SFmIeP6lKVtJIIMWxLCJ91R",
   },

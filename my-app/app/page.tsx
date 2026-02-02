@@ -98,7 +98,7 @@ export default function Home() {
             {/* Item 3 */}
             <Link href="/shop" className="group relative aspect-square overflow-hidden">
               <Image
-                src="/2manblackstickimg.svg"
+                src="/stickerStudio.png"
                 alt="Shop placeholder"
                 fill
                 className="object-cover"
