@@ -86,7 +86,7 @@ export default function Home() {
             {/* Item 2 */}
             <Link href="/shop" className="group relative aspect-square overflow-hidden">
               <Image
-                src="/championStudio.png"
+                src="/championStudioFront.png"
                 alt="Shop placeholder"
                 fill
                 className="object-cover"
