@@ -39,9 +39,9 @@ export default async function Shop() {
             <Link
               key={p.slug}
               href={`/shop/${p.slug}`}
-              className="group block border-2 border-transparent hover:border-gray-600 transition-colors px-2"
+              className="group block border-2 border-transparent px-2"
             >
-              <div className="relative w-full aspect-square">
+              <div className="relative w-full aspect-square transform-gpu transition-transform duration-300 ease-out md:group-hover:-rotate-1 md:group-hover:scale-[1.01]">
                 <Image src={p.images[0]} alt={p.title} fill className="object-contain" />
                 {soldOut.has(p.slug) && (
                   <div className="absolute top-2 left-2 bg-black text-white text-xs md:text-sm font-semibold px-2 py-1">

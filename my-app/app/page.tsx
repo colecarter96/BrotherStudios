@@ -8,10 +8,18 @@ export default function Home() {
   return (
     <LocomotiveScrollWrapper>
       <section
-        className="h-[100dvh] flex items-center justify-center bg-white"
+        className="relative overflow-hidden h-[100dvh] flex items-center justify-center"
         data-scroll-section
         // style={{ backgroundImage: "url('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max')" }}
       >
+        {/* 
+        <div className="absolute inset-0 -z-10">
+          <img
+            src="/textureBackgrond.svg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div> */}
         {/* <Image
           src="https://static.vecteezy.com/system/resources/previews/002/223/740/large_2x/horizontal-cement-and-concrete-texture-for-pattern-and-design-free-photo.jpg"
           alt="Background"
@@ -43,7 +51,7 @@ export default function Home() {
             </span>
           </div>
           {/* Desktop: parallax overlay */}
-          <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-5">
+          <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-3">
             <HeroSwapImage
               alt="Two Brothers Artwork"
               className="w-1/3 md:w-1/3 h-auto object-contain"
@@ -55,7 +63,7 @@ export default function Home() {
 
       <section
         id="brand"
-        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center mt-0 justify-center bg-white"
+        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center mt-0 justify-center"
         data-scroll-section
       >
         <h1
@@ -67,7 +75,7 @@ export default function Home() {
 
       <section
         data-scroll-section
-        className="bg-white text-black"
+        className="text-black"
       >
         <div className="mx-auto w-[80vw] md:w-[60vw] lg:w-[70vw] max-w-[1400px] mb-10 pb-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -176,7 +184,7 @@ export default function Home() {
 
       
       
-      <section className="text-black bg-white" data-scroll-section>
+      <section className="text-black" data-scroll-section>
         <Footer />
       </section>
 
