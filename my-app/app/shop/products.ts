@@ -1,3 +1,6 @@
+export type ShippingSpeed = "3-5" | "7-14";
+export type SizeType = "standard" | "pants" | "none";
+
 export type Product = {
   slug: string;
   title: string;
@@ -9,6 +12,8 @@ export type Product = {
   oneOfOne?: boolean;
   waistOptions?: string[];
   inseamOptions?: string[];
+  sizeType?: SizeType;
+  shippingSpeed?: ShippingSpeed;
 };
 
 export type ProductDetails = {
@@ -27,6 +32,8 @@ export const products: Product[] = [
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "The \`TWO\` Champion Reverse Weave features custom stamps on the chest, hood, and forarm. \n Designed to look better the more you wear it. 1 of 1.",
     stripePriceId: "price_1SuoYmP6lKVtJIIMmc1vIDcw",
+    sizeType: "standard",
+    shippingSpeed: "3-5",
     details: {
       fabric: "82% cotton/18% polyester",
       color: ["Gray", "Black"],
@@ -43,11 +50,29 @@ export const products: Product[] = [
     // images: ["/sexPanthersFront.jpg", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
     description: "The Sex Panthers Tee features our premium vintage cotton blank with a full front and back print depicting two panthers and implicated relevant locations and dates. \n Fits large, size down if between sizes.",
     stripePriceId: "price_1Su4ptP6lKVtJIIMfQtnu739",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
     details: {
       fabric: "100% cotton",
       color: ["Black", "Cream", "Pink"],
       care: "Machine wash, tumble dry low",
       gsm: 250,
+    },
+  },
+  {
+    slug: "dog-tee",
+    title: "DOG TEE",
+    price: 32,
+    images: ["/dogTeeFront.png", "/dogTeeBack.png", "/dogTeeVisual.jpg"],
+    description: "The Dog Tee features our \'B\' chest logo and dog back logo with the \'Two Brothers\' spell out. \n Printed on our contrast stitch cotton blank, shrinks slightly in the wash.",
+    stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    details: {
+      fabric: "100% cotton",
+      color: ["Black", "White"],
+      care: "Machine wash, tumble dry low",
+      gsm: 240,
     },
   },
   
@@ -63,6 +88,8 @@ export const products: Product[] = [
     oneOfOne: true,
     waistOptions: ["34"],
     inseamOptions: ["34"],
+    sizeType: "pants",
+    shippingSpeed: "3-5",
     details: {  
       fabric: "65% Poly/35% Cotton",
       color: ["Black", "White"],
@@ -70,7 +97,16 @@ export const products: Product[] = [
       gsm: 200,
     },
   },
-  // Dog Tee (second in list)
+  {
+    slug: "2-man-sticker",
+    title: "TWO MAN STICKER",
+    price: 2.0,
+    images: ["/stickerStudio.png"],
+    description: "2in X 2in Vinyl Sticker depicting the Two Man Sticker.\n Ideal for water bottles, laptop shells, skateboards, surfboards, or your friends forehead.",
+    stripePriceId: "price_1SFmIeP6lKVtJIIMWxLCJ91R",
+    sizeType: "none",
+    shippingSpeed: "3-5",
+  },
   {
     slug: "two-tee",
     title: "TWO TEE",
@@ -78,6 +114,8 @@ export const products: Product[] = [
     images: ["/twoTeeStudio.png", "/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
     description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
     stripePriceId: "price_1SwAWKP6lKVtJIIMVbo8zq0h",
+    sizeType: "standard",
+    shippingSpeed: "3-5",
     details: {
       fabric: "100% cotton",
       color: ["Black", "White"],
@@ -92,6 +130,8 @@ export const products: Product[] = [
     images: ["/brotherStudio.png", "/brotherBack.png", "/brotherVisual.png"],
     description: "The \'BROTHER\' Tee is a perfect boxy fit tee with our Brother stamp with a plus underneath. \n Printed on a shakwear blank.",
     stripePriceId: "price_1SwAJaP6lKVtJIIMoADhnfrK",
+    sizeType: "standard",
+    shippingSpeed: "3-5",
     details: {
       fabric: "100% cotton",
       color: ["Black", "White"],
@@ -99,28 +139,7 @@ export const products: Product[] = [
       gsm: 260,
     },
   },
-  {
-    slug: "dog-tee",
-    title: "DOG TEE",
-    price: 32,
-    images: ["/dogTeeFront.png", "/dogTeeBack.png"],
-    description: "The Dog Tee features our \'B\' chest logo and dog back logo with the \'Two Brothers\' spell out. \n Printed on our contrast stitch cotton blank, shrinks slightly in the wash.",
-    stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
-    details: {
-      fabric: "100% cotton",
-      color: ["Black", "White"],
-      care: "Machine wash, tumble dry low",
-      gsm: 240,
-    },
-  },
-  {
-    slug: "2-man-sticker",
-    title: "TWO MAN STICKER",
-    price: 2.0,
-    images: ["/stickerStudio.png"],
-    description: "2in X 2in Vinyl Sticker depicting the Two Man Sticker.\n Ideal for water bottles, laptop shells, skateboards, surfboards, or your friends forehead.",
-    stripePriceId: "price_1SFmIeP6lKVtJIIMWxLCJ91R",
-  },
+  
   // {
   //   slug: "plus-hoodie",
   //   title: "TWO STAMP HOODIE",

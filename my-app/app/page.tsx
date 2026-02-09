@@ -1,131 +1,83 @@
 import Image from 'next/image';
 import LocomotiveScrollWrapper from "./components/LocomotiveScrollWrapper";
-import HeroSwapImage from "./components/HeroSwapImage";
 import Footer from './components/Footer';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <LocomotiveScrollWrapper>
-      <section
-        className="relative overflow-hidden h-[100dvh] flex items-center justify-center"
-        data-scroll-section
-        // style={{ backgroundImage: "url('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F01%2Fstussy-spring-2020-collection-campaign-imagery-3.jpg?w=1260&cbr=1&q=90&fit=max')" }}
-      >
-        {/* 
-        <div className="absolute inset-0 -z-10">
-          <img
-            src="/textureBackgrond.svg"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div> */}
-        {/* <Image
-          src="https://static.vecteezy.com/system/resources/previews/002/223/740/large_2x/horizontal-cement-and-concrete-texture-for-pattern-and-design-free-photo.jpg"
-          alt="Background"
-          fill
-          className="object-cover"
-        /> */}
-        <h1 className="hidden">Two Brothers Streetwear</h1>
-        {/* <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-black" data-scroll data-scroll-speed="5">
-          Two Brothers
-        </h1> */}
-
-        <div className="relative mx-auto w-[90vw] md:w-[80vw] h-[80vh] max-w-[1400px]">
-          {/* <video
-            className="w-full h-full object-contain"
-            autoPlay
-            muted
-            playsInline
-            loop
-            preload="metadata"
-            aria-label="Brand hero video"
-          >
-            <source src="/output_6s.webm" type="video/webm" />
-            <source src="/output_6s.mp4" type="video/mp4" />
-          </video> */}
-          {/* Mobile: stationary overlay (no Locomotive) */}
-          <div className="absolute inset-0 z-10 flex items-center justify-center md:hidden">
-            <span className="block text-black font-bold text-5xl sm:text-6xl tracking-tighter text-center">
-              TWO
-            </span>
-          </div>
-          {/* Desktop: parallax overlay */}
-          <div className="hidden md:flex absolute inset-0 z-10 items-center justify-center" data-scroll data-scroll-speed="-3">
-            <HeroSwapImage
-              alt="Two Brothers Artwork"
-              className="w-1/3 md:w-1/3 h-auto object-contain"
-            />
+      <section className="text-black pt-24 pb-16" data-scroll-section>
+        {/* Mobile grid (default) */}
+        <div className="block md:hidden mx-auto w-[97vw] max-w-[1200px]">
+          <div className="grid grid-cols-2 gap-1">
+            {/* Row 1: IMG1 | NONE */}
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/twoBlurPoster1.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            <div className="aspect-square" />
+            {/* Row 2: IMG2 | IMG3 */}
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/sexPVisual2.jpg" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/twoTeeVisual1.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            {/* Row 3: IMG | IMG5 */}
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/championVisual.jpg" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/brotherVisual.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            {/* Row 4: IMG6 | IMG7 */}
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/dogTeeVisual.jpg" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden aspect-square">
+              <Image src="/dickiesVisual3.jpeg" alt="Shop" fill className="object-cover" />
+            </Link>
           </div>
         </div>
-        
-      </section>
 
-      <section
-        id="brand"
-        className="relative z-0 overflow-hidden h-[40dvh] md:h-[60dvh] flex items-center mt-0 justify-center"
-        data-scroll-section
-      >
-        <h1
-          className="text-3xl lg:text-5xl xl:text-6xl pt-0 font-bold mx-[5%] md:mx-[15%] tracking-tighter"
-        >
-          TWO BROTHERS STUDIOS - CALIFORNIA - 2005
-        </h1>
-      </section>
-
-      <section
-        data-scroll-section
-        className="text-black"
-      >
-        <div className="mx-auto w-[80vw] md:w-[60vw] lg:w-[70vw] max-w-[1400px] mb-10 pb-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {/* Item 1 */}
-            <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
-            <Image
-                src="/homePoster1.png"
-                alt="Shop placeholder"
-                fill
-                className="object-cover"
-              />
-              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                SHOP NOW
-              </span>
+        {/* Desktop grid */}
+        <div className="hidden md:block mx-auto w-[96vw] max-w-[1600px]">
+          <div
+            className="grid gap-2"
+            style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
+          >
+            {/* Top-right 2x2 */}
+            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-2 row-start-1 row-span-2 aspect-square">
+              <Image src="/sexPVisual2.jpg" alt="Shop" fill className="object-cover" />
             </Link>
-            {/* Item 2 */}
-            <Link href="/shop" className="group relative aspect-square overflow-hidden">
-              <Image
-                src="/championStudioFront.png"
-                alt="Shop placeholder"
-                fill
-                className="object-cover"
-              />
-              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                SHOP NOW
-              </span>
+            {/* Top-left singles (r1-2, c1-2) */}
+            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-1 row-start-1 aspect-square">
+              <Image src="/homePoster1.png" alt="Shop" fill className="object-cover" />
             </Link>
-            {/* Item 3 */}
-            <Link href="/shop" className="group relative aspect-square overflow-hidden">
-              <Image
-                src="/stickerStudio.png"
-                alt="Shop placeholder"
-                fill
-                className="object-cover"
-              />
-              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                SHOP NOW
-              </span>
+            <Link href="/shop" className="relative overflow-hidden col-start-2 col-span-1 row-start-1 aspect-square">
+              <Image src="/twoBlurPoster1.png" alt="Shop" fill className="object-cover" />
             </Link>
-            {/* Item 4 */}
-            <Link href="/shop" className="bg-gray-800 group relative aspect-square overflow-hidden">
-            <Image
-                src="/homePoster2.png"
-                alt="Shop placeholder"
-                fill
-                className="object-cover "
-              />
-              <span className="pointer-events-none absolute top-2 right-2 text-md font-semibold mix-blend-difference text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                SHOP NOW
-              </span>
+            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-1 row-start-2 aspect-square">
+              <Image src="/twoTeeVisual1.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden col-start-2 col-span-1 row-start-2 aspect-square">
+              <Image src="/brotherVisual.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            {/* Bottom-left 2x2 */}
+            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-2 row-start-3 row-span-2 aspect-square">
+              <Image src="/championVisual.jpg" alt="Shop" fill className="object-cover" />
+            </Link>
+            {/* Bottom-right singles (r3-4, c3-4) */}
+            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-1 row-start-3 aspect-square">
+              <Image src="/dogTeeVisual.jpg" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden col-start-4 col-span-1 row-start-3 aspect-square">
+              <Image src="/homePoster2.png" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-1 row-start-4 aspect-square">
+              <Image src="/dickiesVisual3.jpeg" alt="Shop" fill className="object-cover" />
+            </Link>
+            <Link href="/shop" className="relative overflow-hidden col-start-4 col-span-1 row-start-4 aspect-square">
+              <Image src="/2manblackstickimg.svg" alt="Shop" fill className="object-cover" />
             </Link>
           </div>
         </div>
