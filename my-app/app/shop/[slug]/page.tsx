@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { products } from "../products";
 import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
@@ -48,15 +49,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <section className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto p-6 pt-40 grid md:grid-cols-2 gap-8 min-h-[70dvh]">
+      <section className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto px-3 md:px-6 pt-40 pb-20 grid md:grid-cols-2 gap-8 min-h-[70dvh]">
         <div>
           {/* Mobile: swipeable carousel with arrows */}
-          <div className="md:hidden">
+          <div className="md:hidden -mx-3">
             {product.images.length > 1 ? (
               <ImageCarousel images={product.images} alt={product.title} />
             ) : (
-              <div className="relative aspect-square overflow-hidden">
-                <Image src={product.images[0]} alt={product.title} fill className="object-contain" />
+              <div className="relative aspect-square overflow-hidden rounded-none md:rounded-lg">
+                <Image src={product.images[0]} alt={product.title} fill className="object-contain" priority />
               </div>
             )}
           </div>
@@ -77,15 +78,51 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <ProductPurchase
             slug={product.slug}
             stripePriceId={product.stripePriceId}
-            enableSizes={product.slug === "dog-tee" || product.slug === "sex-panthers-tee" || product.slug === "champion-reverse"}
+            enableSizes={product.sizeType === "standard"}
             title={product.title}
             image={product.images[0]}
             waistOptions={product.waistOptions}
             inseamOptions={product.inseamOptions}
             soldOut={soldOut}
           />
-          <p className="mt-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
+          <p className="my-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
           <ProductDetails details={product.details} />
+          {/* Shipping dropdown */}
+          <section className="mt-8">
+            <details className="group border-t border-black/10 pt-4">
+              <summary className="flex items-center justify-between cursor-pointer text-base md:text-lg font-semibold tracking-tighter">
+                SHIPPING
+                <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <div className="mt-3 text-sm md:text-base">
+                {product.shippingSpeed === "7-14" ? (
+                  <p>
+                    Domestic (USA): 1–3 business day handling plus a 7–14 day production window for this item.
+                    USPS/UPS with tracking. Free shipping may be offered on select items or promotions.
+                  </p>
+                ) : (
+                  <p>
+                    Domestic (USA): 1–3 business day handling. USPS/UPS with tracking. Typical delivery window 3–5
+                    business days after shipment. Free shipping may be offered on select items or promotions.
+                  </p>
+                )}
+                <p className="mt-2">
+                  International: limited pilot. Some items may ship free; others can incur higher costs depending
+                  on weight and region. Duties/taxes are typically paid by the recipient unless stated otherwise.
+                </p>
+                <p className="mt-2">
+                  Full details:{" "}
+                  <Link href="/policies/shipping" className="underline underline-offset-4">
+                    Shipping Policy
+                  </Link>
+                  <span className="mx-1">·</span>
+                  <Link href="/policies/returns" className="underline underline-offset-4">
+                    Returns
+                  </Link>
+                </p>
+              </div>
+            </details>
+          </section>
         </div>
       </section>
       <Footer />

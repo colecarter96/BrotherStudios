@@ -42,6 +42,25 @@ const Footer: React.FC = () => {
               <li>
                 <Link href="/videos">VIDEOS</Link>
               </li>
+              <li>
+                <Link href="/sizing">SIZING</Link>
+              </li>
+              <li>
+                <Link href="/magazine">MAGAZINE</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Policies */}
+          <div className="flex flex-col">
+            <h3 className="font-semibold mb-3">(POLICIES)</h3>
+            <ul className="text-2xl font-semibold">
+              <li><Link href="/policies">OVERVIEW</Link></li>
+              <li><Link href="/policies/returns">RETURNS</Link></li>
+              <li><Link href="/policies/shipping">SHIPPING</Link></li>
+              <li><Link href="/policies/privacy">PRIVACY</Link></li>
+              <li><Link href="/policies/terms">TERMS</Link></li>
+              <li><Link href="/policies/cookies">COOKIES</Link></li>
             </ul>
           </div>
 
