@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from './components/Header';
 import CookieBanner from './components/CookieBanner';
+import { Analytics } from "@vercel/analytics/next";
 
 
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Header />  
         {children}
         <CookieBanner />
+        <Analytics />
       </body>
     </html>
   );
