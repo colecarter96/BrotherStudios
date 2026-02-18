@@ -142,7 +142,7 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
               setMessage({ type: "error", text: "Could not add to bag. Please try again." });
             }
           }}
-          className={`mt-6 inline-flex items-center justify-center px-4 py-4 w-full  ${justAdded ? "bg-green-800" : "bg-black"} text-white font-semibold text-md md:text-xl disabled:cursor-not-allowed transition-colors duration-200`}
+          className={`mt-6 inline-flex items-center justify-center px-4 py-4 w-full  ${justAdded ? "bg-green-800" : "bg-black"} text-white font-semibold text-md md:text-lg lg:text-xl disabled:cursor-not-allowed transition-colors duration-200`}
         >
           {buttonLabel}
         </button>
