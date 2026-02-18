@@ -6,80 +6,20 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <LocomotiveScrollWrapper>
-      <section className="text-black pt-24 pb-16" data-scroll-section>
-        {/* Mobile grid (default) */}
-        <div className="block md:hidden mx-auto w-[97vw] max-w-[1200px]">
-          <div className="grid grid-cols-2 gap-1">
-            {/* Row 1: IMG1 | NONE */}
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/twoBlurPoster1.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            <div className="aspect-square" />
-            {/* Row 2: IMG2 | IMG3 */}
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/sexPVisual2.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/twoTeeVisual1.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            {/* Row 3: IMG | IMG5 */}
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/championVisual.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/brotherVisual.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            {/* Row 4: IMG6 | IMG7 */}
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/dogTeeVisual.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden aspect-square">
-              <Image src="/dickiesVisual3.jpeg" alt="Shop" fill className="object-cover" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Desktop grid */}
-        <div className="hidden md:block mx-auto w-[96vw] max-w-[1600px]">
-          <div
-            className="grid gap-2"
-            style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
-          >
-            {/* Top-right 2x2 */}
-            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-2 row-start-1 row-span-2 aspect-square">
-              <Image src="/sexPVisual2.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            {/* Top-left singles (r1-2, c1-2) */}
-            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-1 row-start-1 aspect-square">
-              <Image src="/homePoster1.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-2 col-span-1 row-start-1 aspect-square">
-              <Image src="/twoBlurPoster1.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-1 row-start-2 aspect-square">
-              <Image src="/twoTeeVisual1.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-2 col-span-1 row-start-2 aspect-square">
-              <Image src="/brotherVisual.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            {/* Bottom-left 2x2 */}
-            <Link href="/shop" className="relative overflow-hidden col-start-1 col-span-2 row-start-3 row-span-2 aspect-square">
-              <Image src="/championVisual.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            {/* Bottom-right singles (r3-4, c3-4) */}
-            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-1 row-start-3 aspect-square">
-              <Image src="/dogTeeVisual.jpg" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-4 col-span-1 row-start-3 aspect-square">
-              <Image src="/homePoster2.png" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-3 col-span-1 row-start-4 aspect-square">
-              <Image src="/dickiesVisual3.jpeg" alt="Shop" fill className="object-cover" />
-            </Link>
-            <Link href="/shop" className="relative overflow-hidden col-start-4 col-span-1 row-start-4 aspect-square">
-              <Image src="/2manblackstickimg.svg" alt="Shop" fill className="object-cover" />
-            </Link>
-          </div>
+      <section className="text-black h-[100dvh] pt-24" data-scroll-section>
+        <div className="h-full flex items-center justify-center">
+          <Link href="/shop" className="block">
+            {/* Mobile: full-width square; Desktop: centered square with space around */}
+            <div className="relative mx-auto w-screen aspect-square md:w-[70dvh] md:h-[70dvh] md:aspect-auto">
+              <Image
+                src="/twoBlurPoster1.png"
+                alt="Two Brothers — Shop"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </Link>
         </div>
       </section>
 

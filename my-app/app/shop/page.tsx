@@ -34,14 +34,14 @@ export default async function Shop() {
     return (
     <>
         <div className="px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:mx-[10%] gap-8 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:mx-[5%] gap-0 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
           {products.map((p) => (
             <Link
               key={p.slug}
               href={`/shop/${p.slug}`}
               className="group block border-2 border-transparent px-2"
             >
-              <div className="relative w-full aspect-square transform-gpu transition-transform duration-300 ease-out md:group-hover:-rotate-1 md:group-hover:scale-[1.01]">
+              <div className="relative w-full aspect-square">
                 <Image src={p.images[0]} alt={p.title} fill className="object-contain" />
                 {soldOut.has(p.slug) && (
                   <div className="absolute top-2 left-2 bg-black text-white text-xs md:text-sm font-semibold px-2 py-1">

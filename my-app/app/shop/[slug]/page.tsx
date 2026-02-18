@@ -49,30 +49,34 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <section className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto px-3 md:px-6 pt-40 pb-20 grid md:grid-cols-2 gap-8 min-h-[70dvh]">
-        <div>
+      <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
+        <div className="pt-40 md:pt-0">
           {/* Mobile: swipeable carousel with arrows */}
           <div className="md:hidden -mx-3">
             {product.images.length > 1 ? (
               <ImageCarousel images={product.images} alt={product.title} />
             ) : (
-              <div className="relative aspect-square overflow-hidden rounded-none md:rounded-lg">
-                <Image src={product.images[0]} alt={product.title} fill className="object-contain" priority />
+              <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
+                <Image src={product.images[0]} alt={product.title} fill className="object-cover" priority />
               </div>
             )}
           </div>
           {/* Desktop: sticky vertical scrollable image stack */}
           <div className="hidden md:block">
-            <div className="space-y-4 pr-2">
+            <div className="space-y-0 pr-0">
               {product.images.map((src, i) => (
-                <div key={i} className="relative w-full aspect-square overflow-hidden">
-                  <Image src={src} alt={`${product.title} ${i + 1}`} fill className="object-contain" />
-                </div>
+                <img
+                  key={i}
+                  src={src}
+                  alt={`${product.title} ${i + 1}`}
+                  loading="lazy"
+                  className="block w-full h-auto"
+                />
               ))}
             </div>
           </div>
         </div>
-        <div className="md:pt-10 lg:pt-16">
+        <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter">{product.title}</h1>
           <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
           <ProductPurchase

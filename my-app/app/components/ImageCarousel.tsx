@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 interface ImageCarouselProps {
   images: string[];
@@ -9,56 +9,66 @@ interface ImageCarouselProps {
 }
 
 export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
-  const [idx, setIdx] = useState(0);
   const total = images.length;
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  const [idx, setIdx] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
+  const [dragDeltaX, setDragDeltaX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const horizontalLock = useRef<boolean>(false);
 
-  const prev = () => setIdx((i) => (i - 1 + total) % total);
-  const next = () => setIdx((i) => (i + 1) % total);
+  const canPrev = idx > 0;
+  const canNext = idx < total - 1;
+  const prev = () => setIdx((i) => Math.max(0, i - 1));
+  const next = () => setIdx((i) => Math.min(total - 1, i + 1));
+
+  const slideWidth = useMemo(() => containerRef.current?.clientWidth ?? 0, [containerRef.current]);
 
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    touchEndX.current = null;
     const t = e.targetTouches[0];
-    touchStartX.current = t.clientX;
-    touchStartY.current = t.clientY;
+    startXRef.current = t.clientX;
+    startYRef.current = t.clientY;
+    setDragDeltaX(0);
+    setIsDragging(true);
     horizontalLock.current = false;
   };
 
   const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     const t = e.targetTouches[0];
-    touchEndX.current = t.clientX;
-    if (touchStartX.current !== null && touchStartY.current !== null) {
-      const dx = t.clientX - touchStartX.current;
-      const dy = t.clientY - touchStartY.current;
-      // Decide if this is a horizontal drag; small slop of 8px
+    if (startXRef.current !== null && startYRef.current !== null) {
+      const dx = t.clientX - startXRef.current;
+      const dy = t.clientY - startYRef.current;
       if (!horizontalLock.current && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
         horizontalLock.current = true;
       }
-      // When horizontally dragging, prevent vertical scroll from hijacking
       if (horizontalLock.current) {
         e.preventDefault();
+        setDragDeltaX(dx);
       }
     }
   };
 
   const onTouchEnd = () => {
-    if (touchStartX.current === null || touchEndX.current === null) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const threshold = 50; // px
-    if (Math.abs(distance) < threshold) return;
-    if (distance > 0) {
-      next();
-    } else {
-      prev();
+    if (startXRef.current === null) {
+      setIsDragging(false);
+      setDragDeltaX(0);
+      return;
     }
+    const distance = dragDeltaX;
+    const threshold = Math.max(50, slideWidth * 0.15);
+    if (Math.abs(distance) >= threshold) {
+      if (distance < 0 && canNext) next();
+      else if (distance > 0 && canPrev) prev();
+    }
+    setIsDragging(false);
+    setDragDeltaX(0);
     horizontalLock.current = false;
   };
 
   return (
     <div
+      ref={containerRef}
       className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg touch-pan-y select-none"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
@@ -66,28 +76,42 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
       role="region"
       aria-roledescription="carousel"
     >
-      <Image src={images[idx]} alt={alt} fill className="object-contain" />
+      <div
+        className="h-full flex"
+        style={{
+          width: `${total * 100}%`,
+          transform: `translateX(calc(${-idx * (100 / total)}% + ${dragDeltaX}px))`,
+          transition: isDragging ? "none" : "transform 300ms ease-out",
+        }}
+      >
+        {images.map((src, i) => (
+          <div key={i} className="relative h-full" style={{ width: `${100 / total}%` }}>
+            <Image src={src} alt={alt} fill className="object-cover" priority={i === idx} />
+          </div>
+        ))}
+      </div>
 
       {total > 1 && (
         <>
           <button
             aria-label="Previous image"
-            onClick={prev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black font-bold flex items-center justify-center"
+            onClick={() => !isDragging && canPrev && prev()}
+            disabled={!canPrev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            ⟵
+            〈
           </button>
           <button
             aria-label="Next image"
-            onClick={next}
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black font-bold flex items-center justify-center"
+            onClick={() => !isDragging && canNext && next()}
+            disabled={!canNext}
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            ⟶
+            〉
           </button>
         </>
       )}
     </div>
   );
 }
-
 
