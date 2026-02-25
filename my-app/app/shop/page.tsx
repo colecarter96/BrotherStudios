@@ -41,8 +41,27 @@ export default async function Shop() {
               href={`/shop/${p.slug}`}
               className="group block border-2 border-transparent px-2"
             >
-              <div className="relative w-full aspect-square">
-                <Image src={p.images[0]} alt={p.title} fill className="object-contain" />
+              <div className="relative w-full aspect-square overflow-hidden">
+                {/* Base image */}
+                <div className="absolute -inset-[2px]">
+                  <Image
+                    src={p.images[0]}
+                    alt={p.title}
+                    fill
+                    className={`object-cover transition-none duration-500 ${p.images[1] ? "md:group-hover:opacity-0" : ""}`}
+                  />
+                </div>
+                {/* Hover image (desktop only) */}
+                {p.images[1] && (
+                  <div className="absolute -inset-[2px]">
+                    <Image
+                      src={p.images[1]}
+                      alt={`${p.title} alternate`}
+                      fill
+                      className="hidden md:block object-cover opacity-0 md:group-hover:opacity-100 transition-none duration-500"
+                    />
+                  </div>
+                )}
                 {soldOut.has(p.slug) && (
                   <div className="absolute top-2 left-2 bg-black text-white text-xs md:text-sm font-semibold px-2 py-1">
                     SOLD OUT

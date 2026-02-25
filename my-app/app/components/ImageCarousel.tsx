@@ -85,8 +85,10 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
         }}
       >
         {images.map((src, i) => (
-          <div key={i} className="relative h-full" style={{ width: `${100 / total}%` }}>
-            <Image src={src} alt={alt} fill className="object-cover" priority={i === idx} />
+          <div key={i} className="relative h-full overflow-hidden" style={{ width: `${100 / total}%` }}>
+            <div className="absolute -inset-[3px]">
+              <Image src={src} alt={alt} fill className="object-cover" priority={i === idx} />
+            </div>
           </div>
         ))}
       </div>
