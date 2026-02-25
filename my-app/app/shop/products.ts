@@ -59,23 +59,6 @@ export const products: Product[] = [
     },
   },
   {
-    slug: "champion-tee",
-    title: "CHAMPIONSHIP TEE",
-    price: 45,
-    images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
-    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
-    description: "The Championship Shirt exudes an aura of winning. 2 Time World Champs, do not forget it. \nFits large, size down if between sizes.",
-    stripePriceId: "price_1T4pDmP6lKVtJIIMYXwHeimk",
-    sizeType: "standard",
-    shippingSpeed: "7-14",
-    details: {
-      fabric: "100% cotton",
-      color: ["Black", "Cream", "Yellow"],
-      care: "Machine wash, tumble dry low",
-      gsm: 350,
-    },
-  },
-  {
     slug: "soccer-tee",
     title: "TBS CLUB SHIRT",
     price: 50,
@@ -92,6 +75,24 @@ export const products: Product[] = [
       gsm: 270,
     },
   },
+  {
+    slug: "champion-tee",
+    title: "CHAMPIONSHIP TEE",
+    price: 45,
+    images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
+    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    description: "The Championship Shirt exudes an aura of winning. 2 Time World Champs, do not forget it. \nFits large, size down if between sizes.",
+    stripePriceId: "price_1T4pDmP6lKVtJIIMYXwHeimk",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    details: {
+      fabric: "100% cotton",
+      color: ["Black", "Cream", "Yellow"],
+      care: "Machine wash, tumble dry low",
+      gsm: 350,
+    },
+  },
+  
   
   {
     slug: "sex-panthers-tee",
