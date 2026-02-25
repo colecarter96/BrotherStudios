@@ -26,7 +26,7 @@ export type ProductDetails = {
 export const products: Product[] = [
   {
     slug: "climbing-tee-black",
-    title: "CLIMBING SHIRT BLACK",
+    title: "CLIMBING SHIRT [BLACK]",
     price: 40,
     images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -43,7 +43,7 @@ export const products: Product[] = [
   },
   {
     slug: "climbing-tee-white",
-    title: "ClIMBING SHIRT WHITE",
+    title: "CLIMBING SHIRT [WHITE]",
     price: 40,
     images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -60,7 +60,7 @@ export const products: Product[] = [
   },
   {
     slug: "champion-tee",
-    title: "CHAMPION TEE",
+    title: "CHAMPIONSHIP TEE",
     price: 45,
     images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -77,7 +77,7 @@ export const products: Product[] = [
   },
   {
     slug: "soccer-tee",
-    title: "SOCCER SHIRT",
+    title: "TBS CLUB SHIRT",
     price: 50,
     images: ["/SS26/soccerShirtFront.webp", "/SS26/soccerShirtBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -95,7 +95,7 @@ export const products: Product[] = [
   
   {
     slug: "sex-panthers-tee",
-    title: "SEX PANTHERS",
+    title: "TWO X SEX PANTHERS SHIRT",
     price: 45,
     images: ["/productPhotos/sexPanthersFront.webp", "/productPhotos/sexPanthersBack.webp", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
 
