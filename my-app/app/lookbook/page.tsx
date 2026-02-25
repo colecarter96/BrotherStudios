@@ -31,14 +31,16 @@ export default function LookbookPage() {
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-3">
           {images.map((src, i) => (
             <div key={`${src}-${i}`} className="relative aspect-square overflow-hidden">
-              <Image
-                src={src}
-                alt="Lookbook image"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                priority={i < 6}
-              />
+              <div className="absolute -inset-[2px]">
+                <Image
+                  src={src}
+                  alt="Lookbook image"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  priority={i < 6}
+                />
+              </div>
             </div>
           ))}
         </div>

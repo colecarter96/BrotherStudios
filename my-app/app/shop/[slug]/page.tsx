@@ -57,7 +57,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <ImageCarousel images={product.images} alt={product.title} />
             ) : (
               <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
-                <Image src={product.images[0]} alt={product.title} fill className="object-cover" priority />
+                <div className="absolute -inset-[3px]">
+                  <Image src={product.images[0]} alt={product.title} fill className="object-cover" priority />
+                </div>
               </div>
             )}
           </div>
@@ -65,13 +67,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="hidden md:block">
             <div className="space-y-0 pr-0">
               {product.images.map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt={`${product.title} ${i + 1}`}
-                  loading="lazy"
-                  className="block w-full h-auto"
-                />
+                <div key={i} className="overflow-hidden">
+                  <img
+                    src={src}
+                    alt={`${product.title} ${i + 1}`}
+                    loading="lazy"
+                    className="block w-[calc(100%+6px)] max-w-none -mx-[3px] my-[-3px] h-auto"
+                  />
+                </div>
               ))}
             </div>
           </div>
