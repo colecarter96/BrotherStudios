@@ -12,7 +12,7 @@ const images: string[] = [
   "/dickiesVisual1.jpeg",
   "/homePoster1.png",
   "/homePoster2.png",
-  "/championStudioFront.png",
+  "/productPhotos/championStudioFront.png",
   "/productPhotos/championBack.jpg",
   "/stickerStudio.png",
   "/twoTeeStudio.png",
