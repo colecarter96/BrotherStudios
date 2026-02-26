@@ -10,12 +10,12 @@ const Footer: React.FC = () => {
       {/* Upper Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 mb-8">
         {/* Image and Initials */}
-        <div className="flex flex-col items-center mb-6 md:mb-0 ">
+        <div className="flex flex-col items-left md:items-center mb-6 md:mb-0 ">
           <Image
             src="/tbsMillion.png"
             alt="Your Initials"
-            width={340} // adjust as needed
-            height={120} // adjust as needed
+            width={226} // adjust as needed
+            height={80} // adjust as needed
             className="object-cover"
           />
           {/* <p className="mt-2 text-xl font-semibold">CSC</p> */}
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
         {/* Navigation and other info */}
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-12">
           {/* Navigation Links */}
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <h3 className="font-semibold mb-3">(NAVIGATION)</h3>
             <ul className="text-2xl font-semibold">
               <li>
@@ -33,9 +33,9 @@ const Footer: React.FC = () => {
               <li>
                 <Link href="/shop">SHOP</Link>
               </li>
-              {/* <li>
+              <li>
                 <Link href="/about">ABOUT</Link>
-              </li> */}
+              </li> 
               <li>
                 <Link href="/contact">CONTACT</Link>
               </li>
@@ -49,18 +49,18 @@ const Footer: React.FC = () => {
                 <Link href="/magazine">MAGAZINE</Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Policies */}
           <div className="flex flex-col">
             <h3 className="font-semibold mb-3">(POLICIES)</h3>
             <ul className="text-2xl font-semibold">
               <li><Link href="/policies">OVERVIEW</Link></li>
-              <li><Link href="/policies/returns">RETURNS</Link></li>
+              {/* <li><Link href="/policies/returns">RETURNS</Link></li>
               <li><Link href="/policies/shipping">SHIPPING</Link></li>
               <li><Link href="/policies/privacy">PRIVACY</Link></li>
               <li><Link href="/policies/terms">TERMS</Link></li>
-              <li><Link href="/policies/cookies">COOKIES</Link></li>
+              <li><Link href="/policies/cookies">COOKIES</Link></li> */}
             </ul>
           </div>
 
@@ -72,14 +72,14 @@ const Footer: React.FC = () => {
                 <span className="">E: </span>{" "}
                 <span className="font-medium"> the.twobrothers.studios@gmail.com</span>
               </li>
-              <li className="flex">
+              {/* <li className="flex">
                 <span className="">M: </span>{" "}
                 <span className="font-medium"> +1 (805) 754-7679</span>
               </li>
               <li className="flex">
                 <span className="">H: </span>{" "}
                 <span className="font-medium"> Monday-Friday, 9am-5pm</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
