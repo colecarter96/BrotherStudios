@@ -25,8 +25,8 @@ export type ProductDetails = {
 
 export const products: Product[] = [
   {
-    slug: "climbing-tee-black",
-    title: "CLIMBING SHIRT [BLACK]",
+    slug: "expedition-tee-black",
+    title: "EXPEDITION SHIRT [BLACK]",
     price: 40,
     images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -42,8 +42,8 @@ export const products: Product[] = [
     },
   },
   {
-    slug: "climbing-tee-white",
-    title: "CLIMBING SHIRT [WHITE]",
+    slug: "expedition-tee-white",
+    title: "EXPEDITION SHIRT [WHITE]",
     price: 40,
     images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp"],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
