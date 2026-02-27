@@ -62,7 +62,7 @@ export const products: Product[] = [
     slug: "soccer-tee",
     title: "TBS CLUB SHIRT",
     price: 50,
-    images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png"], //"/SS26/soccerShirtBack.webp"
+    images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"], //"/SS26/soccerShirtBack.webp"
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "Designed in the style of vintage football kits, we hope you feel the same loyalty to your favorite club as to us. Blanked out name because the brotherhood is more important than any one of us.\nFits large, size down if between sizes.",
     stripePriceId: "price_1T4pEOP6lKVtJIIMYT4Kq0bi",
