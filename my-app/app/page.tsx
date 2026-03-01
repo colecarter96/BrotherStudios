@@ -6,23 +6,58 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <LocomotiveScrollWrapper>
-      <section className="text-black h-[100dvh] pt-24" data-scroll-section>
+      {/* HERO - centered image, 80dvh */}
+      <section className="text-black h-[80dvh] pt-24" data-scroll-section>
         <div className="h-full flex items-center justify-center">
           <Link href="/shop" className="block">
-            {/* Mobile: full-width square; Desktop: centered square with space around */}
-            <div className="relative mx-auto w-screen aspect-square md:w-[70dvh] md:h-[70dvh] md:aspect-auto">
+            <div className="relative mx-auto w-[92vw] max-w-[1200px] h-[60vh] md:h-[70vh]">
               <Image
                 src="/twoBlurPoster1.png"
-                alt="Two Brothers — Shop"
+                alt="Two Brothers — SS26"
                 fill
-                className="object-contain"
                 priority
+                className="object-contain"
+                sizes="(max-width: 768px) 92vw, 1200px"
               />
             </div>
           </Link>
         </div>
       </section>
 
+      {/* Spacer */}
+      <section className="py-6" data-scroll-section />
+
+      
+
+      {/* VISUALS GRID: 1x1 on mobile, 2x2 on desktop (edge-to-edge on desktop) */}
+      <section className="text-black py-6 md:py-10" data-scroll-section>
+        <div className="mx-[calc(-50vw+50%)] w-screen max-w-none">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0">
+            {[
+              
+              { src: "/SS26/visuals/climbingTeeBackBlack.jpeg", alt: "Climbing Tee Back Black" },
+              
+              { src: "/SS26/visuals/climbingTeeBackWhite.jpeg", alt: "Climbing Tee Back White" },
+              { src: "/SS26/visuals/climbingTeeFrontBlack.png", alt: "Climbing Tee Front Black" },
+              { src: "/SS26/visuals/clubTeeFront.jpeg", alt: "Club Tee Front" },
+            ].map((img, i) => (
+              <Link key={i} href="/shop" className="group relative block aspect-square overflow-hidden bg-white">
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 92vw, 50vw"
+                  decoding="async"
+                />
+                <span className="pointer-events-none absolute top-2 right-2 text-xs md:text-sm font-semibold text-white md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                  Shop
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
 
       
@@ -79,9 +114,6 @@ export default function Home() {
       <section className="text-black" data-scroll-section>
         <Footer />
       </section>
-
-      
-      
 
     </LocomotiveScrollWrapper>
   );

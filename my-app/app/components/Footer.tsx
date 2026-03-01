@@ -24,10 +24,10 @@ const Footer: React.FC = () => {
         {/* Navigation and other info */}
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-12">
           {/* Navigation Links */}
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <h3 className="font-semibold mb-3">(NAVIGATION)</h3>
             <ul className="text-2xl font-semibold">
-              <li>
+              {/* <li>
                 <Link href="/">HOME</Link>
               </li>
               <li>
@@ -35,11 +35,11 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/about">ABOUT</Link>
-              </li> 
+              </li>  */}
               <li>
                 <Link href="/contact">CONTACT</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/videos">VIDEOS</Link>
               </li>
               <li>
@@ -47,9 +47,9 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/magazine">MAGAZINE</Link>
-              </li>
+              </li> */}
             </ul>
-          </div> */}
+          </div>
 
           {/* Policies */}
           <div className="flex flex-col">
