@@ -3,9 +3,10 @@ import Link from "next/link";
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const sessionId = typeof searchParams?.session_id === "string" ? searchParams!.session_id : "";
+  const params = (await searchParams) || {};
+  const sessionId = typeof params?.session_id === "string" ? params.session_id : "";
   let order: {
     id: string;
     email?: string | null;
