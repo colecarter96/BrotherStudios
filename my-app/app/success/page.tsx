@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-type SuccessPageProps = {
+export default async function SuccessPage({
+  searchParams,
+}: {
   searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export default async function SuccessPage({ searchParams }: SuccessPageProps) {
+}) {
   const sessionId = typeof searchParams?.session_id === "string" ? searchParams!.session_id : "";
   let order: {
     id: string;
@@ -37,7 +37,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             currency: li.currency ?? (session.currency || "usd"),
           })) || [],
       };
-    } catch (e) {
+    } catch {
       errorMsg = "We could not load your order details, but your payment may have succeeded.";
     }
   } else {
