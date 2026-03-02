@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface ImageCarouselProps {
   images: string[];
@@ -23,7 +23,7 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
   const prev = () => setIdx((i) => Math.max(0, i - 1));
   const next = () => setIdx((i) => Math.min(total - 1, i + 1));
 
-  const slideWidth = useMemo(() => containerRef.current?.clientWidth ?? 0, [containerRef.current]);
+  // slide width is read on touch end; no memoization needed
 
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     const t = e.targetTouches[0];
@@ -56,7 +56,8 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
       return;
     }
     const distance = dragDeltaX;
-    const threshold = Math.max(50, slideWidth * 0.15);
+    const width = containerRef.current?.clientWidth ?? 0;
+    const threshold = Math.max(50, width * 0.15);
     if (Math.abs(distance) >= threshold) {
       if (distance < 0 && canNext) next();
       else if (distance > 0 && canPrev) prev();

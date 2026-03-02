@@ -68,11 +68,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="space-y-0 pr-0">
               {product.images.map((src, i) => (
                 <div key={i} className="overflow-hidden">
-                  <img
+                  <Image
                     src={src}
                     alt={`${product.title} ${i + 1}`}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: "calc(100% + 6px)", height: "auto", marginLeft: "-3px", marginRight: "-3px", marginTop: "-3px", marginBottom: "-3px" }}
                     loading="lazy"
-                    className="block w-[calc(100%+6px)] max-w-none -mx-[3px] my-[-3px] h-auto"
                   />
                 </div>
               ))}

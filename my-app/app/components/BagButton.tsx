@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCart } from "./useCart";
 import Link from "next/link";
 

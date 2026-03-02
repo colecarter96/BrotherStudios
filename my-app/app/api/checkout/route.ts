@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug") || "";
   const successUrl =
     process.env.NEXT_PUBLIC_STRIPE_SUCCESS_URL ||
-    `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?success=1`;
+    `${req.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl =
     process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL ||
     `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?canceled=1`;

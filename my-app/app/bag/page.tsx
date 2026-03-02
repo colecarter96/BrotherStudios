@@ -198,7 +198,7 @@ export default function BagPage() {
                 try {
                   setIsCheckingOut(true);
                   await checkout();
-                } catch (e) {
+                } catch {
                   setIsCheckingOut(false);
                 }
               }}
