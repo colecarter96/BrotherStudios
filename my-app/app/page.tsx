@@ -6,31 +6,36 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <LocomotiveScrollWrapper>
-      {/* HERO - centered image, 80dvh */}
-      <section className="text-black h-[80dvh] pt-24" data-scroll-section>
-        <div className="h-full flex items-center justify-center">
-          <Link href="/shop" className="block">
-            <div className="relative mx-auto w-[92vw] max-w-[1200px] h-[60vh] md:h-[70vh]">
-              <Image
-                src="/twoBlurPoster1.png"
-                alt="Two Brothers — SS26"
-                fill
-                priority
-                className="object-contain"
-                sizes="(max-width: 768px) 92vw, 1200px"
-              />
-            </div>
-          </Link>
+      {/* HERO - 90dvh, responsive composition */}
+      <section className="text-black pt-0" data-scroll-section>
+        <div className="h-[90dvh] w-full">
+          {/* Mobile: single image (with slight zoom to avoid side gaps) */}
+          <div className="md:hidden relative w-screen h-full overflow-hidden">
+            <Image
+              src="/oceanSS26TwoDesktop.png"
+              alt="SS26"
+              fill
+              priority
+              className="object-cover origin-center scale-[1.06] sm:scale-[1.03]"
+              sizes="100vw"
+            />
+          </div>
+          {/* Desktop: single wide image */}
+          <div className="hidden md:block relative w-screen h-full overflow-hidden">
+            <Image
+              src="/oceanSS26TwoDesktop.png"
+              alt="SS26 Ocean"
+              fill
+              priority
+              className="object-cover origin-center md:scale-[1.08] lg:scale-[1.04] xl:scale-100 2xl:scale-100 will-change-transform"
+              sizes="100vw"
+            />
+          </div>
         </div>
       </section>
 
-      {/* Spacer */}
-      <section className="py-6" data-scroll-section />
-
-      
-
       {/* VISUALS GRID: 1x1 on mobile, 2x2 on desktop (edge-to-edge on desktop) */}
-      <section className="text-black py-6 md:py-10" data-scroll-section>
+      <section className="text-black py-0" data-scroll-section>
         <div className="mx-[calc(-50vw+50%)] w-screen max-w-none">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0">
             {[
