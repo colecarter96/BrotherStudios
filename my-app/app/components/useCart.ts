@@ -119,7 +119,12 @@ export function useCart() {
         items: items.map((it) => ({
           priceId: it.priceId,
           quantity: it.quantity,
-          metadata: { size: it.size || undefined, slug: it.slug || undefined },
+          metadata: {
+            size: it.size || undefined,
+            slug: it.slug || undefined,
+            title: it.title || undefined,
+            priceId: it.priceId || undefined,
+          },
         })),
       }),
     });

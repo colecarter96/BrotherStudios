@@ -77,6 +77,7 @@ export async function POST(req: NextRequest) {
       const resolvedPriceId = await resolvePriceId(priceId);
       const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
       const itemSlug = typeof metadata?.slug === "string" && metadata.slug ? String(metadata.slug) : slug;
+      const title = typeof metadata?.title === "string" && metadata.title ? String(metadata.title) : undefined;
       if (await isSoldOut(itemSlug)) {
         return NextResponse.json({ error: "This item is sold out." }, { status: 409 });
       }
@@ -98,11 +99,15 @@ export async function POST(req: NextRequest) {
         metadata: {
           slug,
           ...(metadata || {}),
+          ...(title ? { title } : {}),
+          priceId: resolvedPriceId,
         },
         payment_intent_data: {
           metadata: {
             slug,
             ...(metadata || {}),
+            ...(title ? { title } : {}),
+            priceId: resolvedPriceId,
           },
         },
         ...(size
@@ -125,7 +130,13 @@ export async function POST(req: NextRequest) {
     }
 
     const lineItems: { price: string; quantity?: number }[] = [];
-    const cartMetaCompact: Array<{ size?: string | null; quantity?: number | null }> = [];
+    const cartMetaCompact: Array<{
+      title?: string | null;
+      slug?: string | null;
+      size?: string | null;
+      quantity?: number | null;
+      priceId?: string | null;
+    }> = [];
     let allStickers = true;
     // Prevent checkout for any sold-out one-of-one item
     for (const item of items) {
@@ -138,8 +149,11 @@ export async function POST(req: NextRequest) {
       const resolvedPriceId = await resolvePriceId(item.priceId);
       lineItems.push({ price: resolvedPriceId, quantity: item.quantity ?? 1 });
       cartMetaCompact.push({
+        title: typeof item.metadata?.title === "string" ? item.metadata.title : null,
+        slug: typeof item.metadata?.slug === "string" ? item.metadata.slug : null,
         size: typeof item.metadata?.size === "string" ? item.metadata.size : null,
         quantity: typeof item.quantity === "number" ? item.quantity : 1,
+        priceId: resolvedPriceId,
       });
       const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
       if (itemSlug !== "2-man-sticker") {
