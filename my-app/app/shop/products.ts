@@ -173,10 +173,10 @@ export const products: Product[] = [
   {
     slug: "two-tee",
     title: "TWO TEE",
-    price: 25,
+    price: 30,
     images: ["/twoTeeStudio.png", "/productPhotos/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
     description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
-    stripePriceId: "price_1SwAWKP6lKVtJIIMVbo8zq0h",
+    stripePriceId: "price_1T7Mb8P6lKVtJIIMC9djUa1Y",
     sizeType: "standard",
     shippingSpeed: "3-5",
     details: {
