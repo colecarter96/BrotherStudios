@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
-        <div className="pt-40 md:pt-0">
+        <div className="pt-22 md:pt-0">
           {/* Mobile: swipeable carousel with arrows */}
           <div className="md:hidden -mx-3">
             {product.images.length > 1 ? (
@@ -74,7 +74,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     width={0}
                     height={0}
                     sizes="100vw"
-                    style={{ width: "calc(100% + 6px)", height: "auto", marginLeft: "-3px", marginRight: "-3px", marginTop: "-3px", marginBottom: "-3px" }}
+                    className="block will-change-transform"
+                    style={{ width: "100%", height: "auto", transform: "scale(1.035)", transformOrigin: "center" }}
                     loading="lazy"
                   />
                 </div>
