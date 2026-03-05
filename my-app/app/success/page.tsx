@@ -1,4 +1,6 @@
+import React from "react";
 import Link from "next/link";
+import ClearCartOnMount from "../components/ClearCartOnMount";
 
 export default async function SuccessPage({
   searchParams,
@@ -59,6 +61,7 @@ export default async function SuccessPage({
 
   return (
     <main className="mx-auto w-[92vw] max-w-3xl pt-28 pb-20">
+      <ClearCartOnMount />
       <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter">Thanks for your order</h1>
       <p className="mt-2 text-sm md:text-base">A confirmation email will arrive shortly.</p>
 

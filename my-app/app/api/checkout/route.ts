@@ -194,7 +194,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: session.url }, { status: 200 });
   } catch (err) {
     const message = typeof err === "object" && err && "message" in err ? (err as { message?: string }).message : "Failed to create checkout session";
-    // eslint-disable-next-line no-console
     console.error("Stripe checkout error:", err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
