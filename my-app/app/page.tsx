@@ -8,7 +8,7 @@ export default function Home() {
     <LocomotiveScrollWrapper>
       {/* HERO - 90dvh, responsive composition */}
       <section className="text-black pt-0" data-scroll-section>
-        <div className="h-[90dvh] w-full">
+        <div className="h-[90vh] md:h-[90dvh] w-full">
           {/* Mobile: single image (with slight zoom to avoid side gaps) */}
           <div className="md:hidden relative w-screen h-full overflow-hidden">
             <Image
@@ -18,6 +18,7 @@ export default function Home() {
               priority
               className="object-cover origin-center scale-[1.06] sm:scale-[1.03]"
               sizes="100vw"
+              unoptimized
             />
           </div>
           {/* Desktop: single wide image */}
@@ -29,6 +30,7 @@ export default function Home() {
               priority
               className="object-cover origin-center md:scale-[1.08] lg:scale-[1.04] xl:scale-100 2xl:scale-100 will-change-transform"
               sizes="100vw"
+              unoptimized
             />
           </div>
         </div>
