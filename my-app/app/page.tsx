@@ -56,6 +56,7 @@ export default function Home() {
                   className="object-cover"
                   sizes="(max-width: 768px) 92vw, 50vw"
                   decoding="async"
+                  unoptimized
                 />
                 <span className="pointer-events-none absolute top-2 right-2 text-xs md:text-sm font-semibold text-white md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                   Shop
