@@ -43,6 +43,32 @@ export default function BagPage() {
 
       {hasItems && (
         <>
+          <div className="mb-6 flex items-center justify-end gap-3 px-2">
+            <Link href="/shop" className="inline-flex items-center justify-center px-5 py-3 bg-black text-white font-semibold text-base">
+              Shop
+            </Link>
+            <button
+              onClick={clear}
+              className="inline-flex items-center justify-center px-5 py-3 border border-red-600 text-red-600 bg-white font-semibold text-base"
+            >
+              Clear
+            </button>
+            <button
+              onClick={async () => {
+                try {
+                  setIsCheckingOut(true);
+                  await checkout();
+                } catch {
+                  setIsCheckingOut(false);
+                }
+              }}
+              disabled={isCheckingOut}
+              className="inline-flex items-center justify-center px-5 py-3 bg-blue-400 text-black font-semibold text-base disabled:opacity-60"
+            >
+              {isCheckingOut ? "Redirecting..." : "Checkout"}
+            </button>
+          </div>
+
           <ul className="divide-y divide-black/10 border-t border-b border-black/10 bg-white">
             {items.map((item, index) => (
               <li key={`${item.priceId}-${index}`} className="py-4 px-2">
@@ -182,32 +208,6 @@ export default function BagPage() {
               </li>
             ))}
           </ul>
-
-          <div className="mt-8 flex items-center justify-end gap-3 px-2">
-            <Link href="/shop" className="inline-flex items-center justify-center px-5 py-3 bg-black text-white font-semibold text-base">
-              Shop
-            </Link>
-            <button
-              onClick={clear}
-              className="inline-flex items-center justify-center px-5 py-3 border border-red-600 text-red-600 bg-white font-semibold text-base"
-            >
-              Clear
-            </button>
-            <button
-              onClick={async () => {
-                try {
-                  setIsCheckingOut(true);
-                  await checkout();
-                } catch {
-                  setIsCheckingOut(false);
-                }
-              }}
-              disabled={isCheckingOut}
-              className="inline-flex items-center justify-center px-5 py-3 bg-blue-400 text-black font-semibold text-base disabled:opacity-60"
-            >
-              {isCheckingOut ? "Redirecting..." : "Checkout"}
-            </button>
-          </div>
         </>
       )}
     </section>
