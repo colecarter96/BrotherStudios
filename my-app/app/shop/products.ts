@@ -332,14 +332,14 @@ export type ProductNormalized = Omit<Product, "variants" | "images"> & {
 
 function toNormalizedVariantArray(p: Product): NormalizedVariant[] {
   if (Array.isArray(p.variants) && p.variants.length > 0) {
-    return p.variants.map((v) => ({
+    return p.variants.map((v): NormalizedVariant => ({
       color: v.color || "default",
       label: v.label || undefined,
-      images: v.images || (Array.isArray((p as any).images) ? (p as any).images : []),
+      images: v.images || p.images,
       stripePriceId: v.stripePriceId || p.stripePriceId,
-    })) as NormalizedVariant[];
+    }));
   }
-  const imgs = (p as any).images as string[] | undefined;
+  const imgs = p.images as string[] | undefined;
   return [
     {
       color: "default",
@@ -356,17 +356,23 @@ export const productsNormalized: ProductNormalized[] = products.map((p) => ({
 }));
 
 export function getPrimaryImage(p: Product | ProductNormalized): string | undefined {
-  const variants = (p as any).variants as ColorVariant[] | NormalizedVariant[] | undefined;
+  const variants = (p as ProductNormalized).variants ?? (p as Product).variants;
   if (variants && variants.length > 0 && variants[0].images?.length) return variants[0].images[0];
-  const imgs = (p as any).images as string[] | undefined;
-  return imgs?.[0];
+  if ("images" in p) {
+    const imgs = (p as Product).images;
+    return imgs?.[0];
+  }
+  return undefined;
 }
 
 export function getHoverImage(p: Product | ProductNormalized): string | undefined {
-  const variants = (p as any).variants as ColorVariant[] | NormalizedVariant[] | undefined;
+  const variants = (p as ProductNormalized).variants ?? (p as Product).variants;
   if (variants && variants.length > 1 && variants[1].images?.length) return variants[1].images[0];
   if (variants && variants.length > 0 && variants[0].images?.length > 1) return variants[0].images[1];
-  const imgs = (p as any).images as string[] | undefined;
-  return imgs?.[1];
+  if ("images" in p) {
+    const imgs = (p as Product).images;
+    return imgs?.[1];
+  }
+  return undefined;
 }
 

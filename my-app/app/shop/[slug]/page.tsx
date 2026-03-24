@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "../products";
+import { products, type ColorVariant } from "../products";
 import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
@@ -48,19 +48,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
   const soldOut = await isSoldOut(product.slug, product.oneOfOne);
-  const hasVariants = Array.isArray((product as any).variants) && (product as any).variants.length > 0;
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   if (hasVariants) {
     return (
       <>
         <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
-          <VariantView product={product as any} soldOut={soldOut} />
+          <VariantView product={product} soldOut={soldOut} />
         </section>
         <Footer />
       </>
     );
   }
-  const variants = (product as any).variants as Array<{ color: string; label?: string; images: string[]; stripePriceId?: string }> | undefined;
-  const images: string[] = ((product as any).variants?.[0]?.images as string[] | undefined) ?? product.images;
+  const variants: ColorVariant[] | undefined = product.variants;
+  const images: string[] = (product.variants?.[0]?.images as string[] | undefined) ?? product.images;
   const colorPriceIds: Record<string, string | undefined> | undefined = Array.isArray(variants)
     ? variants.reduce((acc, v) => {
         acc[v.color] = v.stripePriceId || product.stripePriceId;

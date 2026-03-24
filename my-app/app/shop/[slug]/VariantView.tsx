@@ -6,7 +6,7 @@ import Link from "next/link";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
-import type { Product } from "../products";
+import type { Product, ColorVariant } from "../products";
 
 type Props = {
   product: Product;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function VariantView({ product, soldOut }: Props) {
-  const variants = (product as any).variants as Array<{ color: string; label?: string; images: string[]; stripePriceId?: string }> | undefined;
+  const variants: ColorVariant[] | undefined = product.variants;
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
 
@@ -23,8 +23,8 @@ export default function VariantView({ product, soldOut }: Props) {
     [hasVariants, variants, selectedColor]
   );
 
-  const images = hasVariants ? (currentVariant?.images || []) : product.images;
-  const priceId = hasVariants ? (currentVariant?.stripePriceId || product.stripePriceId) : product.stripePriceId;
+  const images: string[] = hasVariants ? (currentVariant?.images || []) : product.images;
+  const priceId: string | undefined = hasVariants ? (currentVariant?.stripePriceId || product.stripePriceId) : product.stripePriceId;
   const enableSizes = product.sizeType === "standard";
 
   return (
