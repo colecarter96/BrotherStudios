@@ -1,12 +1,12 @@
 import Footer from "../components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "./products";
+import { productsNormalized, type ProductNormalized } from "./products";
 
 export const dynamic = "force-dynamic";
 
 async function getSoldOutSlugs(): Promise<Set<string>> {
-  const oneOfOneSlugs = products.filter((p) => p.oneOfOne).map((p) => p.slug);
+  const oneOfOneSlugs = productsNormalized.filter((p: ProductNormalized) => p.oneOfOne).map((p: ProductNormalized) => p.slug);
   if (oneOfOneSlugs.length === 0) return new Set();
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -35,7 +35,7 @@ export default async function Shop() {
     <>
         <div className="px-4 md:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:mx-[5%] gap-0 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
-          {products.map((p) => (
+          {productsNormalized.map((p) => (
             <Link
               key={p.slug}
               href={`/shop/${p.slug}`}
@@ -45,17 +45,19 @@ export default async function Shop() {
                 {/* Base image */}
                 <div className="absolute -inset-[2px]">
                   <Image
-                    src={p.images[0]}
+                    src={p.variants[0]?.images[0]}
                     alt={p.title}
                     fill
-                    className={`object-cover transition-none duration-500 ${p.images[1] ? "md:group-hover:opacity-0" : ""}`}
+                    className={`object-cover transition-none duration-500 ${
+                      p.variants[1]?.images?.[0] || p.variants[0]?.images?.[1] ? "md:group-hover:opacity-0" : ""
+                    }`}
                   />
                 </div>
                 {/* Hover image (desktop only) */}
-                {p.images[1] && (
+                {(p.variants[1]?.images?.[0] || p.variants[0]?.images?.[1]) && (
                   <div className="absolute -inset-[2px]">
                     <Image
-                      src={p.images[1]}
+                      src={p.variants[1]?.images?.[0] || p.variants[0]?.images?.[1]}
                       alt={`${p.title} alternate`}
                       fill
                       className="hidden md:block object-cover opacity-0 md:group-hover:opacity-100 transition-none duration-500"

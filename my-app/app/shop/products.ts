@@ -1,6 +1,13 @@
 export type ShippingSpeed = "3-5" | "7-14";
 export type SizeType = "standard" | "pants" | "none";
 
+export type ColorVariant = {
+  color: string; // required color key, e.g., "black", "white"
+  label?: string; // optional display label
+  images: string[]; // images for this color
+  stripePriceId?: string; // optional per-color Stripe price
+};
+
 export type Product = {
   slug: string;
   title: string;
@@ -14,6 +21,7 @@ export type Product = {
   inseamOptions?: string[];
   sizeType?: SizeType;
   shippingSpeed?: ShippingSpeed;
+  variants?: ColorVariant[]; // preferred: define color variants (even if only one)
 };
 
 export type ProductDetails = {
@@ -23,12 +31,22 @@ export type ProductDetails = {
   gsm?: number | string;
 };
 
+// Legacy note:
+// - images: kept for backward-compat read, but all readers should use variantsNormalized/productsNormalized.
+// - Each product should define at least one color variant with its own images.
 export const products: Product[] = [
   {
     slug: "expedition-tee-black",
     title: "EXPEDITION SHIRT [BLACK]",
     price: 40,
     images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+    variants: [
+      {
+        color: "black",
+        label: "Black",
+        images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+      },
+    ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "This shirt is designed to allow freedom of movement, be durable and get better as you wear it. With contrast stitching and print, it will keep you styling on any expedition.\nFits true to size.",
     stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
@@ -41,11 +59,51 @@ export const products: Product[] = [
       gsm: 240,
     },
   },
+  
+  {
+    slug: "handsome-brother-tee",
+    title: "HANDSOME BROTHER TEE",
+    price: 36,
+    // Kept for backward compatibility; primary/hover come from variants below
+    images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherWhite.webp"],
+    description:
+      "A premium cotton tee with front and back prints. Available in Black and White. Fits true to size.",
+    // You can omit product-level stripePriceId when using per-variant price IDs
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    variants: [
+      {
+        color: "#000000",
+        label: "Black",
+        stripePriceId: "price_1TEbRMP6lKVtJIIMYJ7WV2Is", // bogus placeholder
+        images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherBlackBack.webp"],
+      },
+      {
+        color: "#ffffff",
+        label: "White",
+        stripePriceId: "price_1TEbQoP6lKVtJIIMBcTfayyK", // bogus placeholder
+        images: ["/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeBrotherWhiteBack.webp"],
+      },
+    ],
+    details: {
+      fabric: "95% Cotton, 5% Spandex",
+      color: ["Black", "White"],
+      care: "Machine wash cold, tumble dry low",
+      gsm: 180,
+    },
+  },
   {
     slug: "expedition-tee-white",
     title: "EXPEDITION SHIRT [WHITE]",
     price: 40,
     images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+    variants: [
+      {
+        color: "white",
+        label: "White",
+        images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+      },
+    ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "This shirt is designed to allow freedom of movement, be durable and get better as you wear it. With contrast stitching and print, it will keep you styling on any expedition.\nFits true to size.",
     stripePriceId: "price_1T4pCDP6lKVtJIIM5NUrBiky",
@@ -58,11 +116,19 @@ export const products: Product[] = [
       gsm: 240,
     },
   },
+  
   {
     slug: "soccer-tee",
     title: "TBS CLUB SHIRT",
     price: 50,
     images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"], //"/SS26/soccerShirtBack.webp"
+    variants: [
+      {
+        color: "Black",
+        label: "Black",
+        images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"],
+      },
+    ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "Designed in the style of vintage football kits, we hope you feel the same loyalty to your favorite club as to us. Blanked out name because the brotherhood is more important than any one of us.\nFits large, size down if between sizes.",
     stripePriceId: "price_1T4pEOP6lKVtJIIMYT4Kq0bi",
@@ -80,6 +146,13 @@ export const products: Product[] = [
     title: "CHAMPIONSHIP TEE",
     price: 45,
     images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
+    variants: [
+      {
+        color: "black",
+        label: "Black",
+        images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
+      },
+    ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
     description: "The Championship Shirt exudes an aura of winning. 2 Time World Champs, do not forget it. \nFits large, size down if between sizes.",
     stripePriceId: "price_1T4pDmP6lKVtJIIMYXwHeimk",
@@ -99,6 +172,13 @@ export const products: Product[] = [
     title: "TWO X SEX PANTHERS SHIRT",
     price: 45,
     images: ["/productPhotos/sexPanthersFront.webp", "/productPhotos/sexPanthersBack.webp", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
+    variants: [
+      {
+        color: "black",
+        label: "Black",
+        images: ["/productPhotos/sexPanthersFront.webp", "/productPhotos/sexPanthersBack.webp", "/sexPVisual1.jpg", "/sexPVisual2.jpg"],
+      },
+    ],
 
     // images: ["/sexPanthersFront.jpg", "/sexPanthersBack.jpg", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
     description: "The Sex Panthers Tee features our premium vintage cotton blank with a full front and back print depicting two panthers and implicated relevant locations and dates. \n Fits large, size down if between sizes.",
@@ -117,6 +197,13 @@ export const products: Product[] = [
     title: "TWO MAN STICKER",
     price: 2.0,
     images: ["/stickerStudio.png"],
+    variants: [
+      {
+        color: "default",
+        label: "Default",
+        images: ["/stickerStudio.png"],
+      },
+    ],
     description: "2in X 2in Vinyl Sticker depicting the Two Man Sticker.\n Ideal for water bottles, laptop shells, skateboards, surfboards, or your friends forehead.",
     stripePriceId: "price_1SFmIeP6lKVtJIIMWxLCJ91R",
     sizeType: "none",
@@ -127,6 +214,13 @@ export const products: Product[] = [
     title: "DOG TEE",
     price: 32,
     images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
+    variants: [
+      {
+        color: "White",
+        label: "White",
+        images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
+      },
+    ],
     description: "The Dog Tee features our \'B\' chest logo and dog back logo with the \'Two Brothers\' spell out. \n Printed on our contrast stitch cotton blank, shrinks slightly in the wash.",
     stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
     sizeType: "standard",
@@ -170,22 +264,29 @@ export const products: Product[] = [
   //   sizeType: "none",
   //   shippingSpeed: "3-5",
   // },
-  {
-    slug: "two-tee",
-    title: "TWO TEE",
-    price: 30,
-    images: ["/twoTeeStudio.png", "/productPhotos/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
-    description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
-    stripePriceId: "price_1T7Mb8P6lKVtJIIMC9djUa1Y",
-    sizeType: "standard",
-    shippingSpeed: "3-5",
-    details: {
-      fabric: "100% cotton",
-      color: ["Black", "White"],
-      care: "Machine wash, tumble dry low",
-      gsm: 260,
-    },
-  },
+  // {
+  //   slug: "two-tee",
+  //   title: "TWO TEE",
+  //   price: 30,
+  //   images: ["/twoTeeStudio.png", "/productPhotos/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
+  //   variants: [
+  //     {
+  //       color: "black",
+  //       label: "Black",
+  //       images: ["/twoTeeStudio.png", "/productPhotos/twoTeeBack.png", "/twoTeeVisual1.png", "/twoTeeVisual.png"],
+  //     },
+  //   ],
+  //   description: "The \'TWO\' Tee is a perfect boxy fit tee with our TWO stamp and a stitched seam going down the back. \n Printed on a shakwear blank.",
+  //   stripePriceId: "price_1T7Mb8P6lKVtJIIMC9djUa1Y",
+  //   sizeType: "standard",
+  //   shippingSpeed: "3-5",
+  //   details: {
+  //     fabric: "100% cotton",
+  //     color: ["Black", "White"],
+  //     care: "Machine wash, tumble dry low",
+  //     gsm: 260,
+  //   },
+  // },
   // {
   //   slug: "brother-tee",
   //   title: "BROTHER TEE",
@@ -218,4 +319,54 @@ export const products: Product[] = [
   // },
   
 ];
+
+export type NormalizedVariant = {
+  color: string;
+  label?: string;
+  images: string[];
+  stripePriceId?: string;
+};
+export type ProductNormalized = Omit<Product, "variants" | "images"> & {
+  variants: NormalizedVariant[];
+};
+
+function toNormalizedVariantArray(p: Product): NormalizedVariant[] {
+  if (Array.isArray(p.variants) && p.variants.length > 0) {
+    return p.variants.map((v) => ({
+      color: v.color || "default",
+      label: v.label || undefined,
+      images: v.images || (Array.isArray((p as any).images) ? (p as any).images : []),
+      stripePriceId: v.stripePriceId || p.stripePriceId,
+    })) as NormalizedVariant[];
+  }
+  const imgs = (p as any).images as string[] | undefined;
+  return [
+    {
+      color: "default",
+      label: "Default",
+      images: imgs && imgs.length ? imgs : [],
+      stripePriceId: p.stripePriceId,
+    },
+  ];
+}
+
+export const productsNormalized: ProductNormalized[] = products.map((p) => ({
+  ...p,
+  variants: toNormalizedVariantArray(p),
+}));
+
+export function getPrimaryImage(p: Product | ProductNormalized): string | undefined {
+  const variants = (p as any).variants as ColorVariant[] | NormalizedVariant[] | undefined;
+  if (variants && variants.length > 0 && variants[0].images?.length) return variants[0].images[0];
+  const imgs = (p as any).images as string[] | undefined;
+  return imgs?.[0];
+}
+
+export function getHoverImage(p: Product | ProductNormalized): string | undefined {
+  const variants = (p as any).variants as ColorVariant[] | NormalizedVariant[] | undefined;
+  if (variants && variants.length > 1 && variants[1].images?.length) return variants[1].images[0];
+  if (variants && variants.length > 0 && variants[0].images?.length > 1) return variants[0].images[1];
+  const imgs = (p as any).images as string[] | undefined;
+  return imgs?.[1];
+}
 

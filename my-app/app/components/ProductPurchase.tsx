@@ -12,12 +12,32 @@ interface ProductPurchaseProps {
   waistOptions?: string[];
   inseamOptions?: string[];
   soldOut?: boolean;
+  colorOptions?: { value: string; label?: string }[];
+  color?: string;
+  onColorChange?: (value: string) => void;
+  colorPriceIds?: Record<string, string | undefined>;
 }
 
-export default function ProductPurchase({ slug, stripePriceId, enableSizes, title, image, waistOptions, inseamOptions, soldOut }: ProductPurchaseProps) {
+export default function ProductPurchase({
+  slug,
+  stripePriceId,
+  enableSizes,
+  title,
+  image,
+  waistOptions,
+  inseamOptions,
+  soldOut,
+  colorOptions,
+  color: controlledColor,
+  onColorChange,
+  colorPriceIds,
+}: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
   const [waist, setWaist] = useState<string>("");
   const [inseam, setInseam] = useState<string>("");
+  const [uncontrolledColor, setUncontrolledColor] = useState<string>(
+    controlledColor || colorOptions?.[0]?.value || ""
+  );
   const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" });
   const [justAdded, setJustAdded] = useState<boolean>(false);
   const { addItem } = useCart();
@@ -25,7 +45,9 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
   const isPants = Array.isArray(waistOptions) || Array.isArray(inseamOptions);
   const showSize = !!enableSizes && !isPants;
   const sizeValid = isPants ? Boolean(waist) && Boolean(inseam) : (!showSize || Boolean(size));
-  const canAdd = Boolean(stripePriceId) && sizeValid && !soldOut;
+  const effectiveColor = controlledColor ?? uncontrolledColor;
+  const computedPriceId = (effectiveColor && colorPriceIds?.[effectiveColor]) || stripePriceId;
+  const canAdd = Boolean(computedPriceId) && sizeValid && !soldOut;
   const buttonLabel =
     soldOut ? "SOLD OUT" :
     isPants && (!waist || !inseam) ? "SELECT SIZE" :
@@ -105,13 +127,44 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
         </div>
       )}
 
+      {/* Color swatches (below size) */}
+      {Array.isArray(colorOptions) && colorOptions.length > 0 && (
+        <div className="mb-4">
+          <div className="block text-base md:text-lg font-semibold mb-2">Color</div>
+          <div role="radiogroup" aria-label="Color" className="flex flex-wrap gap-2">
+            {colorOptions.map((opt) => {
+              const selected = (effectiveColor || colorOptions[0].value) === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  title={opt.label || opt.value}
+                  onClick={() => {
+                    if (onColorChange) onColorChange(opt.value);
+                    setUncontrolledColor(opt.value);
+                  }}
+                  className={`relative h-8 w-10 md:h-9 md:w-12 border ${
+                    selected ? "border-black ring-2 ring-black" : "border-black/20"
+                  } focus:outline-none focus:ring-2 focus:ring-black`}
+                  style={{ backgroundColor: opt.value }}
+                >
+                  <span className="sr-only">{opt.label || opt.value}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start flex-col">
 
         <button
           disabled={!canAdd}
           onClick={() => {
             setMessage({ type: "", text: "" });
-            if (!stripePriceId) {
+            if (!computedPriceId) {
               setMessage({ type: "error", text: "This product is not available right now." });
               return;
             }
@@ -129,12 +182,13 @@ export default function ProductPurchase({ slug, stripePriceId, enableSizes, titl
             }
             try {
               addItem({
-                priceId: stripePriceId,
+                priceId: computedPriceId!,
                 quantity: 1,
                 size: isPants ? `${waist}x${inseam}` : (showSize ? size : undefined),
                 slug,
                 title,
                 image,
+                color: effectiveColor || undefined,
               });
               setJustAdded(true);
               setTimeout(() => setJustAdded(false), 1800);

@@ -6,6 +6,7 @@ import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductDetails from "@/app/components/ProductDetails";
+import VariantView from "./VariantView";
 
 export const dynamic = "force-dynamic";
 
@@ -34,10 +35,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
   if (!product) return {};
+  const ogImg = (product as any).variants?.[0]?.images?.[0] || product.images?.[0];
   return {
     title: `${product.title} | Shop`,
     description: product.description,
-    openGraph: { images: product.images.slice(0, 1) },
+    openGraph: { images: ogImg ? [ogImg] : [] },
   };
 }
 
@@ -46,6 +48,25 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
   const soldOut = await isSoldOut(product.slug, product.oneOfOne);
+  const hasVariants = Array.isArray((product as any).variants) && (product as any).variants.length > 0;
+  if (hasVariants) {
+    return (
+      <>
+        <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
+          <VariantView product={product as any} soldOut={soldOut} />
+        </section>
+        <Footer />
+      </>
+    );
+  }
+  const variants = (product as any).variants as Array<{ color: string; label?: string; images: string[]; stripePriceId?: string }> | undefined;
+  const images: string[] = ((product as any).variants?.[0]?.images as string[] | undefined) ?? product.images;
+  const colorPriceIds: Record<string, string | undefined> | undefined = Array.isArray(variants)
+    ? variants.reduce((acc, v) => {
+        acc[v.color] = v.stripePriceId || product.stripePriceId;
+        return acc;
+      }, {} as Record<string, string | undefined>)
+    : undefined;
 
   return (
     <>
@@ -53,12 +74,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="pt-22 md:pt-0">
           {/* Mobile: swipeable carousel with arrows */}
           <div className="md:hidden -mx-3">
-            {product.images.length > 1 ? (
-              <ImageCarousel images={product.images} alt={product.title} />
+            {images.length > 1 ? (
+              <ImageCarousel images={images} alt={product.title} />
             ) : (
               <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
                 <div className="absolute -inset-[3px]">
-                  <Image src={product.images[0]} alt={product.title} fill className="object-cover" priority />
+                  <Image src={images[0]} alt={product.title} fill className="object-cover" priority />
                 </div>
               </div>
             )}
@@ -66,7 +87,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {/* Desktop: sticky vertical scrollable image stack */}
           <div className="hidden md:block">
             <div className="space-y-0 pr-0">
-              {product.images.map((src, i) => (
+              {images.map((src, i) => (
                 <div key={i} className="overflow-hidden">
                   <Image
                     src={src}
@@ -91,10 +112,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             stripePriceId={product.stripePriceId}
             enableSizes={product.sizeType === "standard"}
             title={product.title}
-            image={product.images[0]}
+            image={images[0]}
             waistOptions={product.waistOptions}
             inseamOptions={product.inseamOptions}
             soldOut={soldOut}
+            colorOptions={Array.isArray(variants) && variants.length > 0 ? variants.map(v => ({ value: v.color, label: v.label })) : undefined}
+            colorPriceIds={colorPriceIds}
           />
           <p className="my-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
           <ProductDetails details={product.details} />

@@ -6,6 +6,7 @@ export type CartItem = {
   priceId: string; // Stripe price_... or prod_...
   quantity: number;
   size?: string;
+  color?: string;
   // Optional identifiers for UI use
   slug?: string;
   title?: string;
@@ -84,7 +85,10 @@ export function useCart() {
     setItems((prev) => {
       // Merge by priceId + size for simplicity
       const idx = prev.findIndex(
-        (p) => p.priceId === item.priceId && (p.size || "") === (item.size || "")
+        (p) =>
+          p.priceId === item.priceId &&
+          (p.size || "") === (item.size || "") &&
+          (p.color || "") === (item.color || "")
       );
       if (idx >= 0) {
         const next = [...prev];
@@ -121,6 +125,7 @@ export function useCart() {
           quantity: it.quantity,
           metadata: {
             size: it.size || undefined,
+            color: it.color || undefined,
             slug: it.slug || undefined,
             title: it.title || undefined,
             priceId: it.priceId || undefined,
