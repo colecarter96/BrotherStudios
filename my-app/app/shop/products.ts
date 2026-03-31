@@ -67,7 +67,7 @@ export const products: Product[] = [
     // Kept for backward compatibility; primary/hover come from variants below
     images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherWhite.webp"],
     description:
-      "A premium cotton tee with front and back prints. Available in Black and White. Fits true to size.",
+      "A tight fitting slightly stretchy T-Shirt with tighter sleeves and chess with a more relaxed midsection. Model is wearing size M. Size down 1 size.",
     // You can omit product-level stripePriceId when using per-variant price IDs
     sizeType: "standard",
     shippingSpeed: "7-14",
