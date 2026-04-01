@@ -209,29 +209,29 @@ export const products: Product[] = [
     sizeType: "none",
     shippingSpeed: "3-5",
   },
-  {
-    slug: "dog-tee",
-    title: "DOG TEE",
-    price: 32,
-    images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
-    variants: [
-      {
-        color: "White",
-        label: "White",
-        images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
-      },
-    ],
-    description: "The Dog Tee features our \'B\' chest logo and dog back logo with the \'Two Brothers\' spell out. \n Printed on our contrast stitch cotton blank, shrinks slightly in the wash.",
-    stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
-    sizeType: "standard",
-    shippingSpeed: "7-14",
-    details: {
-      fabric: "100% cotton",
-      color: ["Black", "White"],
-      care: "Machine wash, tumble dry low",
-      gsm: 240,
-    },
-  },
+  // {
+  //   slug: "dog-tee",
+  //   title: "DOG TEE",
+  //   price: 32,
+  //   images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
+  //   variants: [
+  //     {
+  //       color: "White",
+  //       label: "White",
+  //       images: ["/productPhotos/dogTeeFront.png", "/productPhotos/dogTeeBack.png", "/dogTeeVisual.jpg"],
+  //     },
+  //   ],
+  //   description: "The Dog Tee features our \'B\' chest logo and dog back logo with the \'Two Brothers\' spell out. \n Printed on our contrast stitch cotton blank, shrinks slightly in the wash.",
+  //   stripePriceId: "price_1SmLaoP6lKVtJIIMFIItxoSN",
+  //   sizeType: "standard",
+  //   shippingSpeed: "7-14",
+  //   details: {
+  //     fabric: "100% cotton",
+  //     color: ["Black", "White"],
+  //     care: "Machine wash, tumble dry low",
+  //     gsm: 240,
+  //   },
+  // },
   
   // {
   //   slug: "dickies-pants",
