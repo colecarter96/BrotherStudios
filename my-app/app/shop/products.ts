@@ -67,7 +67,7 @@ export const products: Product[] = [
     // Kept for backward compatibility; primary/hover come from variants below
     images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherWhite.webp"],
     description:
-      "A tight fitting slightly stretchy T-Shirt with tighter sleeves and chess with a more relaxed midsection. Model is wearing size M. Size down 1 size.",
+      "A tight fitting slightly stretchy T-Shirt with tighter sleeves and chest and a more relaxed midsection. Model is wearing size M. Size down 1 size.",
     // You can omit product-level stripePriceId when using per-variant price IDs
     sizeType: "standard",
     shippingSpeed: "7-14",
@@ -76,13 +76,13 @@ export const products: Product[] = [
         color: "#000000",
         label: "Black",
         stripePriceId: "price_1TEbRMP6lKVtJIIMYJ7WV2Is", // bogus placeholder
-        images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherBlackBack.webp"],
+        images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBlackVisual.png"],
       },
       {
         color: "#ffffff",
         label: "White",
         stripePriceId: "price_1TEbQoP6lKVtJIIMBcTfayyK", // bogus placeholder
-        images: ["/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeBrotherWhiteBack.webp"],
+        images: ["/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeWhiteVisual.png"],
       },
     ],
     details: {

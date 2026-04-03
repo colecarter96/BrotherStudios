@@ -9,19 +9,26 @@ interface ImageCarouselProps {
 }
 
 export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
-  const total = images.length;
-  const [idx, setIdx] = useState(0);
+  const realCount = images.length;
+  const hasLoop = realCount > 1;
+  // Augment slides for seamless circular scroll: [last, ...images, first]
+  const augmented = hasLoop ? [images[realCount - 1], ...images, images[0]] : images;
+  const total = augmented.length;
+  // Start at index 1 (first real slide) when looping; else 0
+  const [idx, setIdx] = useState(hasLoop ? 1 : 0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const startXRef = useRef<number | null>(null);
   const startYRef = useRef<number | null>(null);
   const [dragDeltaX, setDragDeltaX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
   const horizontalLock = useRef<boolean>(false);
+  const recentMovesRef = useRef<Array<{ t: number; x: number }>>([]);
 
-  const canPrev = idx > 0;
-  const canNext = idx < total - 1;
-  const prev = () => setIdx((i) => Math.max(0, i - 1));
-  const next = () => setIdx((i) => Math.min(total - 1, i + 1));
+  const canPrev = hasLoop ? true : idx > 0;
+  const canNext = hasLoop ? true : idx < total - 1;
+  const prev = () => setIdx((i) => (hasLoop ? i - 1 : Math.max(0, i - 1)));
+  const next = () => setIdx((i) => (hasLoop ? i + 1 : Math.min(total - 1, i + 1)));
 
   // slide width is read on touch end; no memoization needed
 
@@ -31,7 +38,9 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
     startYRef.current = t.clientY;
     setDragDeltaX(0);
     setIsDragging(true);
+    setIsRestoring(false);
     horizontalLock.current = false;
+    recentMovesRef.current = [{ t: performance.now(), x: t.clientX }];
   };
 
   const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -45,6 +54,11 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
       if (horizontalLock.current) {
         e.preventDefault();
         setDragDeltaX(dx);
+        // Track for velocity
+        const now = performance.now();
+        recentMovesRef.current.push({ t: now, x: t.clientX });
+        // keep last ~5 samples
+        if (recentMovesRef.current.length > 5) recentMovesRef.current.shift();
       }
     }
   };
@@ -57,14 +71,52 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
     }
     const distance = dragDeltaX;
     const width = containerRef.current?.clientWidth ?? 0;
-    const threshold = Math.max(50, width * 0.15);
-    if (Math.abs(distance) >= threshold) {
-      if (distance < 0 && canNext) next();
-      else if (distance > 0 && canPrev) prev();
+    const threshold = Math.max(36, width * 0.1); // a bit easier
+
+    // Compute approximate swipe velocity (px/ms) from recent samples
+    let velocity = 0;
+    const samples = recentMovesRef.current;
+    if (samples.length >= 2) {
+      const last = samples[samples.length - 1];
+      // find a sample at least 30ms before last for stability
+      let ref = samples[0];
+      for (let i = samples.length - 2; i >= 0; i--) {
+        if (last.t - samples[i].t >= 30) {
+          ref = samples[i];
+          break;
+        }
+      }
+      const dt = last.t - ref.t || 1;
+      velocity = (last.x - ref.x) / dt; // px/ms (+ right, - left)
     }
+    const velocityThreshold = 0.35; // px/ms
+
+    // Decide slide change using distance or velocity
+    if (Math.abs(distance) >= threshold || Math.abs(velocity) > velocityThreshold) {
+      if ((distance < 0 || velocity < -velocityThreshold) && canNext) next();
+      else if ((distance > 0 || velocity > velocityThreshold) && canPrev) prev();
+    }
+
     setIsDragging(false);
     setDragDeltaX(0);
     horizontalLock.current = false;
+  };
+
+  const onTransitionEnd = () => {
+    if (!hasLoop) return;
+    // If we landed on a clone, jump (without animation) to the corresponding real index
+    if (idx === total - 1) {
+      // Moved onto last clone (copy of first real) → jump to first real (1)
+      setIsRestoring(true);
+      setIdx(1);
+      // allow next paint to remove restoring flag
+      requestAnimationFrame(() => setIsRestoring(false));
+    } else if (idx === 0) {
+      // Moved onto first clone (copy of last real) → jump to last real (total-2)
+      setIsRestoring(true);
+      setIdx(total - 2);
+      requestAnimationFrame(() => setIsRestoring(false));
+    }
   };
 
   return (
@@ -82,10 +134,12 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
         style={{
           width: `${total * 100}%`,
           transform: `translateX(calc(${-idx * (100 / total)}% + ${dragDeltaX}px))`,
-          transition: isDragging ? "none" : "transform 300ms ease-out",
+          transition: isDragging || isRestoring ? "none" : "transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1)",
+          willChange: "transform",
         }}
+        onTransitionEnd={onTransitionEnd}
       >
-        {images.map((src, i) => (
+        {augmented.map((src, i) => (
           <div key={i} className="relative h-full overflow-hidden" style={{ width: `${100 / total}%` }}>
             <div className="absolute -inset-[3px]">
               <Image src={src} alt={alt} fill className="object-cover" priority={i === idx} />
@@ -94,12 +148,12 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
         ))}
       </div>
 
-      {total > 1 && (
+      {realCount > 1 && (
         <>
           <button
             aria-label="Previous image"
             onClick={() => !isDragging && canPrev && prev()}
-            disabled={!canPrev}
+            disabled={!canPrev && !hasLoop}
             className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
           >
             〈
@@ -107,7 +161,7 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
           <button
             aria-label="Next image"
             onClick={() => !isDragging && canNext && next()}
-            disabled={!canNext}
+            disabled={!canNext && !hasLoop}
             className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full text-xl hover:bg-white text-black flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed"
           >
             〉

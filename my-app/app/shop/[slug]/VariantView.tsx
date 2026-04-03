@@ -24,21 +24,22 @@ export default function VariantView({ product, soldOut }: Props) {
   );
 
   const images: string[] = hasVariants ? (currentVariant?.images || []) : product.images;
+  const displayImages: string[] = [...images].reverse();
   const priceId: string | undefined = hasVariants ? (currentVariant?.stripePriceId || product.stripePriceId) : product.stripePriceId;
   const enableSizes = product.sizeType === "standard";
 
   return (
     <>
       {/* Left: images */}
-      <div className="pt-22 md:pt-0">
+      <div className="pt-22 md:pt-0 md:mt-0">
         {/* Mobile carousel */}
         <div className="md:hidden -mx-3">
-          {images.length > 1 ? (
-            <ImageCarousel images={images} alt={product.title} />
+          {displayImages.length > 1 ? (
+            <ImageCarousel images={displayImages} alt={product.title} />
           ) : (
             <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
               <div className="absolute -inset-[3px]">
-                <Image src={images[0] || product.images[0]} alt={product.title} fill className="object-cover" priority />
+                <Image src={displayImages[0] || product.images[0]} alt={product.title} fill className="object-cover" priority />
               </div>
             </div>
           )}
@@ -46,7 +47,7 @@ export default function VariantView({ product, soldOut }: Props) {
         {/* Desktop stack */}
         <div className="hidden md:block">
           <div className="space-y-0 pr-0">
-            {(images.length ? images : product.images).map((src, i) => (
+            {(displayImages.length ? displayImages : product.images).map((src, i) => (
               <div key={i} className="overflow-hidden">
                 <Image
                   src={src}
@@ -66,8 +67,8 @@ export default function VariantView({ product, soldOut }: Props) {
 
       {/* Right: details + purchase */}
       <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter">{product.title}</h1>
-        <p className="mt-2 text-3xl md:text-4xl font-semibold tracking-titter">${product.price.toFixed(2)}</p>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tighter">{product.title}</h1>
+        <p className="text-xl md:text-2xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
 
         <ProductPurchase
           slug={product.slug}
@@ -85,8 +86,19 @@ export default function VariantView({ product, soldOut }: Props) {
           onColorChange={hasVariants ? setSelectedColor : undefined}
         />
 
+        {/* Details dropdown (above description) */}
+        <section className="mt-8">
+          <details className="group border-t border-black/10 pt-4">
+            <summary className="flex items-center justify-between cursor-pointer text-base md:text-lg font-semibold tracking-titter">
+              DETAILS
+              <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <div className="mt-3 text-sm md:text-base">
+              <ProductDetails details={product.details} />
+            </div>
+          </details>
+        </section>
         <p className="my-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
-        <ProductDetails details={product.details} />
         {/* Shipping dropdown */}
         <section className="mt-8">
           <details className="group border-t border-black/10 pt-4">

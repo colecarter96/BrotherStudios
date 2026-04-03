@@ -54,10 +54,10 @@ export default function ProductPurchase({
     (showSize && !size ? "SELECT A SIZE" : justAdded ? "SUCCESS" : "ADD TO BAG");
 
   return (
-    <div className="mt-8">
+    <div className="mt-2 md:mt-8">
       {isPants && (
         <div className="mb-4">
-          <div className="block text-base md:text-lg font-semibold mb-2">Waist</div>
+          <div className="block text-sm md:text-base font-semibold mb-2">Waist</div>
           <div role="radiogroup" aria-label="Waist" className="grid grid-cols-4 gap-2 max-w-xs">
             {(waistOptions || []).map((opt) => {
               const selected = waist === opt;
@@ -68,14 +68,14 @@ export default function ProductPurchase({
                   role="radio"
                   aria-checked={selected}
                   onClick={() => setWaist(opt)}
-                  className={`px-3 py-2 text-sm md:text-base border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
+                  className={`px-2 py-1 text-xs md:text-sm border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
                 >
                   {opt}
                 </button>
               );
             })}
           </div>
-          <div className="block text-base md:text-lg font-semibold mt-4 mb-2">Inseam</div>
+          <div className="block text-sm md:text-base font-semibold mt-4 mb-2">Inseam</div>
           <div role="radiogroup" aria-label="Inseam" className="grid grid-cols-4 gap-2 max-w-xs">
             {(inseamOptions || []).map((opt) => {
               const selected = inseam === opt;
@@ -86,7 +86,7 @@ export default function ProductPurchase({
                   role="radio"
                   aria-checked={selected}
                   onClick={() => setInseam(opt)}
-                  className={`px-3 py-2 text-sm md:text-base border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
+                  className={`px-2 py-1 text-xs md:text-sm border ${selected ? "border border-black" : "border-black/20"} hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
                 >
                   {opt}
                 </button>
@@ -99,38 +99,10 @@ export default function ProductPurchase({
         </div>
       )}
 
-      {showSize && (
-        <div className="mb-4">
-          <div className="block text-base md:text-lg font-semibold mb-2">Size</div>
-          <div role="radiogroup" aria-label="Size" className="grid grid-cols-4 gap-2 max-w-xs">
-            {["S", "M", "L", "XL"].map((opt) => {
-              const selected = size === opt;
-              return (
-                <button
-                  key={opt}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => setSize(opt)}
-                  className={`px-3 py-2 text-sm md:text-base border ${
-                    selected ? "border border-black" : "border-black/20"
-                  } hover:border-black focus:outline-none focus:ring-2 focus:ring-black`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-          {!sizeValid && (
-            <div className="mt-2 text-sm text-blue-400">Please select a size.</div>
-          )}
-        </div>
-      )}
-
-      {/* Color swatches (below size) */}
+      {/* Color swatches */}
       {Array.isArray(colorOptions) && colorOptions.length > 0 && (
         <div className="mb-4">
-          <div className="block text-base md:text-lg font-semibold mb-2">Color</div>
+          <div className="block text-sm md:text-base font-semibold mb-2">Color</div>
           <div role="radiogroup" aria-label="Color" className="flex flex-wrap gap-2">
             {colorOptions.map((opt) => {
               const selected = (effectiveColor || colorOptions[0].value) === opt.value;
@@ -145,12 +117,40 @@ export default function ProductPurchase({
                     if (onColorChange) onColorChange(opt.value);
                     setUncontrolledColor(opt.value);
                   }}
-                  className={`relative h-8 w-10 md:h-9 md:w-12 border ${
+                  className={`relative h-7 w-9 md:h-8 md:w-10 border ${
                     selected ? "border-black ring-2 ring-black" : "border-black/20"
                   } focus:outline-none focus:ring-2 focus:ring-black`}
                   style={{ backgroundColor: opt.value }}
                 >
                   <span className="sr-only">{opt.label || opt.value}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {showSize && (
+        <div className="mb-4">
+          <div className="block text-sm md:text-base font-semibold mb-2">Size</div>
+          {!sizeValid && (
+            <div className="mb-2 text-sm text-blue-400">Please select a size.</div>
+          )}
+          <div role="radiogroup" aria-label="Size" className="flex flex-wrap gap-x-1 gap-y-2 justify-start w-full">
+            {["S", "M", "L", "XL"].map((opt) => {
+              const selected = size === opt;
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setSize(opt)}
+                  className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-base md:text-lg font-semibold focus:outline-none ${
+                    selected ? "text-blue-400" : "text-black hover:text-blue-400"
+                  }`}
+                >
+                  {opt}
                 </button>
               );
             })}
@@ -196,7 +196,7 @@ export default function ProductPurchase({
               setMessage({ type: "error", text: "Could not add to bag. Please try again." });
             }
           }}
-          className={`mt-6 inline-flex items-center justify-center px-4 py-4 w-full  ${justAdded ? "bg-blue-400" : "bg-black"} text-white font-semibold text-md md:text-lg lg:text-xl disabled:cursor-not-allowed transition-colors duration-200`}
+          className={`mt-0 md:mt-1 inline-flex items-center justify-center px-4 py-3 w-full  ${justAdded ? "bg-blue-400" : "bg-black"} text-white font-semibold text-sm md:text-base lg:text-lg disabled:cursor-not-allowed transition-colors duration-200`}
         >
           {buttonLabel}
         </button>
