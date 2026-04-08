@@ -45,6 +45,13 @@ export const products: Product[] = [
         color: "black",
         label: "Black",
         images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+        stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
+      },
+      {
+        color: "white",
+        label: "White",
+        images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+        stripePriceId: "price_1T4pCDP6lKVtJIIM5NUrBiky",
       },
     ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -76,13 +83,13 @@ export const products: Product[] = [
         color: "#000000",
         label: "Black",
         stripePriceId: "price_1TEbRMP6lKVtJIIMYJ7WV2Is", // bogus placeholder
-        images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBlackVisual.png"],
+        images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBlackVisual.png"],
       },
       {
         color: "#ffffff",
         label: "White",
         stripePriceId: "price_1TEbQoP6lKVtJIIMBcTfayyK", // bogus placeholder
-        images: ["/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeWhiteVisual.png"],
+        images: ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeWhiteVisual.png"],
       },
     ],
     details: {
@@ -92,30 +99,7 @@ export const products: Product[] = [
       gsm: 180,
     },
   },
-  {
-    slug: "expedition-tee-white",
-    title: "EXPEDITION SHIRT [WHITE]",
-    price: 40,
-    images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
-    variants: [
-      {
-        color: "white",
-        label: "White",
-        images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
-      },
-    ],
-    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
-    description: "This shirt is designed to allow freedom of movement, be durable and get better as you wear it. With contrast stitching and print, it will keep you styling on any expedition.\nFits true to size.",
-    stripePriceId: "price_1T4pCDP6lKVtJIIM5NUrBiky",
-    sizeType: "standard",
-    shippingSpeed: "7-14",
-    details: {
-      fabric: "100% cotton",
-      color: ["Gray", "Black"],
-      care: "Machine wash, tumble dry low",
-      gsm: 240,
-    },
-  },
+  
   
   {
     slug: "soccer-tee",
@@ -126,7 +110,7 @@ export const products: Product[] = [
       {
         color: "Black",
         label: "Black",
-        images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"],
+        images: ["/productPhotos/newBackImg.png", "/SS26/soccerShirtFront.png", "/SS26/visuals/clubTeeFront.jpeg"],
       },
     ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -145,12 +129,12 @@ export const products: Product[] = [
     slug: "champion-tee",
     title: "CHAMPIONSHIP TEE",
     price: 45,
-    images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
+    images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
     variants: [
       {
         color: "black",
         label: "Black",
-        images: ["/SS26/championTeeFront.webp", "/SS26/championTeeBack.webp"],
+        images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
       },
     ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -171,12 +155,12 @@ export const products: Product[] = [
     slug: "sex-panthers-tee",
     title: "TWO X SEX PANTHERS SHIRT",
     price: 45,
-    images: ["/productPhotos/sexPanthersFront.webp", "/productPhotos/sexPanthersBack.webp", "/sexPVisual1.jpg", "/sexPVisual2.jpg" ],
+    images: ["/productPhotos/sexPanthersBack.webp", "/productPhotos/sexPanthersFront.webp", "/sexPVisual1.jpg"],
     variants: [
       {
         color: "black",
         label: "Black",
-        images: ["/productPhotos/sexPanthersFront.webp", "/productPhotos/sexPanthersBack.webp", "/sexPVisual1.jpg", "/sexPVisual2.jpg"],
+        images: ["/productPhotos/sexPanthersBack.webp", "/productPhotos/sexPanthersFront.webp", "/sexPVisual1.jpg"],
       },
     ],
 

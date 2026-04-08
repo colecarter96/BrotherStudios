@@ -99,8 +99,8 @@ export default function ProductPurchase({
         </div>
       )}
 
-      {/* Color swatches */}
-      {Array.isArray(colorOptions) && colorOptions.length > 0 && (
+      {/* Color swatches (hide when only one variant) */}
+      {Array.isArray(colorOptions) && colorOptions.length > 1 && (
         <div className="mb-4">
           <div className="block text-sm md:text-base font-semibold mb-2">Color</div>
           <div role="radiogroup" aria-label="Color" className="flex flex-wrap gap-2">
