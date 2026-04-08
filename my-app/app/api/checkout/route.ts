@@ -77,7 +77,6 @@ export async function POST(req: NextRequest) {
       const resolvedPriceId = await resolvePriceId(priceId);
       const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
       const itemSlug = typeof metadata?.slug === "string" && metadata.slug ? String(metadata.slug) : slug;
-      const title = typeof metadata?.title === "string" && metadata.title ? String(metadata.title) : undefined;
       if (await isSoldOut(itemSlug)) {
         return NextResponse.json({ error: "This item is sold out." }, { status: 409 });
       }
@@ -97,16 +96,15 @@ export async function POST(req: NextRequest) {
         shipping_address_collection: { allowed_countries: ["US"] },
         shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
         metadata: {
-          slug,
-          ...(metadata || {}),
-          ...(title ? { title } : {}),
+          // Keep metadata minimal to stay under Stripe limits
+          ...(size ? { size } : {}),
+          q: String(quantity),
           priceId: resolvedPriceId,
         },
         payment_intent_data: {
           metadata: {
-            slug,
-            ...(metadata || {}),
-            ...(title ? { title } : {}),
+            ...(size ? { size } : {}),
+            q: String(quantity),
             priceId: resolvedPriceId,
           },
         },
@@ -130,13 +128,8 @@ export async function POST(req: NextRequest) {
     }
 
     const lineItems: { price: string; quantity?: number }[] = [];
-    const cartMetaCompact: Array<{
-      title?: string | null;
-      slug?: string | null;
-      size?: string | null;
-      quantity?: number | null;
-      priceId?: string | null;
-    }> = [];
+    // Minimal, compact cart metadata to avoid exceeding Stripe's per-value 500 char limit
+    const cartMetaCompact: Array<{ p: string; s?: string; q: number }> = [];
     let allStickers = true;
     // Prevent checkout for any sold-out one-of-one item
     for (const item of items) {
@@ -147,13 +140,12 @@ export async function POST(req: NextRequest) {
     }
     for (const item of items) {
       const resolvedPriceId = await resolvePriceId(item.priceId);
-      lineItems.push({ price: resolvedPriceId, quantity: item.quantity ?? 1 });
+      const qty = typeof item.quantity === "number" ? item.quantity : 1;
+      lineItems.push({ price: resolvedPriceId, quantity: qty });
       cartMetaCompact.push({
-        title: typeof item.metadata?.title === "string" ? item.metadata.title : null,
-        slug: typeof item.metadata?.slug === "string" ? item.metadata.slug : null,
-        size: typeof item.metadata?.size === "string" ? item.metadata.size : null,
-        quantity: typeof item.quantity === "number" ? item.quantity : 1,
-        priceId: resolvedPriceId,
+        p: resolvedPriceId,
+        s: typeof item.metadata?.size === "string" ? item.metadata.size : undefined,
+        q: qty,
       });
       const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
       if (itemSlug !== "2-man-sticker") {
@@ -173,14 +165,10 @@ export async function POST(req: NextRequest) {
       shipping_address_collection: { allowed_countries: ["US"] },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
       metadata: {
-        slug,
-        ...(metadata || {}),
         cart: JSON.stringify(cartMetaCompact),
       },
       payment_intent_data: {
         metadata: {
-          slug,
-          ...(metadata || {}),
           cart: JSON.stringify(cartMetaCompact),
         },
       },

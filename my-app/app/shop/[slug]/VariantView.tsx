@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
 import type { Product, ColorVariant } from "../products";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   product: Product;
@@ -17,15 +18,29 @@ export default function VariantView({ product, soldOut }: Props) {
   const variants: ColorVariant[] | undefined = product.variants;
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
+  const searchParams = useSearchParams();
 
   const currentVariant = useMemo(
     () => (hasVariants ? variants!.find((v) => v.color === selectedColor) ?? variants![0] : undefined),
     [hasVariants, variants, selectedColor]
   );
 
+  // Preselect color from query param ?color=...
+  useEffect(() => {
+    if (!hasVariants) return;
+    const q = searchParams?.get("color");
+    if (!q) return;
+    const match = variants!.find((v) => v.color.toLowerCase() === q.toLowerCase());
+    if (match && match.color !== selectedColor) {
+      setSelectedColor(match.color);
+    }
+  }, [hasVariants, searchParams, variants, selectedColor]);
   const images: string[] = hasVariants ? (currentVariant?.images || []) : product.images;
   const displayImages: string[] = [...images].reverse();
   const priceId: string | undefined = hasVariants ? (currentVariant?.stripePriceId || product.stripePriceId) : product.stripePriceId;
+  const colorPriceIds: Record<string, string | undefined> | undefined = hasVariants
+    ? Object.fromEntries(variants!.map((v) => [v.color, v.stripePriceId || product.stripePriceId]))
+    : undefined;
   const enableSizes = product.sizeType === "standard";
 
   return (
@@ -67,8 +82,8 @@ export default function VariantView({ product, soldOut }: Props) {
 
       {/* Right: details + purchase */}
       <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tighter">{product.title}</h1>
-        <p className="text-xl md:text-2xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
+        <h1 className="text-lg md:text-xl font-semibold tracking-tighter">{product.title}</h1>
+        <p className="text-lg md:text-xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
 
         <ProductPurchase
           slug={product.slug}
@@ -84,27 +99,28 @@ export default function VariantView({ product, soldOut }: Props) {
           }
           color={hasVariants ? selectedColor : undefined}
           onColorChange={hasVariants ? setSelectedColor : undefined}
+          colorPriceIds={colorPriceIds}
         />
 
         {/* Details dropdown (above description) */}
         <section className="mt-8">
           <details className="group border-t border-black/10 pt-4">
-            <summary className="flex items-center justify-between cursor-pointer text-base md:text-lg font-semibold tracking-titter">
+            <summary className="flex items-center justify-between cursor-pointer text-base md:text-base font-semibold tracking-titter">
               DETAILS
               <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
             </summary>
-            <div className="mt-3 text-sm md:text-base">
+            <div className="mt-3 text-sm">
               <ProductDetails details={product.details} />
             </div>
           </details>
         </section>
-        <p className="my-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
+        <p className="my-10 text-sm md:text-base font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
         {/* Shipping dropdown */}
         <section className="mt-8">
           <details className="group border-t border-black/10 pt-4">
-            <summary className="flex items-center justify-between cursor-pointer text-base md:text-lg font-semibold tracking-titter">
+            <summary className="flex items-center justify-between cursor-pointer text-base md:text-base font-semibold tracking-titter">
               SHIPPING
-              <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
+              <span className="ml-2 text-lg transition-transform group-open:rotate-45">+</span>
             </summary>
             <div className="mt-3 text-sm md:text-base">
               {product.shippingSpeed === "7-14" ? (

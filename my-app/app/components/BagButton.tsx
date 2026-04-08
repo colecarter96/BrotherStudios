@@ -10,8 +10,11 @@ type Props = {
 export default function BagButton({ onClick }: Props) {
   const { totalQuantity } = useCart();
 
-  const handleClick = async () => {
-    if (onClick) return onClick();
+  const handleClick = async (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
   };
 
   return (
@@ -25,5 +28,4 @@ export default function BagButton({ onClick }: Props) {
     </Link>
   );
 }
-
 
