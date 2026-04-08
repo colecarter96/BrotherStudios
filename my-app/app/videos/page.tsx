@@ -45,7 +45,7 @@ export default function Videos() {
               <div className="md:col-span-3">
                 <h2 className="text-xl md:text-2xl font-semibold tracking-tighter">{v.title}</h2>
                 <p className="mt-0 text-sm font-medium opacity-70">{v.date}</p>
-                <p className="mt-2 text-base md:text-md">{v.description}</p>
+                <p className="mt-2 text-base md:text-base">{v.description}</p>
               </div>
             </article>
           ))}

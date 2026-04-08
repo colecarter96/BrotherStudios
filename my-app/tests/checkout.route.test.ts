@@ -43,7 +43,8 @@ describe('POST /api/checkout', () => {
     expect(args.line_items[0]).toMatchObject({ price: 'price_x', quantity: 2 });
     expect(args.metadata.cart).toBeTypeOf('string');
     const cart = JSON.parse(args.metadata.cart);
-    expect(cart[0]).toMatchObject({ title: 'TWO TEE', slug: 'two-tee', size: 'M', quantity: 2, priceId: 'price_x' });
+    // Compact cart metadata: { p: priceId, s?: size, q: quantity }
+    expect(cart[0]).toMatchObject({ p: 'price_x', s: 'M', q: 2 });
   });
 });
 

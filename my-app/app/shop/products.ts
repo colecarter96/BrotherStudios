@@ -36,8 +36,8 @@ export type ProductDetails = {
 // - Each product should define at least one color variant with its own images.
 export const products: Product[] = [
   {
-    slug: "expedition-tee-black",
-    title: "EXPEDITION SHIRT [BLACK]",
+    slug: "expedition-tee",
+    title: "EXPEDITION SHIRT",
     price: 40,
     images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
     variants: [

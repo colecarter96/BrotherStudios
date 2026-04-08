@@ -4,9 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BagButton from "./BagButton";
+import BagDrawer from "./BagDrawer";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [bagOpen, setBagOpen] = useState(false);
 
   return (
     <>
@@ -17,7 +19,7 @@ export default function Header() {
             <Image src="/logo.svg" alt="Logo" width={80} height={32} />
           </Link>
           <div className="flex items-center gap-3">
-            <BagButton />
+            <BagButton onClick={() => setBagOpen(true)} />
             <button
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
@@ -76,15 +78,16 @@ export default function Header() {
           </Link>
 
           {/* Right: Shop and Bag */}
-          <nav className="flex items-center gap-6 text-md font-semibold">
+          <nav className="flex items-center gap-6 text-base font-semibold">
             <Link href="/shop" className="hover:opacity-80 transition">SHOP</Link>
             {/* <Link href="/lookbook" className="hover:opacity-80 transition">LOOKBOOK</Link> */}
             {/* <Link href="/magazine" className="hover:opacity-80 transition">MAGAZINE</Link> */}
             <Link href="/videos" className="hover:opacity-80 transition">VIDEOS</Link>
-            <BagButton />
+            <BagButton onClick={() => setBagOpen(true)} />
           </nav>
         </div>
       </header>
+      <BagDrawer open={bagOpen} onClose={() => setBagOpen(false)} />
     </>
   );
 }

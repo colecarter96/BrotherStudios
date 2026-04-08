@@ -24,7 +24,7 @@ export default function ProductDetails({ details }: ProductDetailsProps) {
 
   return (
     <section className="mt-10">
-      <h2 className="text-base md:text-lg font-semibold tracking-tighter">PRODUCT DETAILS</h2>
+      <h2 className="text-sm md:text-base font-semibold tracking-tighter">PRODUCT DETAILS</h2>
       {hasAnyDetail ? (
         <dl className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
           {details?.fabric && (

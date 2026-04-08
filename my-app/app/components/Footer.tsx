@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
           {/* Navigation Links */}
           <div className="flex flex-col">
             <h3 className="font-semibold mb-3">(NAVIGATION)</h3>
-            <ul className="text-2xl font-semibold">
+            <ul className="text-xl font-semibold">
               {/* <li>
                 <Link href="/">HOME</Link>
               </li>
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
           {/* Policies */}
           <div className="flex flex-col">
             <h3 className="font-semibold mb-3">(POLICIES)</h3>
-            <ul className="text-2xl font-semibold">
+            <ul className="text-xl font-semibold">
               <li><Link href="/policies">OVERVIEW</Link></li>
               {/* <li><Link href="/policies/returns">RETURNS</Link></li>
               <li><Link href="/policies/shipping">SHIPPING</Link></li>
@@ -69,8 +69,8 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold mb-3">(INFO)</h3>
             <ul className="text-2xl font-semibold space-y-2">
               <li className="flex">
-                <span className="">E: </span>{" "}
-                <span className="font-medium"> the.twobrothers.studios@gmail.com</span>
+                <span className="text-xl">EMAIL: </span>{" "}
+                <span className="font-medium text-xl"> the.twobrothers.studios@gmail.com</span>
               </li>
               {/* <li className="flex">
                 <span className="">M: </span>{" "}
@@ -88,20 +88,20 @@ const Footer: React.FC = () => {
       {/* Lower Section */}
       <div className="flex flex-col md:flex-row justify-between text-left">
         {/* Column 1 */}
-        <div className="flex flex-col text-md font-semibold mb-4 md:mb-0">
+        <div className="flex flex-col text-base font-semibold mb-4 md:mb-0">
           <p>&copy; {new Date().getFullYear()} TWO BROTHERS, ALL RIGHTS RESERVED</p>
           <p>SAN DIEGO🡒CA (PST)</p>
         </div>
 
         {/* Column 2 */}
-        <div className="flex flex-col text-md font-semibold mb-4 md:mb-0">
+        <div className="flex flex-col text-base font-semibold mb-4 md:mb-0">
           <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">YOUTUBE</a></p>
           <p><a href="https://www.instagram.com/twobrothers.digital/?hl=en" target="_blank">INSTAGRAM</a></p>
           {/* <p><a href="https://www.youtube.com/@TwoBrothers.Studios" target="_blank">TIKTOK</a></p> */}
         </div>
 
         {/* Column 3 */}
-        <div className="flex flex-col text-md font-semibold">
+        <div className="flex flex-col text-base font-semibold">
           <Clock />
         </div>
       </div>
