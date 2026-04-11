@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+type ImageItem = { src: string; aspect?: "5:7" | "auto" };
+
 interface ImageCarouselProps {
-  images: string[];
+  images: ImageItem[];
   alt: string;
 }
 
@@ -12,7 +14,7 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
   const realCount = images.length;
   const hasLoop = realCount > 1;
   // Augment slides for seamless circular scroll: [last, ...images, first]
-  const augmented = hasLoop ? [images[realCount - 1], ...images, images[0]] : images;
+  const augmented: ImageItem[] = hasLoop ? [images[realCount - 1], ...images, images[0]] : images;
   const total = augmented.length;
   // Start at index 1 (first real slide) when looping; else 0
   const [idx, setIdx] = useState(hasLoop ? 1 : 0);
@@ -122,7 +124,7 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg touch-pan-y select-none"
+      className="relative w-full aspect-5/7 overflow-hidden rounded-none md:rounded-lg touch-pan-y select-none"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -139,10 +141,17 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
         }}
         onTransitionEnd={onTransitionEnd}
       >
-        {augmented.map((src, i) => (
+        {augmented.map((item, i) => (
           <div key={i} className="relative h-full overflow-hidden" style={{ width: `${100 / total}%` }}>
             <div className="absolute -inset-[3px]">
-              <Image src={src} alt={alt} fill className="object-cover" priority={i === idx} />
+              <Image
+                src={item.src}
+                alt={alt}
+                fill
+                className={item.aspect === "5:7" ? "object-cover" : "object-contain bg-white"}
+                priority={i === idx}
+                style={item.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
+              />
             </div>
           </div>
         ))}
