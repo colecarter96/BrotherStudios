@@ -1,7 +1,7 @@
 import Footer from "../components/Footer";
 import Image from "next/image";
-import Link from "next/link";
-import { productsNormalized, type ProductNormalized } from "./products";
+import VariantLink from "../components/VariantLink";
+import { productsNormalized, type ProductNormalized, type ImageSpec } from "./products";
 
 export const dynamic = "force-dynamic";
 
@@ -37,16 +37,22 @@ export default async function Shop() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:mx-[5%] gap-0 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
           {productsNormalized.flatMap((p) =>
             p.variants.map((v, vi) => {
-              const baseImg = v.images?.[1] || v.images?.[0];
+              const imgAt = (idx: number): string | undefined => {
+                const it: ImageSpec | undefined = v.images?.[idx];
+                return typeof it === "string" ? it : it?.src;
+              };
+              const baseImg = imgAt(1) || imgAt(0);
               // Hover: prefer alternate image of the same variant
-              const altA = v.images?.[0];
-              const altB = v.images?.[1];
+              const altA = imgAt(0);
+              const altB = imgAt(1);
               const hoverImg = (altA && altA !== baseImg && altA) || (altB && altB !== baseImg && altB) || undefined;
               const hasHover = Boolean(hoverImg);
               return (
-                <Link
+                <VariantLink
                   key={`${p.slug}__${vi}`}
                   href={`/shop/${p.slug}`}
+                  slug={p.slug}
+                  color={v.color}
                   className="group block border-2 border-transparent px-2"
                 >
                   <div className="relative w-full aspect-square overflow-hidden">
@@ -78,7 +84,7 @@ export default async function Shop() {
                   </div>
                   <h2 className="font-semibold text-base md:text-lg mt-2">{p.title}</h2>
                   <p className="font-medium text-base md:text-lg -mt-2">${p.price.toFixed(2)}</p>
-                </Link>
+                </VariantLink>
               );
             })
           )}

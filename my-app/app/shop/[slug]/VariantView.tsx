@@ -6,7 +6,7 @@ import Link from "next/link";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
-import type { Product, ColorVariant } from "../products";
+import type { Product, ColorVariant, ImageSpec } from "../products";
 import { useSearchParams } from "next/navigation";
 
 type Props = {
@@ -19,6 +19,22 @@ export default function VariantView({ product, soldOut }: Props) {
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
   const searchParams = useSearchParams();
+
+  // Preselect from sessionStorage when navigating from the shop listing
+  useEffect(() => {
+    if (!hasVariants) return;
+    try {
+      const key = `prefColor:${product.slug}`;
+      const stored = typeof window !== "undefined" ? window.sessionStorage.getItem(key) : null;
+      if (stored) {
+        const match = variants!.find((v) => v.color.toLowerCase() === stored.toLowerCase());
+        if (match) setSelectedColor(match.color);
+        if (typeof window !== "undefined") window.sessionStorage.removeItem(key);
+      }
+    } catch {
+      // ignore
+    }
+  }, [hasVariants, product.slug, variants]);
 
   const currentVariant = useMemo(
     () => (hasVariants ? variants!.find((v) => v.color === selectedColor) ?? variants![0] : undefined),
@@ -35,13 +51,17 @@ export default function VariantView({ product, soldOut }: Props) {
       setSelectedColor(match.color);
     }
   }, [hasVariants, searchParams, variants, selectedColor]);
-  const images: string[] = hasVariants ? (currentVariant?.images || []) : product.images;
-  const displayImages: string[] = [...images].reverse();
+  type Img = string | { src: string; aspect?: "5:7" | "auto" };
+  const rawImages: Img[] = hasVariants ? ((currentVariant?.images as Img[]) || []) : (product.images as Img[]);
+  const images = rawImages.map((im) => (typeof im === "string" ? { src: im, aspect: "auto" as const } : { src: im.src, aspect: im.aspect ?? "auto" }));
+  const displayImages = [...images].reverse();
   const priceId: string | undefined = hasVariants ? (currentVariant?.stripePriceId || product.stripePriceId) : product.stripePriceId;
   const colorPriceIds: Record<string, string | undefined> | undefined = hasVariants
     ? Object.fromEntries(variants!.map((v) => [v.color, v.stripePriceId || product.stripePriceId]))
     : undefined;
   const enableSizes = product.sizeType === "standard";
+  const imgToSrc = (im: ImageSpec | undefined): string | undefined =>
+    typeof im === "string" ? im : im?.src;
 
   return (
     <>
@@ -52,26 +72,42 @@ export default function VariantView({ product, soldOut }: Props) {
           {displayImages.length > 1 ? (
             <ImageCarousel images={displayImages} alt={product.title} />
           ) : (
-            <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
-              <div className="absolute -inset-[3px]">
-                <Image src={displayImages[0] || product.images[0]} alt={product.title} fill className="object-cover" priority />
-              </div>
-            </div>
+            <>
+              {displayImages[0]?.aspect === "5:7" ? (
+                <div className="relative w-full aspect-5/7 overflow-hidden rounded-none md:rounded-lg">
+                  <div className="absolute -inset-[3px]">
+                    <Image src={displayImages[0].src} alt={product.title} fill className="object-cover" priority />
+                  </div>
+                </div>
+              ) : (
+                <div className="overflow-hidden">
+                  <Image
+                    src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
+                    alt={product.title}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: "100%", height: "auto", transform: "scale(1.03)", transformOrigin: "center" }}
+                    className="block"
+                    priority
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
         {/* Desktop stack */}
         <div className="hidden md:block">
           <div className="space-y-0 pr-0">
-            {(displayImages.length ? displayImages : product.images).map((src, i) => (
-              <div key={i} className="overflow-hidden">
+            {(displayImages.length ? displayImages : images).map((im, i) => (
+              <div key={i} className="relative w-full h-[92vh] overflow-hidden">
                 <Image
-                  src={src}
+                  src={im.src}
                   alt={`${product.title} ${i + 1}`}
-                  width={0}
-                  height={0}
+                  fill
                   sizes="100vw"
-                  className="block will-change-transform"
-                  style={{ width: "100%", height: "auto", transform: "scale(1.035)", transformOrigin: "center" }}
+                  className="object-contain bg-white"
+                  style={im.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
                   loading="lazy"
                 />
               </div>
@@ -90,7 +126,7 @@ export default function VariantView({ product, soldOut }: Props) {
           stripePriceId={priceId}
           enableSizes={enableSizes}
           title={product.title}
-          image={(images[0] || product.images[0])}
+          image={images[0]?.src || imgToSrc(product.images?.[0]) || ""}
           soldOut={soldOut}
           colorOptions={
             hasVariants

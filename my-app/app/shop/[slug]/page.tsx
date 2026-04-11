@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { products, type ColorVariant } from "../products";
+import { products, type ColorVariant, type ImageSpec } from "../products";
 import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
@@ -52,7 +52,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (hasVariants) {
     return (
       <>
-        <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
+        <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-4 md:gap-0 min-h-[70dvh]">
           <VariantView product={product} soldOut={soldOut} />
         </section>
         <Footer />
@@ -60,8 +60,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     );
   }
   const variants: ColorVariant[] | undefined = product.variants;
-  const images: string[] = (product.variants?.[0]?.images as string[] | undefined) ?? product.images;
-  const displayImages: string[] = [...images].reverse();
+  type Img = string | { src: string; aspect?: "5:7" | "auto" };
+  const rawImages: Img[] = (product.variants?.[0]?.images as Img[] | undefined) ?? (product.images as Img[]);
+  const images = rawImages.map((im) => (typeof im === "string" ? { src: im, aspect: "auto" as const } : { src: im.src, aspect: im.aspect ?? "auto" }));
+  const displayImages = [...images].reverse();
+  const imgToSrc = (im: ImageSpec | undefined): string | undefined =>
+    typeof im === "string" ? im : im?.src;
   const colorPriceIds: Record<string, string | undefined> | undefined = Array.isArray(variants)
     ? variants.reduce((acc, v) => {
         acc[v.color] = v.stripePriceId || product.stripePriceId;
@@ -71,33 +75,49 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-4 md:pt-28 lg:pt-32 pb-20 grid md:grid-cols-[3fr_2fr] gap-8 lg:gap-12 min-h-[70dvh]">
+      <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-4 md:pt-28 lg:pt-32 pb-20 grid md:grid-cols-[3fr_2fr] gap-4 lg:gap-6 min-h-[70dvh]">
         <div className="pt-22 md:pt-0 md:mt-0">
           {/* Mobile: swipeable carousel with arrows */}
           <div className="md:hidden -mx-3">
             {displayImages.length > 1 ? (
               <ImageCarousel images={displayImages} alt={product.title} />
             ) : (
-              <div className="relative w-full aspect-square overflow-hidden rounded-none md:rounded-lg">
-                <div className="absolute -inset-[3px]">
-                  <Image src={displayImages[0]} alt={product.title} fill className="object-cover" priority />
-                </div>
-              </div>
+              <>
+                {displayImages[0]?.aspect === "5:7" ? (
+                  <div className="relative w-full aspect-5/7 overflow-hidden rounded-none md:rounded-lg">
+                    <div className="absolute -inset-[3px]">
+                      <Image src={displayImages[0].src} alt={product.title} fill className="object-cover" priority />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="overflow-hidden">
+                    <Image
+                      src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
+                      alt={product.title}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ width: "100%", height: "auto", transform: "scale(1.03)", transformOrigin: "center" }}
+                      className="block"
+                      priority
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
           {/* Desktop: sticky vertical scrollable image stack */}
           <div className="hidden md:block">
             <div className="space-y-0 pr-0">
-              {displayImages.map((src, i) => (
-                <div key={i} className="overflow-hidden">
+              {displayImages.map((im, i) => (
+                <div key={i} className="relative w-full h-[92vh] overflow-hidden">
                   <Image
-                    src={src}
+                    src={im.src}
                     alt={`${product.title} ${i + 1}`}
-                    width={0}
-                    height={0}
+                    fill
                     sizes="100vw"
-                    className="block will-change-transform"
-                    style={{ width: "100%", height: "auto", transform: "scale(1.035)", transformOrigin: "center" }}
+                    className="object-contain bg-white"
+                    style={im.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
                     loading="lazy"
                   />
                 </div>
@@ -113,7 +133,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             stripePriceId={product.stripePriceId}
             enableSizes={product.sizeType === "standard"}
             title={product.title}
-            image={images[0]}
+            image={images[0]?.src}
             waistOptions={product.waistOptions}
             inseamOptions={product.inseamOptions}
             soldOut={soldOut}

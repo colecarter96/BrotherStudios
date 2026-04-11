@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Batch mode
-    const { items, metadata } = body as Extract<CheckoutRequestBody, { items: CheckoutLineItem[] }>;
+    const { items } = body as Extract<CheckoutRequestBody, { items: CheckoutLineItem[] }>;
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "No items provided" }, { status: 400 });
     }

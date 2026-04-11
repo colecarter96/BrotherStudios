@@ -1,10 +1,12 @@
 export type ShippingSpeed = "3-5" | "7-14";
 export type SizeType = "standard" | "pants" | "none";
 
+export type ImageSpec = string | { src: string; aspect?: "5:7" | "auto" };
+
 export type ColorVariant = {
   color: string; // required color key, e.g., "black", "white"
   label?: string; // optional display label
-  images: string[]; // images for this color
+  images: ImageSpec[]; // images for this color
   stripePriceId?: string; // optional per-color Stripe price
 };
 
@@ -12,7 +14,7 @@ export type Product = {
   slug: string;
   title: string;
   price: number;
-  images: string[];
+  images: ImageSpec[];
   description: string;
   stripePriceId?: string;
   details?: ProductDetails;
@@ -44,13 +46,25 @@ export const products: Product[] = [
       {
         color: "black",
         label: "Black",
-        images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+        images: [
+          { src: "/SS26/climbingTeeBlackFront.webp", aspect: "auto" },
+          { src: "/SS26/climbingTeeBlackBack.webp", aspect: "auto" },
+          { src: "/SS26/visuals/climbingTeeFrontBlack.png", aspect: "5:7" },
+          { src: "/SS26/visuals/climbingTeeBackBlack.jpeg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
         stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
       },
       {
         color: "white",
         label: "White",
-        images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+        images: [
+          { src: "/SS26/climbingTeeWhiteFront.webp", aspect: "auto" },
+          { src: "/SS26/climbingTeeWhiteBack.webp", aspect: "auto" },
+          { src: "/SS26/visuals/climbingTeeFrontWhite.jpeg", aspect: "5:7" },
+          { src: "/SS26/visuals/climbingTeeBackWhite.jpeg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
         stripePriceId: "price_1T4pCDP6lKVtJIIM5NUrBiky",
       },
     ],
@@ -72,7 +86,10 @@ export const products: Product[] = [
     title: "HANDSOME BROTHER TEE",
     price: 36,
     // Kept for backward compatibility; primary/hover come from variants below
-    images: ["/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBrotherWhite.webp"],
+    images: [
+      {src: "/SS26/handsomeBrotherBlack.webp", aspect: "auto" },
+      {src: "/SS26/handsomeBrotherWhite.webp", aspect: "auto" },
+    ],
     description:
       "A tight fitting slightly stretchy T-Shirt with tighter sleeves and chest and a more relaxed midsection. Model is wearing size M. Size down 1 size.",
     // You can omit product-level stripePriceId when using per-variant price IDs
@@ -83,13 +100,29 @@ export const products: Product[] = [
         color: "#000000",
         label: "Black",
         stripePriceId: "price_1TEbRMP6lKVtJIIMYJ7WV2Is", // bogus placeholder
-        images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/SS26/handsomeBlackVisual.png"],
+        images: [
+          { src: "/SS26/handsomeBrotherBlackBack.webp", aspect: "auto" },
+          { src: "/SS26/handsomeBrotherBlack.webp", aspect: "auto" },
+          { src: "/handsomeBrother/blackBack.webp", aspect: "5:7" },
+          { src: "/handsomeBrother/blackDetail.webp", aspect: "5:7" },
+          { src: "/handsomeBrother/blackFront.webp", aspect: "5:7" },
+        ],
+        // images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/handsomeBrother/blackBack.webp", "/handsomeBrother/blackDetail.webp", "/handsomeBrother/blackFront.webp"], //"/SS26/handsomeBlackVisual.png"
       },
       {
         color: "#ffffff",
         label: "White",
         stripePriceId: "price_1TEbQoP6lKVtJIIMBcTfayyK", // bogus placeholder
-        images: ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/SS26/handsomeWhiteVisual.png"],
+        images: [
+          { src: "/SS26/handsomeBrotherWhiteBack.webp", aspect: "auto" },
+          { src: "/SS26/handsomeBrotherWhite.webp", aspect: "auto" },
+          { src: "/handsomeBrother/whiteBack.webp", aspect: "5:7" },
+          { src: "/handsomeBrother/whiteSide.webp", aspect: "5:7" },
+          { src: "/handsomeBrother/whiteFront.webp", aspect: "5:7" },
+          // { src: "/handsomeBrother/brighter.webp", aspect: "5:7" },
+        ],
+        
+        // ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/handsomeBrother/whiteBack.webp", "/handsomeBrother/whiteSide.webp", "/handsomeBrother/whiteFront.webp" ], //"/SS26/handsomeWhiteVisual.png"
       },
     ],
     details: {
@@ -110,7 +143,11 @@ export const products: Product[] = [
       {
         color: "Black",
         label: "Black",
-        images: ["/productPhotos/newBackImg.png", "/SS26/soccerShirtFront.png", "/SS26/visuals/clubTeeFront.jpeg"],
+        images: [
+          { src: "/productPhotos/newBackImg.png", aspect: "auto" },
+          { src:"/SS26/soccerShirtFront.png", aspect: "auto" },
+          { src:"/SS26/visuals/clubTeeFront.jpeg", aspect: "5:7" },
+        ],
       },
     ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -134,7 +171,11 @@ export const products: Product[] = [
       {
         color: "black",
         label: "Black",
-        images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
+        images: [
+          { src: "/SS26/championTeeBack.webp", aspect: "auto" },
+          { src:"/SS26/championTeeFront.webp", aspect: "auto" },
+        ],
+        // images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
       },
     ],
     // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
@@ -160,7 +201,12 @@ export const products: Product[] = [
       {
         color: "black",
         label: "Black",
-        images: ["/productPhotos/sexPanthersBack.webp", "/productPhotos/sexPanthersFront.webp", "/sexPVisual1.jpg"],
+        images: [
+          { src: "/productPhotos/sexPanthersBack.webp", aspect: "auto" },
+          { src:"/productPhotos/sexPanthersFront.webp", aspect: "auto" },
+          { src:"/sexPVisual1.jpg", aspect: "5:7" },
+        ],
+        // images: ["/productPhotos/sexPanthersBack.webp", "/productPhotos/sexPanthersFront.webp", "/sexPVisual1.jpg"],
       },
     ],
 
@@ -307,7 +353,7 @@ export const products: Product[] = [
 export type NormalizedVariant = {
   color: string;
   label?: string;
-  images: string[];
+  images: ImageSpec[];
   stripePriceId?: string;
 };
 export type ProductNormalized = Omit<Product, "variants" | "images"> & {
@@ -323,7 +369,7 @@ function toNormalizedVariantArray(p: Product): NormalizedVariant[] {
       stripePriceId: v.stripePriceId || p.stripePriceId,
     }));
   }
-  const imgs = p.images as string[] | undefined;
+  const imgs = p.images as ImageSpec[] | undefined;
   return [
     {
       color: "default",
@@ -339,23 +385,34 @@ export const productsNormalized: ProductNormalized[] = products.map((p) => ({
   variants: toNormalizedVariantArray(p),
 }));
 
+function firstSrc(images?: ImageSpec[]): string | undefined {
+  if (!images || images.length === 0) return undefined;
+  const it = images[0];
+  return typeof it === "string" ? it : it?.src;
+}
+
 export function getPrimaryImage(p: Product | ProductNormalized): string | undefined {
   const variants = (p as ProductNormalized).variants ?? (p as Product).variants;
-  if (variants && variants.length > 0 && variants[0].images?.length) return variants[0].images[0];
+  if (variants && variants.length > 0 && variants[0].images?.length) return firstSrc(variants[0].images);
   if ("images" in p) {
-    const imgs = (p as Product).images;
-    return imgs?.[0];
+    const imgs = (p as Product).images as ImageSpec[] | undefined;
+    return firstSrc(imgs);
   }
   return undefined;
 }
 
 export function getHoverImage(p: Product | ProductNormalized): string | undefined {
   const variants = (p as ProductNormalized).variants ?? (p as Product).variants;
-  if (variants && variants.length > 1 && variants[1].images?.length) return variants[1].images[0];
-  if (variants && variants.length > 0 && variants[0].images?.length > 1) return variants[0].images[1];
+  if (variants && variants.length > 1 && variants[1].images?.length) return firstSrc(variants[1].images);
+  if (variants && variants.length > 0 && variants[0].images?.length > 1) {
+    const img = variants[0].images[1];
+    return typeof img === "string" ? img : img?.src;
+  }
   if ("images" in p) {
-    const imgs = (p as Product).images;
-    return imgs?.[1];
+    const imgs = (p as Product).images as ImageSpec[] | undefined;
+    if (!imgs || imgs.length < 2) return undefined;
+    const img = imgs[1];
+    return typeof img === "string" ? img : img?.src;
   }
   return undefined;
 }
