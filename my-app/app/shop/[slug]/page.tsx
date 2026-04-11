@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { products, type ColorVariant } from "../products";
+import { products, type ColorVariant, type ImageSpec } from "../products";
 import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
@@ -64,6 +64,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const rawImages: Img[] = (product.variants?.[0]?.images as Img[] | undefined) ?? (product.images as Img[]);
   const images = rawImages.map((im) => (typeof im === "string" ? { src: im, aspect: "auto" as const } : { src: im.src, aspect: im.aspect ?? "auto" }));
   const displayImages = [...images].reverse();
+  const imgToSrc = (im: ImageSpec | undefined): string | undefined =>
+    typeof im === "string" ? im : im?.src;
   const colorPriceIds: Record<string, string | undefined> | undefined = Array.isArray(variants)
     ? variants.reduce((acc, v) => {
         acc[v.color] = v.stripePriceId || product.stripePriceId;
@@ -90,10 +92,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 ) : (
                   <div className="overflow-hidden">
                     <Image
-                      src={
-                        displayImages[0]?.src ||
-                        (typeof product.images[0] === "string" ? (product.images[0] as string) : (product.images[0] as any)?.src)
-                      }
+                      src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
                       alt={product.title}
                       width={0}
                       height={0}

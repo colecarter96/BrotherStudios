@@ -6,7 +6,7 @@ import Link from "next/link";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
-import type { Product, ColorVariant } from "../products";
+import type { Product, ColorVariant, ImageSpec } from "../products";
 import { useSearchParams } from "next/navigation";
 
 type Props = {
@@ -60,6 +60,8 @@ export default function VariantView({ product, soldOut }: Props) {
     ? Object.fromEntries(variants!.map((v) => [v.color, v.stripePriceId || product.stripePriceId]))
     : undefined;
   const enableSizes = product.sizeType === "standard";
+  const imgToSrc = (im: ImageSpec | undefined): string | undefined =>
+    typeof im === "string" ? im : im?.src;
 
   return (
     <>
@@ -80,12 +82,7 @@ export default function VariantView({ product, soldOut }: Props) {
               ) : (
                 <div className="overflow-hidden">
                   <Image
-                    src={
-                      displayImages[0]?.src ||
-                      (typeof product.images[0] === "string"
-                        ? (product.images[0] as string)
-                        : (product.images[0] as any)?.src)
-                    }
+                    src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
                     alt={product.title}
                     width={0}
                     height={0}
@@ -129,7 +126,7 @@ export default function VariantView({ product, soldOut }: Props) {
           stripePriceId={priceId}
           enableSizes={enableSizes}
           title={product.title}
-          image={(images[0]?.src || (typeof product.images[0] === "string" ? (product.images[0] as string) : (product.images[0] as any)?.src))}
+          image={images[0]?.src || imgToSrc(product.images?.[0]) || ""}
           soldOut={soldOut}
           colorOptions={
             hasVariants

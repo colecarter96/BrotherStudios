@@ -1,8 +1,7 @@
 import Footer from "../components/Footer";
 import Image from "next/image";
-import Link from "next/link";
 import VariantLink from "../components/VariantLink";
-import { productsNormalized, type ProductNormalized } from "./products";
+import { productsNormalized, type ProductNormalized, type ImageSpec } from "./products";
 
 export const dynamic = "force-dynamic";
 
@@ -38,8 +37,8 @@ export default async function Shop() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:mx-[5%] gap-0 mt-40 justify-items-stretch items-start min-h-[80dvh] mb-20">
           {productsNormalized.flatMap((p) =>
             p.variants.map((v, vi) => {
-              const imgAt = (idx: number) => {
-                const it: any = v.images?.[idx];
+              const imgAt = (idx: number): string | undefined => {
+                const it: ImageSpec | undefined = v.images?.[idx];
                 return typeof it === "string" ? it : it?.src;
               };
               const baseImg = imgAt(1) || imgAt(0);
