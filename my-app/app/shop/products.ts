@@ -119,6 +119,7 @@ export const products: Product[] = [
           { src: "/handsomeBrother/whiteBack.webp", aspect: "5:7" },
           { src: "/handsomeBrother/whiteSide.webp", aspect: "5:7" },
           { src: "/handsomeBrother/whiteFront.webp", aspect: "5:7" },
+          // { src: "/handsomeBrother/brighter.webp", aspect: "5:7" },
         ],
         
         // ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/handsomeBrother/whiteBack.webp", "/handsomeBrother/whiteSide.webp", "/handsomeBrother/whiteFront.webp" ], //"/SS26/handsomeWhiteVisual.png"
