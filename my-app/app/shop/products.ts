@@ -38,6 +38,108 @@ export type ProductDetails = {
 // - Each product should define at least one color variant with its own images.
 export const products: Product[] = [
   {
+    slug: "raglan-tee",
+    title: "RAGLAN TEE",
+    price: 38,
+    // Kept for backward compatibility; primary/hover come from variants below
+    images: [
+      { src: "/raglanTee/blackFrontProd.webp", aspect: "auto" },
+      { src: "/raglanTee/whiteFrontProd.webp", aspect: "auto" },
+    ],
+    description:
+      "The Ragland Tee features a raglan construction with a mid wash, cotton. It features raw neckline features while still keeping it structure. We recommend sizing down one size. Model is 185cm wearing a size M.",
+    // You can omit product-level stripePriceId when using per-variant price IDs
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    variants: [
+      {
+        color: "#000000",
+        label: "Black",
+        stripePriceId: "price_1TOnRsP6lKVtJIIMqDZgWdsy", 
+        images: [
+          { src: "/raglanTee/blackBackProd.webp", aspect: "auto" },
+          { src: "/raglanTee/blackFrontProd.webp", aspect: "auto" },
+          { src: "/raglanTee/blackSide.webp", aspect: "5:7" },
+          { src: "/raglanTee/blackBack.webp", aspect: "5:7" },
+          { src: "/raglanTee/blackFront.webp", aspect: "5:7" },
+        ],
+        // images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/handsomeBrother/blackBack.webp", "/handsomeBrother/blackDetail.webp", "/handsomeBrother/blackFront.webp"], //"/SS26/handsomeBlackVisual.png"
+      },
+      {
+        color: "#ffffff",
+        label: "White",
+        stripePriceId: "price_1TOnSGP6lKVtJIIMwJciCMLB", //price_1TMbU6P6lKVtJIIMltLHbKPd
+        images: [
+          { src: "/raglanTee/whiteBackProd.webp", aspect: "auto" },
+          { src: "/raglanTee/whiteFrontProd.webp", aspect: "auto" },
+          { src: "/raglanTee/whiteSide.webp", aspect: "5:7" },
+          { src: "/raglanTee/whiteBack.webp", aspect: "5:7" },
+          { src: "/raglanTee/whiteFront.webp", aspect: "5:7" },
+          // { src: "/handsomeBrother/brighter.webp", aspect: "5:7" },
+        ],
+        
+        // ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/handsomeBrother/whiteBack.webp", "/handsomeBrother/whiteSide.webp", "/handsomeBrother/whiteFront.webp" ], //"/SS26/handsomeWhiteVisual.png"
+      },
+    ],
+    details: {
+      fabric: "100% Cotton",
+      color: ["Black", "White"],
+      care: "Machine wash cold, tumble dry low",
+      gsm: 260,
+    },
+  },
+  {
+    slug: "slub-tee",
+    title: "SLUB TEE",
+    price: 38,
+    // Kept for backward compatibility; primary/hover come from variants below
+    images: [
+      {src: "/slubTee/slubBlackFront.webp", aspect: "auto" },
+      {src: "/SS26/handsomeBrotherWhite.webp", aspect: "auto" },
+    ],
+    description:
+      "Lightweight, boxy fitting slub cotton tee shirt. Model is wearing size M. Size down 1 size.",
+    // You can omit product-level stripePriceId when using per-variant price IDs
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    variants: [
+      {
+        color: "#000000",
+        label: "Black",
+        stripePriceId: "price_1TMbUYP6lKVtJIIMMMxDGx9h", 
+        images: [
+          { src: "/slubTee/slubBlackBack.webp", aspect: "auto" },
+          { src: "/slubTee/slubBlackFront.webp", aspect: "auto" },
+          { src: "/slubTee/blackSlubSide.webp", aspect: "5:7" },
+          { src: "/slubTee/blackSlubBack.webp", aspect: "5:7" },
+          { src: "/slubTee/blackSlubFront.webp", aspect: "5:7" },
+        ],
+        // images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/handsomeBrother/blackBack.webp", "/handsomeBrother/blackDetail.webp", "/handsomeBrother/blackFront.webp"], //"/SS26/handsomeBlackVisual.png"
+      },
+      {
+        color: "#ffffff",
+        label: "White",
+        stripePriceId: "price_1TMbU6P6lKVtJIIMltLHbKPd", 
+        images: [
+          { src: "/slubTee/slubWhiteBack.webp", aspect: "auto" },
+          { src: "/slubTee/slubWhiteFront.webp", aspect: "auto" },
+          { src: "/slubTee/whiteSlubSide.webp", aspect: "5:7" },
+          { src: "/slubTee/whiteSlubBack.webp", aspect: "5:7" },
+          { src: "/slubTee/whiteSlubFront.webp", aspect: "5:7" },
+          // { src: "/handsomeBrother/brighter.webp", aspect: "5:7" },
+        ],
+        
+        // ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/handsomeBrother/whiteBack.webp", "/handsomeBrother/whiteSide.webp", "/handsomeBrother/whiteFront.webp" ], //"/SS26/handsomeWhiteVisual.png"
+      },
+    ],
+    details: {
+      fabric: "100% Cotton",
+      color: ["Black", "White"],
+      care: "Machine wash cold, tumble dry low",
+      gsm: 190,
+    },
+  },
+  {
     slug: "expedition-tee",
     title: "EXPEDITION SHIRT",
     price: 40,
@@ -133,57 +235,8 @@ export const products: Product[] = [
     },
   },
 
-  {
-    slug: "slub-tee",
-    title: "SLUB TEE",
-    price: 38,
-    // Kept for backward compatibility; primary/hover come from variants below
-    images: [
-      {src: "/slubTee/slubBlackFront.webp", aspect: "auto" },
-      {src: "/SS26/handsomeBrotherWhite.webp", aspect: "auto" },
-    ],
-    description:
-      "Lightweight, boxy fitting slub cotton tee shirt. Model is wearing size M. Size down 1 size.",
-    // You can omit product-level stripePriceId when using per-variant price IDs
-    sizeType: "standard",
-    shippingSpeed: "7-14",
-    variants: [
-      {
-        color: "#000000",
-        label: "Black",
-        stripePriceId: "price_1TMbUYP6lKVtJIIMMMxDGx9h", 
-        images: [
-          { src: "/slubTee/slubBlackBack.webp", aspect: "auto" },
-          { src: "/slubTee/slubBlackFront.webp", aspect: "auto" },
-          { src: "/slubTee/blackSlubSide.webp", aspect: "5:7" },
-          { src: "/slubTee/blackSlubBack.webp", aspect: "5:7" },
-          { src: "/slubTee/blackSlubFront.webp", aspect: "5:7" },
-        ],
-        // images: ["/SS26/handsomeBrotherBlackBack.webp", "/SS26/handsomeBrotherBlack.webp", "/handsomeBrother/blackBack.webp", "/handsomeBrother/blackDetail.webp", "/handsomeBrother/blackFront.webp"], //"/SS26/handsomeBlackVisual.png"
-      },
-      {
-        color: "#ffffff",
-        label: "White",
-        stripePriceId: "price_1TMbU6P6lKVtJIIMltLHbKPd", 
-        images: [
-          { src: "/slubTee/slubWhiteBack.webp", aspect: "auto" },
-          { src: "/slubTee/slubWhiteFront.webp", aspect: "auto" },
-          { src: "/slubTee/whiteSlubSide.webp", aspect: "5:7" },
-          { src: "/slubTee/whiteSlubBack.webp", aspect: "5:7" },
-          { src: "/slubTee/whiteSlubFront.webp", aspect: "5:7" },
-          // { src: "/handsomeBrother/brighter.webp", aspect: "5:7" },
-        ],
-        
-        // ["/SS26/handsomeBrotherWhiteBack.webp", "/SS26/handsomeBrotherWhite.webp", "/handsomeBrother/whiteBack.webp", "/handsomeBrother/whiteSide.webp", "/handsomeBrother/whiteFront.webp" ], //"/SS26/handsomeWhiteVisual.png"
-      },
-    ],
-    details: {
-      fabric: "100% Cotton",
-      color: ["Black", "White"],
-      care: "Machine wash cold, tumble dry low",
-      gsm: 190,
-    },
-  },
+  
+  
   
   
   {
