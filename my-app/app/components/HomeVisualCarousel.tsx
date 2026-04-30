@@ -57,11 +57,11 @@ export default function HomeVisualCarousel() {
             >
               SHOP
             </Link>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {IMAGES.map((img, i) => (
                 <span
                   key={img.src}
-                  className={`h-2.5 w-2.5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
+                  className={`h-[3px] w-5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
                 />
               ))}
             </div>
@@ -101,11 +101,11 @@ export default function HomeVisualCarousel() {
             >
               SHOP
             </Link>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {IMAGES.map((img, i) => (
                 <span
                   key={img.src}
-                  className={`h-2.5 w-2.5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
+                  className={`h-[3px] w-5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
                 />
               ))}
             </div>
