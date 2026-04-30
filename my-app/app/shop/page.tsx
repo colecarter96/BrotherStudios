@@ -6,14 +6,17 @@ import { productsNormalized, type ProductNormalized, type ImageSpec } from "./pr
 export const dynamic = "force-dynamic";
 
 async function getSoldOutSlugs(): Promise<Set<string>> {
+  const manualSoldOutSlugs = productsNormalized
+    .filter((p: ProductNormalized) => p.soldOut)
+    .map((p: ProductNormalized) => p.slug);
   const oneOfOneSlugs = productsNormalized.filter((p: ProductNormalized) => p.oneOfOne).map((p: ProductNormalized) => p.slug);
-  if (oneOfOneSlugs.length === 0) return new Set();
+  const sold = new Set<string>(manualSoldOutSlugs);
+  if (oneOfOneSlugs.length === 0) return sold;
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-    if (!stripeSecretKey) return new Set();
+    if (!stripeSecretKey) return sold;
     const Stripe = (await import("stripe")).default;
     const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
-    const sold = new Set<string>();
     for (const slug of oneOfOneSlugs) {
       const result = await stripe.paymentIntents.search({
         query: `status:'succeeded' AND metadata['slug']:'${slug}'`,
@@ -25,7 +28,7 @@ async function getSoldOutSlugs(): Promise<Set<string>> {
     }
     return sold;
   } catch {
-    return new Set();
+    return sold;
   }
 }
 
@@ -47,15 +50,16 @@ export default async function Shop() {
               const altB = imgAt(1);
               const hoverImg = (altA && altA !== baseImg && altA) || (altB && altB !== baseImg && altB) || undefined;
               const hasHover = Boolean(hoverImg);
+              const productSoldOut = soldOut.has(p.slug);
               return (
                 <VariantLink
                   key={`${p.slug}__${vi}`}
                   href={`/shop/${p.slug}`}
                   slug={p.slug}
                   color={v.color}
-                  className="group block border-2 border-transparent px-2"
+                  className={`group block border-2 border-transparent px-2 ${productSoldOut ? "opacity-60" : ""}`}
                 >
-                  <div className="relative w-full aspect-square overflow-hidden">
+                  <div className={`relative w-full aspect-square overflow-hidden ${productSoldOut ? "grayscale" : ""}`}>
                     {/* Base image */}
                     <div className="absolute -inset-[2px]">
                       <Image
@@ -76,14 +80,9 @@ export default async function Shop() {
                         />
                       </div>
                     )}
-                    {soldOut.has(p.slug) && (
-                      <div className="absolute top-2 left-2 bg-black text-white text-xs md:text-sm font-semibold px-2 py-1">
-                        SOLD OUT
-                      </div>
-                    )}
                   </div>
-                  <h2 className="font-semibold text-base md:text-lg mt-2">{p.title}</h2>
-                  <p className="font-medium text-base md:text-lg -mt-2">${p.price.toFixed(2)}</p>
+                  <h2 className={`font-semibold text-base md:text-lg mt-2 ${productSoldOut ? "text-black/60" : ""}`}>{p.title}</h2>
+                  <p className={`font-medium text-base md:text-lg -mt-2 ${productSoldOut ? "text-black/60" : ""}`}>${p.price.toFixed(2)}</p>
                 </VariantLink>
               );
             })

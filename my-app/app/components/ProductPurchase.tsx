@@ -196,7 +196,9 @@ export default function ProductPurchase({
               setMessage({ type: "error", text: "Could not add to bag. Please try again." });
             }
           }}
-          className={`mt-0 md:mt-1 inline-flex items-center justify-center px-4 py-3 w-full  ${justAdded ? "bg-blue-400" : "bg-black"} text-white font-semibold text-sm md:text-lg lg:text-lg disabled:cursor-not-allowed transition-colors duration-200`}
+          className={`mt-0 md:mt-1 inline-flex items-center justify-center px-4 py-3 w-full ${
+            soldOut ? "bg-black/40" : justAdded ? "bg-blue-400" : "bg-black"
+          } text-white font-semibold text-sm md:text-lg lg:text-lg disabled:cursor-not-allowed transition-colors duration-200`}
         >
           {buttonLabel}
         </button>

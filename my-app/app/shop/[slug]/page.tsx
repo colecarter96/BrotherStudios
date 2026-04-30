@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
-  const soldOut = await isSoldOut(product.slug, product.oneOfOne);
+  const soldOut = Boolean(product.soldOut) || (await isSoldOut(product.slug, product.oneOfOne));
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   if (hasVariants) {
     return (

@@ -29,6 +29,7 @@ export type Product = {
   stripePriceId?: string;
   details?: ProductDetails;
   oneOfOne?: boolean;
+  soldOut?: boolean;
   waistOptions?: string[];
   inseamOptions?: string[];
   sizeType?: SizeType;
@@ -328,6 +329,7 @@ export const products: Product[] = [
     slug: "champion-tee",
     title: "CHAMPIONSHIP TEE",
     price: 45,
+    soldOut: true,
     images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
     variants: [
       {
