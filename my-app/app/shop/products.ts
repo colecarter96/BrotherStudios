@@ -207,12 +207,12 @@ export const products: Product[] = [
     sizeType: "standard",
     shippingSpeed: "7-14",
     sizeChart: {
-      sizes: ["S", "M", "L", "XL", "2XL"],
+      sizes: ["S", "M", "L", "XL"],
       rows: [
-        { label: "Length", values: [26.77, 27.56, 28.35, 29.13, 29.92] },
-        { label: "Shoulder", values: [20.83, 21.54, 22.24, 22.95, 23.66] },
-        { label: "Chest", values: [21.26, 22.05, 22.83, 23.62, 24.41] },
-        { label: "Sleeve length", values: [8.07, 8.27, 8.46, 8.66, 8.86] },
+        { label: "Length", values: [26.77, 27.56, 28.35, 29.13] },
+        { label: "Shoulder", values: [20.83, 21.54, 22.24, 22.95] },
+        { label: "Chest", values: [21.26, 22.05, 22.83, 23.62] },
+        { label: "Sleeve length", values: [8.07, 8.27, 8.46, 8.66] },
       ],
     },
     details: {
