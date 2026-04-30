@@ -40,11 +40,11 @@ export default function HomeVisualCarousel() {
 
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none px-10">
             <img
-              src="/logo2.0.svg"
+              src="/logo2.0White.png"
               alt="Brother Studios"
               width={520}
               height={182}
-              className="w-[60%] h-auto brightness-0 invert drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]"
+              className="w-[60%] h-auto"
               decoding="async"
               fetchPriority="high"
             />
@@ -84,11 +84,11 @@ export default function HomeVisualCarousel() {
 
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none px-8">
             <img
-              src="/logo2.0.svg"
+              src="/logo2.0White.png"
               alt="Brother Studios"
               width={420}
               height={147}
-              className="w-[78%] h-auto brightness-0 invert drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]"
+              className="w-[78%] h-auto"
               decoding="async"
               fetchPriority="high"
             />
