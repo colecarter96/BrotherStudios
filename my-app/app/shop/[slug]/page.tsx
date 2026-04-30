@@ -6,6 +6,7 @@ import Footer from "@/app/components/Footer";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductDetails from "@/app/components/ProductDetails";
+import ProductSizeChart from "@/app/components/ProductSizeChart";
 import VariantView from "./VariantView";
 
 export const dynamic = "force-dynamic";
@@ -152,6 +153,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
             </details>
           </section>
+          {product.sizeChart ? (
+            <section className="mt-8">
+              <details className="group border-t border-black/10 pt-4">
+                <summary className="flex items-center justify-between cursor-pointer text-base md:text-lg font-semibold tracking-tighter">
+                  SIZE CHART
+                  <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
+                </summary>
+                <div className="mt-3 text-sm md:text-base">
+                  <ProductSizeChart chart={product.sizeChart} />
+                </div>
+              </details>
+            </section>
+          ) : null}
           <p className="my-10 text-base md:text-lg font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
           {/* Shipping dropdown */}
           <section className="mt-8">
