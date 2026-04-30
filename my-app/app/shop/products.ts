@@ -10,6 +10,16 @@ export type ColorVariant = {
   stripePriceId?: string; // optional per-color Stripe price
 };
 
+export type SizeChartRow = {
+  label: string;
+  values: number[];
+};
+
+export type SizeChart = {
+  sizes: string[];
+  rows: SizeChartRow[];
+};
+
 export type Product = {
   slug: string;
   title: string;
@@ -23,6 +33,7 @@ export type Product = {
   inseamOptions?: string[];
   sizeType?: SizeType;
   shippingSpeed?: ShippingSpeed;
+  sizeChart?: SizeChart;
   variants?: ColorVariant[]; // preferred: define color variants (even if only one)
 };
 
@@ -36,6 +47,16 @@ export type ProductDetails = {
 // Legacy note:
 // - images: kept for backward-compat read, but all readers should use variantsNormalized/productsNormalized.
 // - Each product should define at least one color variant with its own images.
+const STANDARD_TEE_SIZE_CHART: SizeChart = {
+  sizes: ["S", "M", "L", "XL"],
+  rows: [
+    { label: "Length", values: [27.56, 28.35, 29.13, 29.92] },
+    { label: "Shoulder", values: [21.85, 22.44, 23.03, 23.62] },
+    { label: "Chest", values: [22.83, 23.62, 24.41, 25.2] },
+    { label: "Sleeve length", values: [8.46, 8.66, 8.86, 9.0] },
+  ],
+};
+
 export const products: Product[] = [
   {
     slug: "raglan-tee",
@@ -51,6 +72,14 @@ export const products: Product[] = [
     // You can omit product-level stripePriceId when using per-variant price IDs
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [27.17, 27.95, 28.74, 30.31] },
+        { label: "Chest", values: [21.65, 22.44, 23.23, 24.02] },
+        { label: "Sleeve length", values: [14.17, 14.96, 15.75, 16.54] },
+      ],
+    },
     variants: [
       {
         color: "#000000",
@@ -102,6 +131,7 @@ export const products: Product[] = [
     // You can omit product-level stripePriceId when using per-variant price IDs
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: STANDARD_TEE_SIZE_CHART,
     variants: [
       {
         color: "#000000",
@@ -175,6 +205,15 @@ export const products: Product[] = [
     stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL", "2XL"],
+      rows: [
+        { label: "Length", values: [26.77, 27.56, 28.35, 29.13, 29.92] },
+        { label: "Shoulder", values: [20.83, 21.54, 22.24, 22.95, 23.66] },
+        { label: "Chest", values: [21.26, 22.05, 22.83, 23.62, 24.41] },
+        { label: "Sleeve length", values: [8.07, 8.27, 8.46, 8.66, 8.86] },
+      ],
+    },
     details: {
       fabric: "100% Cotton",
       color: ["Gray", "Black"],
@@ -197,6 +236,15 @@ export const products: Product[] = [
     // You can omit product-level stripePriceId when using per-variant price IDs
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [26.77, 27.17, 27.95, 28.74] },
+        { label: "Shoulder", values: [17.72, 18.11, 18.70, 19.29] },
+        { label: "Chest", values: [18.90, 19.88, 21.06, 22.24] },
+        { label: "Sleeve length", values: [8.07, 8.27, 8.50, 8.74] },
+      ],
+    },
     variants: [
       {
         color: "#000000",
@@ -260,6 +308,15 @@ export const products: Product[] = [
     stripePriceId: "price_1T4pEOP6lKVtJIIMYT4Kq0bi",
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [27.95, 28.74, 29.53, 30.31] },
+        { label: "Shoulder", values: [22.83, 23.62, 24.41, 25.20] },
+        { label: "Chest", values: [24.80, 25.59, 26.38, 27.17] },
+        { label: "Sleeve length", values: [22.44, 22.83, 23.23, 23.62] },
+      ],
+    },
     details: {
       fabric: "100% cotton",
       color: ["Gray", "Black"],
@@ -288,6 +345,15 @@ export const products: Product[] = [
     stripePriceId: "price_1T4pDmP6lKVtJIIMYXwHeimk",
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [28.74, 29.53, 30.12, 30.71] },
+        { label: "Shoulder", values: [20.87, 21.26, 22.05, 22.44] },
+        { label: "Chest", values: [22.44, 23.23, 24.02, 24.80] },
+        { label: "Sleeve length", values: [10.24, 10.43, 10.63, 10.83] },
+      ],
+    },
     details: {
       fabric: "100% cotton",
       color: ["Black", "Cream", "Yellow"],
@@ -320,6 +386,15 @@ export const products: Product[] = [
     stripePriceId: "price_1T4pFzP6lKVtJIIMnSThatZr",
     sizeType: "standard",
     shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [28.74, 29.53, 30.12, 30.71] },
+        { label: "Shoulder", values: [20.87, 21.26, 22.05, 22.44] },
+        { label: "Chest", values: [22.44, 23.23, 24.02, 24.80] },
+        { label: "Sleeve length", values: [10.24, 10.43, 10.63, 10.83] },
+      ],
+    },
     details: {
       fabric: "100% cotton",
       color: ["Black", "Cream", "Pink"],

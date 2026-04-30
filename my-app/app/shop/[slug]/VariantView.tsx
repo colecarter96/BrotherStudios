@@ -6,6 +6,7 @@ import Link from "next/link";
 import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
+import ProductSizeChart from "@/app/components/ProductSizeChart";
 import type { Product, ColorVariant, ImageSpec } from "../products";
 import { useSearchParams } from "next/navigation";
 
@@ -150,6 +151,19 @@ export default function VariantView({ product, soldOut }: Props) {
             </div>
           </details>
         </section>
+        {product.sizeChart ? (
+          <section className="mt-8">
+            <details className="group border-t border-black/10 pt-4">
+              <summary className="flex items-center justify-between cursor-pointer text-base md:text-base font-semibold tracking-titter">
+                SIZE CHART
+                <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <div className="mt-3 text-sm">
+                <ProductSizeChart chart={product.sizeChart} />
+              </div>
+            </details>
+          </section>
+        ) : null}
         <p className="my-10 text-sm md:text-base font-semibold tracking-titter whitespace-pre-line">{product.description}</p>
         {/* Shipping dropdown */}
         <section className="mt-8">
