@@ -17,18 +17,35 @@ type CheckoutRequestBody =
       metadata?: Record<string, string | number | boolean | null | undefined>;
     };
 
+/** Slugs that skip Stripe shipping rates (still collect address). */
+const FREE_SHIPPING_SLUGS = new Set(["nepo-baby-tee"]);
+
+function isFreeShippingSlug(slug: string) {
+  return Boolean(slug && FREE_SHIPPING_SLUGS.has(slug));
+}
+
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as CheckoutRequestBody;
   const isBatch = "items" in body;
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const slug = req.nextUrl.searchParams.get("slug") || "";
+  const returnToRaw = req.nextUrl.searchParams.get("return_to");
+  const safeReturnPath =
+    returnToRaw &&
+    returnToRaw.startsWith("/") &&
+    !returnToRaw.startsWith("//") &&
+    !returnToRaw.includes("://")
+      ? returnToRaw
+      : null;
   const successUrl =
     process.env.NEXT_PUBLIC_STRIPE_SUCCESS_URL ||
     `${req.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl =
     process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL ||
-    `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?canceled=1`;
+    (safeReturnPath
+      ? `${req.nextUrl.origin}${safeReturnPath}?canceled=1`
+      : `${req.nextUrl.origin}/shop${slug ? `/${slug}` : ""}?canceled=1`);
 
   if (!stripeSecretKey) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
@@ -82,8 +99,11 @@ export async function POST(req: NextRequest) {
       }
       const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
       const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
-      const shippingRateId =
+      let shippingRateId =
         itemSlug === "2-man-sticker" && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
+      if (isFreeShippingSlug(itemSlug)) {
+        shippingRateId = undefined;
+      }
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         line_items: [
@@ -155,8 +175,16 @@ export async function POST(req: NextRequest) {
 
     const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
     const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
-    const shippingRateId =
+    let shippingRateId =
       allStickers && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
+    const batchSlugs = items.map((item) =>
+      typeof item.metadata?.slug === "string" ? item.metadata.slug : ""
+    );
+    const allFreeShipping =
+      batchSlugs.length > 0 && batchSlugs.every((s) => isFreeShippingSlug(s));
+    if (allFreeShipping) {
+      shippingRateId = undefined;
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",

@@ -23,6 +23,7 @@ describe('POST /api/checkout', () => {
     productsRetrieve.mockClear();
     intentsSearch.mockClear();
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
+    delete process.env.STRIPE_SHIPPING_RATE_ID;
   });
 
   it('creates a session for batch checkout with promotion codes and metadata', async () => {
@@ -45,6 +46,37 @@ describe('POST /api/checkout', () => {
     const cart = JSON.parse(args.metadata.cart);
     // Compact cart metadata: { p: priceId, s?: size, q: quantity }
     expect(cart[0]).toMatchObject({ p: 'price_x', s: 'M', q: 2 });
+  });
+
+  it('omits shipping_options for nepo-baby-tee (free shipping)', async () => {
+    process.env.STRIPE_SHIPPING_RATE_ID = 'shr_paid_default';
+    const req = new NextRequest('http://localhost/api/checkout', {
+      method: 'POST',
+      body: JSON.stringify({
+        priceId: 'price_x',
+        quantity: 1,
+        metadata: { size: 'M', slug: 'nepo-baby-tee' },
+      }),
+    } as any);
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+    const args = sessionsCreate.mock.calls[0][0];
+    expect(args.shipping_options).toBeUndefined();
+    expect(args.shipping_address_collection).toEqual({ allowed_countries: ['US'] });
+  });
+
+  it('uses return_to for cancel_url when safe', async () => {
+    const req = new NextRequest(
+      'http://localhost/api/checkout?return_to=' + encodeURIComponent('/landing/nepo-baby-tee'),
+      {
+        method: 'POST',
+        body: JSON.stringify({ priceId: 'price_x', quantity: 1, metadata: { size: 'M' } }),
+      } as any
+    );
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+    const args = sessionsCreate.mock.calls[0][0];
+    expect(args.cancel_url).toBe('http://localhost/landing/nepo-baby-tee?canceled=1');
   });
 });
 

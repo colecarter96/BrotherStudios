@@ -26,6 +26,8 @@ export type Product = {
   price: number;
   images: ImageSpec[];
   description: string;
+  /** If set, shop grid links here instead of `/shop/[slug]`; `/shop/[slug]` redirects to this URL. */
+  listingHref?: string;
   stripePriceId?: string;
   details?: ProductDetails;
   oneOfOne?: boolean;
@@ -168,6 +170,45 @@ export const products: Product[] = [
       color: ["Black", "White"],
       care: "Machine wash cold, tumble dry low",
       gsm: 190,
+    },
+  },
+  {
+    slug: "nepo-baby-tee",
+    title: "NEPO BABY TEE",
+    price: 65,
+    listingHref: "/landing/nepo-baby-tee",
+    images: [
+      { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+      { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+    ],
+    description:
+      "Limited tee only 100 made — 100% cotton, heavyweight distressed fabric. \nFits like our other tees: size down if between sizes.",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [27.17, 27.95, 28.74, 30.31] },
+        { label: "Chest", values: [21.65, 22.44, 23.23, 24.02] },
+        { label: "Sleeve length", values: [14.17, 14.96, 15.75, 16.54] },
+      ],
+    },
+    variants: [
+      {
+        color: "#000000",
+        label: "Black",
+        stripePriceId: "price_1TUCoYP6lKVtJIIMlgZViO6W",
+        images: [
+          { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+          { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+        ],
+      },
+    ],
+    details: {
+      fabric: "100% Cotton",
+      color: ["Black"],
+      care: "Machine wash cold, tumble dry low",
+      gsm: 430,
     },
   },
   {

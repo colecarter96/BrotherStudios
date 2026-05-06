@@ -54,7 +54,7 @@ export default async function Shop() {
               return (
                 <VariantLink
                   key={`${p.slug}__${vi}`}
-                  href={`/shop/${p.slug}`}
+                  href={p.listingHref ?? `/shop/${p.slug}`}
                   slug={p.slug}
                   color={v.color}
                   className={`group block border-2 border-transparent px-2 ${productSoldOut ? "opacity-60" : ""}`}

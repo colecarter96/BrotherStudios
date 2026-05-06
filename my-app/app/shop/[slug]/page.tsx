@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { products, type ColorVariant, type ImageSpec } from "../products";
@@ -48,6 +48,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
+  if (product.listingHref) {
+    redirect(product.listingHref);
+  }
   const soldOut = Boolean(product.soldOut) || (await isSoldOut(product.slug, product.oneOfOne));
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   if (hasVariants) {
