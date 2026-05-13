@@ -3,15 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { HOME_HERO_IMAGES, HOME_HERO_ROTATE_MS } from "./homeHeroAssets";
 
-const IMAGES = [
-  { src: "/SS26/handsomeWhiteVisual.png", alt: "Handsome Tee White" },
-  { src: "/SS26/handsomeBlackVisual.png", alt: "Handsome Tee Black" },
-  { src: "/SS26/visuals/climbingTeeBackBlack.jpeg", alt: "Climbing Tee Back Black" },
-  { src: "/SS26/visuals/climbingTeeBackWhite.jpeg", alt: "Climbing Tee Back White" },
-];
-
-const ROTATE_MS = 2000;
+const IMAGES = HOME_HERO_IMAGES;
+const ROTATE_MS = HOME_HERO_ROTATE_MS;
 
 export default function HomeVisualCarousel() {
   const [index, setIndex] = useState(0);

@@ -14,9 +14,11 @@ const RETURN_PATH = "/landing/nepo-baby-tee";
 
 type Props = {
   product: Product;
+  inventoryBySize?: Record<string, number> | null;
+  inventoryDisplay?: { remaining: number; cap: number } | null;
 };
 
-export default function NepoBabyLanding({ product }: Props) {
+export default function NepoBabyLanding({ product, inventoryBySize, inventoryDisplay }: Props) {
   const variants: ColorVariant[] | undefined = product.variants;
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
@@ -76,13 +78,27 @@ export default function NepoBabyLanding({ product }: Props) {
   const showSize = enableSizes;
   const sizeValid = !showSize || Boolean(size);
   const qty = Math.max(1, Number.isFinite(quantity) ? quantity : 1);
-  const canAct = Boolean(resolvedPriceId) && sizeValid;
+  const leftForSelected =
+    showSize && size && inventoryBySize && size in inventoryBySize ? (inventoryBySize[size] ?? 0) : null;
+  const canAct =
+    Boolean(resolvedPriceId) &&
+    sizeValid &&
+    (leftForSelected === null || leftForSelected > 0) &&
+    (leftForSelected === null || qty <= leftForSelected);
   const soldOut = Boolean(product.soldOut);
 
   const setQty = (n: number) => {
-    const next = Math.max(1, Number.isFinite(n) ? n : 1);
+    const cap =
+      leftForSelected !== null && Number.isFinite(leftForSelected) ? Math.max(1, leftForSelected) : Infinity;
+    const next = Math.max(1, Math.min(cap, Number.isFinite(n) ? n : 1));
     setQuantity(next);
   };
+
+  useEffect(() => {
+    if (leftForSelected !== null && qty > leftForSelected) {
+      setQuantity(Math.max(1, leftForSelected));
+    }
+  }, [leftForSelected, qty]);
 
   async function goToStripe() {
     setFormError("");
@@ -96,6 +112,10 @@ export default function NepoBabyLanding({ product }: Props) {
     }
     if (showSize && !size) {
       setFormError("Please select a size.");
+      return;
+    }
+    if (leftForSelected !== null && qty > leftForSelected) {
+      setFormError(`Only ${leftForSelected} available in size ${size}.`);
       return;
     }
     try {
@@ -181,8 +201,22 @@ export default function NepoBabyLanding({ product }: Props) {
       </div>
 
       <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
-        <h1 className="text-lg md:text-xl font-semibold tracking-tighter">{product.title}</h1>
-        <p className="text-lg md:text-xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1 md:flex-col md:items-stretch md:gap-0">
+          <h1 className="order-1 text-lg md:text-xl font-semibold tracking-tighter min-w-0 shrink md:shrink-0">
+            {product.title}
+          </h1>
+          {inventoryDisplay && (
+            <p
+              className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
+              aria-live="polite"
+            >
+              {inventoryDisplay.remaining}/{inventoryDisplay.cap} left
+            </p>
+          )}
+          <p className="order-3 md:order-2 w-full md:w-auto text-lg md:text-xl font-semibold tracking-tighter md:mt-0">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
 
         <div className="mt-2 md:mt-8">
           {Array.isArray(variants) && variants.length > 1 && (
@@ -219,16 +253,27 @@ export default function NepoBabyLanding({ product }: Props) {
               <div role="radiogroup" aria-label="Size" className="flex flex-wrap gap-x-1 gap-y-2 justify-start w-full">
                 {["S", "M", "L", "XL"].map((opt) => {
                   const selected = size === opt;
+                  const left =
+                    inventoryBySize && opt in inventoryBySize ? (inventoryBySize[opt] ?? 0) : null;
+                  const soldOutSize = left === 0;
                   return (
                     <button
                       key={opt}
                       type="button"
                       role="radio"
                       aria-checked={selected}
-                      onClick={() => setSize(opt)}
-                      className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-base md:text-lg font-semibold focus:outline-none ${
-                        selected ? "text-blue-400" : "text-black hover:text-blue-400"
-                      }`}
+                      disabled={soldOutSize}
+                      title={left !== null && left > 0 ? `${left} left` : soldOutSize ? "Sold out" : undefined}
+                      onClick={() => {
+                        if (!soldOutSize) setSize(opt);
+                      }}
+                  className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-base md:text-lg font-semibold focus:outline-none disabled:pointer-events-none ${
+                    soldOutSize
+                      ? "text-black/30 cursor-not-allowed line-through opacity-45"
+                      : selected
+                        ? "text-blue-400"
+                        : "text-black hover:text-blue-400"
+                  }`}
                     >
                       {opt}
                     </button>
@@ -252,6 +297,7 @@ export default function NepoBabyLanding({ product }: Props) {
               <input
                 type="number"
                 min={1}
+                max={leftForSelected !== null ? leftForSelected : undefined}
                 className="w-16 text-center px-2 py-2 text-base outline-none border border-black/20"
                 value={qty}
                 onChange={(e) => setQty(Number(e.target.value))}

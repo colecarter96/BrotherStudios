@@ -44,8 +44,8 @@ describe('POST /api/checkout', () => {
     expect(args.line_items[0]).toMatchObject({ price: 'price_x', quantity: 2 });
     expect(args.metadata.cart).toBeTypeOf('string');
     const cart = JSON.parse(args.metadata.cart);
-    // Compact cart metadata: { p: priceId, s?: size, q: quantity }
-    expect(cart[0]).toMatchObject({ p: 'price_x', s: 'M', q: 2 });
+    // Compact cart: { p, s?, q, u?, c? } — c = color for per-colorway inventory
+    expect(cart[0]).toMatchObject({ p: 'price_x', s: 'M', q: 2, u: 'two-tee' });
   });
 
   it('omits shipping_options for nepo-baby-tee (free shipping)', async () => {
@@ -61,6 +61,8 @@ describe('POST /api/checkout', () => {
     const res = await POST(req);
     expect(res.status).toBe(200);
     const args = sessionsCreate.mock.calls[0][0];
+    expect(args.metadata.slug).toBe('nepo-baby-tee');
+    expect(args.payment_intent_data.metadata.slug).toBe('nepo-baby-tee');
     expect(args.shipping_options).toBeUndefined();
     expect(args.shipping_address_collection).toEqual({ allowed_countries: ['US'] });
   });
