@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+import { slugAutoEdgeTrimStyle } from "@/app/shop/productImage";
+
 type ImageItem = { src: string; aspect?: "5:7" | "auto" };
 
 interface ImageCarouselProps {
@@ -149,8 +151,8 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
                 alt={alt}
                 fill
                 className={item.aspect === "5:7" ? "object-cover" : "object-contain bg-white"}
+                style={item.aspect === "auto" ? slugAutoEdgeTrimStyle() : undefined}
                 priority={i === idx}
-                style={item.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
               />
             </div>
           </div>

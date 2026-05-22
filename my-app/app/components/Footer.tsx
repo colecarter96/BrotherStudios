@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Clock from "./Clock";
+import FooterNewsletter from "./FooterNewsletter";
 
 const Footer: React.FC = () => {
   return (
@@ -40,6 +41,12 @@ const Footer: React.FC = () => {
                 <Link href="/contact">CONTACT</Link>
               </li>
               {/* <li>
+                <Link href="/blog">BLOG</Link>
+              </li> */}
+              <li>
+                <Link href="/videos">VIDEOS</Link>
+              </li>
+              {/* <li>
                 <Link href="/videos">VIDEOS</Link>
               </li>
               <li>
@@ -50,6 +57,8 @@ const Footer: React.FC = () => {
               </li> */}
             </ul>
           </div>
+
+          <FooterNewsletter />
 
           {/* Policies */}
           <div className="flex flex-col">

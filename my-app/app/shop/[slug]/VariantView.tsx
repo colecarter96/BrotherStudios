@@ -8,14 +8,23 @@ import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
 import ProductSizeChart from "@/app/components/ProductSizeChart";
 import type { Product, ColorVariant, ImageSpec } from "../products";
+import AutoAspectImage from "../AutoAspectImage";
 import { useSearchParams } from "next/navigation";
+import {
+  getInventoryDisplayForColorway,
+  inventoryUsesPerColorwayKeys,
+  sliceInventoryByColor,
+} from "@/lib/inventory";
 
 type Props = {
   product: Product;
   soldOut?: boolean;
+  /** Full Redis-backed map (size keys, or `color|SIZE` for per-colorway). */
+  inventoryBySize?: Record<string, number> | null;
+  inventoryDisplay?: { remaining: number; cap: number } | null;
 };
 
-export default function VariantView({ product, soldOut }: Props) {
+export default function VariantView({ product, soldOut, inventoryBySize, inventoryDisplay }: Props) {
   const variants: ColorVariant[] | undefined = product.variants;
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
@@ -64,10 +73,40 @@ export default function VariantView({ product, soldOut }: Props) {
   const imgToSrc = (im: ImageSpec | undefined): string | undefined =>
     typeof im === "string" ? im : im?.src;
 
+  const inventoryForPurchase = useMemo(
+    () =>
+      sliceInventoryByColor(
+        inventoryBySize ?? null,
+        hasVariants ? selectedColor : undefined,
+        product.initialInventory
+      ),
+    [inventoryBySize, selectedColor, hasVariants, product.initialInventory]
+  );
+
+  const inventoryDisplayForSwatch = useMemo(() => {
+    const seed = product.initialInventory;
+    const live = inventoryBySize;
+    if (!seed || Object.keys(seed).length === 0) return inventoryDisplay ?? null;
+    if (inventoryUsesPerColorwayKeys(seed) && hasVariants && selectedColor && live) {
+      const variantCap = currentVariant?.inventoryCap;
+      return (
+        getInventoryDisplayForColorway(seed, live, selectedColor, variantCap) ?? inventoryDisplay ?? null
+      );
+    }
+    return inventoryDisplay ?? null;
+  }, [
+    product.initialInventory,
+    inventoryBySize,
+    hasVariants,
+    selectedColor,
+    inventoryDisplay,
+    currentVariant?.inventoryCap,
+  ]);
+
   return (
     <>
       {/* Left: images */}
-      <div className="pt-22 md:pt-0 md:mt-0">
+      <div className="pt-14 md:pt-0 md:mt-0">
         {/* Mobile carousel */}
         <div className="md:hidden -mx-3">
           {displayImages.length > 1 ? (
@@ -81,18 +120,11 @@ export default function VariantView({ product, soldOut }: Props) {
                   </div>
                 </div>
               ) : (
-                <div className="overflow-hidden">
-                  <Image
-                    src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
-                    alt={product.title}
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: "100%", height: "auto", transform: "scale(1.03)", transformOrigin: "center" }}
-                    className="block"
-                    priority
-                  />
-                </div>
+                <AutoAspectImage
+                  src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
+                  alt={product.title}
+                  priority
+                />
               )}
             </>
           )}
@@ -100,27 +132,50 @@ export default function VariantView({ product, soldOut }: Props) {
         {/* Desktop stack */}
         <div className="hidden md:block">
           <div className="space-y-0 pr-0">
-            {(displayImages.length ? displayImages : images).map((im, i) => (
-              <div key={i} className="relative w-full h-[92vh] overflow-hidden">
-                <Image
+            {(displayImages.length ? displayImages : images).map((im, i) =>
+              im.aspect === "auto" ? (
+                <AutoAspectImage
+                  key={i}
                   src={im.src}
                   alt={`${product.title} ${i + 1}`}
-                  fill
-                  sizes="100vw"
-                  className="object-contain bg-white"
-                  style={im.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
-                  loading="lazy"
+                  layout="viewport"
+                  priority={i === 0}
                 />
-              </div>
-            ))}
+              ) : (
+                <div key={i} className="relative w-full h-[92vh] overflow-hidden">
+                  <Image
+                    src={im.src}
+                    alt={`${product.title} ${i + 1}`}
+                    fill
+                    sizes="100vw"
+                    className="object-contain bg-white"
+                    loading="lazy"
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>
 
       {/* Right: details + purchase */}
       <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
-        <h1 className="text-lg md:text-xl font-semibold tracking-tighter">{product.title}</h1>
-        <p className="text-lg md:text-xl font-semibold tracking-tighter">${product.price.toFixed(2)}</p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1 md:flex-col md:items-stretch md:gap-0">
+          <h1 className="order-1 text-lg md:text-xl font-semibold tracking-tighter min-w-0 shrink md:shrink-0">
+            {product.title}
+          </h1>
+          {inventoryDisplayForSwatch && (
+            <p
+              className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
+              aria-live="polite"
+            >
+              {inventoryDisplayForSwatch.remaining}/{inventoryDisplayForSwatch.cap} left
+            </p>
+          )}
+          <p className="order-3 md:order-2 w-full md:w-auto text-lg md:text-xl font-semibold tracking-tighter md:mt-0">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
 
         <ProductPurchase
           slug={product.slug}
@@ -137,6 +192,7 @@ export default function VariantView({ product, soldOut }: Props) {
           color={hasVariants ? selectedColor : undefined}
           onColorChange={hasVariants ? setSelectedColor : undefined}
           colorPriceIds={colorPriceIds}
+          inventoryBySize={inventoryForPurchase}
         />
 
         {/* Details dropdown (above description) */}

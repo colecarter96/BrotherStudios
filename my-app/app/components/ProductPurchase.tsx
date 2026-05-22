@@ -16,6 +16,8 @@ interface ProductPurchaseProps {
   color?: string;
   onColorChange?: (value: string) => void;
   colorPriceIds?: Record<string, string | undefined>;
+  /** Live counts per size label (e.g. S/M/L/XL). When set, sizes at 0 are disabled. */
+  inventoryBySize?: Record<string, number> | null;
 }
 
 export default function ProductPurchase({
@@ -31,6 +33,7 @@ export default function ProductPurchase({
   color: controlledColor,
   onColorChange,
   colorPriceIds,
+  inventoryBySize,
 }: ProductPurchaseProps) {
   const [size, setSize] = useState<string>("");
   const [waist, setWaist] = useState<string>("");
@@ -47,7 +50,10 @@ export default function ProductPurchase({
   const sizeValid = isPants ? Boolean(waist) && Boolean(inseam) : (!showSize || Boolean(size));
   const effectiveColor = controlledColor ?? uncontrolledColor;
   const computedPriceId = (effectiveColor && colorPriceIds?.[effectiveColor]) || stripePriceId;
-  const canAdd = Boolean(computedPriceId) && sizeValid && !soldOut;
+  const leftForSelectedSize =
+    showSize && size && inventoryBySize && size in inventoryBySize ? inventoryBySize[size]! : null;
+  const canAdd =
+    Boolean(computedPriceId) && sizeValid && !soldOut && (leftForSelectedSize === null || leftForSelectedSize > 0);
   const buttonLabel =
     soldOut ? "SOLD OUT" :
     isPants && (!waist || !inseam) ? "SELECT SIZE" :
@@ -139,15 +145,26 @@ export default function ProductPurchase({
           <div role="radiogroup" aria-label="Size" className="flex flex-wrap gap-x-1 gap-y-2 justify-start w-full">
             {["S", "M", "L", "XL"].map((opt) => {
               const selected = size === opt;
+              const left =
+                inventoryBySize && opt in inventoryBySize ? (inventoryBySize[opt] ?? 0) : null;
+              const soldOutSize = left === 0;
               return (
                 <button
                   key={opt}
                   type="button"
                   role="radio"
                   aria-checked={selected}
-                  onClick={() => setSize(opt)}
-                  className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-base md:text-lg font-semibold focus:outline-none ${
-                    selected ? "text-blue-400" : "text-black hover:text-blue-400"
+                  disabled={soldOutSize}
+                  title={left !== null && left > 0 ? `${left} left` : soldOutSize ? "Sold out" : undefined}
+                  onClick={() => {
+                    if (!soldOutSize) setSize(opt);
+                  }}
+                  className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-base md:text-lg font-semibold focus:outline-none disabled:pointer-events-none ${
+                    soldOutSize
+                      ? "text-black/30 cursor-not-allowed line-through opacity-45"
+                      : selected
+                        ? "text-blue-400"
+                        : "text-black hover:text-blue-400"
                   }`}
                 >
                   {opt}

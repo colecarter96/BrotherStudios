@@ -8,6 +8,8 @@ import ImageCarousel from "@/app/components/ImageCarousel";
 import ProductDetails from "@/app/components/ProductDetails";
 import ProductSizeChart from "@/app/components/ProductSizeChart";
 import VariantView from "./VariantView";
+import AutoAspectImage from "../AutoAspectImage";
+import { getInventoryForSlug, getInventoryDisplayForSlug } from "@/lib/inventory";
 
 export const dynamic = "force-dynamic";
 
@@ -52,12 +54,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     redirect(product.listingHref);
   }
   const soldOut = Boolean(product.soldOut) || (await isSoldOut(product.slug, product.oneOfOne));
+  const inventoryBySize = await getInventoryForSlug(product.slug);
+  const inventoryDisplay = await getInventoryDisplayForSlug(product.slug);
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   if (hasVariants) {
     return (
       <>
-        <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-8 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-4 md:gap-0 min-h-[70dvh]">
-          <VariantView product={product} soldOut={soldOut} />
+        <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-7 md:pt-16 lg:pt-22 pb-20 grid md:grid-cols-[3fr_2fr] gap-4 md:gap-0 min-h-[70dvh]">
+          <VariantView
+            product={product}
+            soldOut={soldOut}
+            inventoryBySize={inventoryBySize}
+            inventoryDisplay={inventoryDisplay}
+          />
         </section>
         <Footer />
       </>
@@ -80,7 +89,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <section className="max-w-5xl lg:max-w-6xl xl:max-w-none xl:w-[80vw] mx-auto px-3 md:px-6 pt-4 md:pt-28 lg:pt-32 pb-20 grid md:grid-cols-[3fr_2fr] gap-4 lg:gap-6 min-h-[70dvh]">
-        <div className="pt-22 md:pt-0 md:mt-0">
+        <div className="pt-14 md:pt-0 md:mt-0">
           {/* Mobile: swipeable carousel with arrows */}
           <div className="md:hidden -mx-3">
             {displayImages.length > 1 ? (
@@ -94,18 +103,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     </div>
                   </div>
                 ) : (
-                  <div className="overflow-hidden">
-                    <Image
-                      src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
-                      alt={product.title}
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      style={{ width: "100%", height: "auto", transform: "scale(1.03)", transformOrigin: "center" }}
-                      className="block"
-                      priority
-                    />
-                  </div>
+                  <AutoAspectImage
+                    src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
+                    alt={product.title}
+                    priority
+                  />
                 )}
               </>
             )}
@@ -113,25 +115,48 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {/* Desktop: sticky vertical scrollable image stack */}
           <div className="hidden md:block">
             <div className="space-y-0 pr-0">
-              {displayImages.map((im, i) => (
-                <div key={i} className="relative w-full h-[92vh] overflow-hidden">
-                  <Image
+              {displayImages.map((im, i) =>
+                im.aspect === "auto" ? (
+                  <AutoAspectImage
+                    key={i}
                     src={im.src}
                     alt={`${product.title} ${i + 1}`}
-                    fill
-                    sizes="100vw"
-                    className="object-contain bg-white"
-                    style={im.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
-                    loading="lazy"
+                    layout="viewport"
+                    priority={i === 0}
                   />
-                </div>
-              ))}
+                ) : (
+                  <div key={i} className="relative w-full h-[92vh] overflow-hidden">
+                    <Image
+                      src={im.src}
+                      alt={`${product.title} ${i + 1}`}
+                      fill
+                      sizes="100vw"
+                      className="object-contain bg-white"
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
         <div className="md:sticky md:top-28 md:self-start md:pt-0 lg:top-48">
-          <h1 className="text-xl md:text-xl font-semibold tracking-tighter mb-0">{product.title}</h1>
-          <p className="text-lg md:text-lg font-semibold tracking-tighter mt-0">${product.price.toFixed(2)}</p>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1 md:flex-col md:items-stretch md:gap-0">
+            <h1 className="order-1 text-xl md:text-xl font-semibold tracking-tighter mb-0 min-w-0 shrink md:shrink-0">
+              {product.title}
+            </h1>
+            {inventoryDisplay && (
+              <p
+                className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
+                aria-live="polite"
+              >
+                {inventoryDisplay.remaining}/{inventoryDisplay.cap} left
+              </p>
+            )}
+            <p className="order-3 md:order-2 w-full md:w-auto text-lg md:text-lg font-semibold tracking-tighter mt-0 md:mt-0">
+              ${product.price.toFixed(2)}
+            </p>
+          </div>
           <ProductPurchase
             slug={product.slug}
             stripePriceId={product.stripePriceId}
@@ -143,6 +168,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             soldOut={soldOut}
             colorOptions={Array.isArray(variants) && variants.length > 0 ? variants.map(v => ({ value: v.color, label: v.label })) : undefined}
             colorPriceIds={colorPriceIds}
+            inventoryBySize={inventoryBySize}
           />
           {/* Details dropdown (above description) */}
           <section className="mt-8">

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { assertEnoughStock } from "@/lib/inventory";
 
 type CheckoutLineItem = {
   priceId: string;
@@ -93,9 +94,16 @@ export async function POST(req: NextRequest) {
       }
       const resolvedPriceId = await resolvePriceId(priceId);
       const size = typeof metadata?.size === "string" && metadata.size ? String(metadata.size) : undefined;
+      const color = typeof metadata?.color === "string" && metadata.color ? String(metadata.color) : undefined;
       const itemSlug = typeof metadata?.slug === "string" && metadata.slug ? String(metadata.slug) : slug;
       if (await isSoldOut(itemSlug)) {
         return NextResponse.json({ error: "This item is sold out." }, { status: 409 });
+      }
+      if (size) {
+        const stock = await assertEnoughStock(itemSlug, size, quantity, color);
+        if (!stock.ok) {
+          return NextResponse.json({ error: stock.message }, { status: 409 });
+        }
       }
       const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
       const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
@@ -116,14 +124,17 @@ export async function POST(req: NextRequest) {
         shipping_address_collection: { allowed_countries: ["US"] },
         shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
         metadata: {
-          // Keep metadata minimal to stay under Stripe limits
+          ...(itemSlug ? { slug: itemSlug } : {}),
           ...(size ? { size } : {}),
+          ...(color ? { color } : {}),
           q: String(quantity),
           priceId: resolvedPriceId,
         },
         payment_intent_data: {
           metadata: {
+            ...(itemSlug ? { slug: itemSlug } : {}),
             ...(size ? { size } : {}),
+            ...(color ? { color } : {}),
             q: String(quantity),
             priceId: resolvedPriceId,
           },
@@ -149,7 +160,7 @@ export async function POST(req: NextRequest) {
 
     const lineItems: { price: string; quantity?: number }[] = [];
     // Minimal, compact cart metadata to avoid exceeding Stripe's per-value 500 char limit
-    const cartMetaCompact: Array<{ p: string; s?: string; q: number }> = [];
+    const cartMetaCompact: Array<{ p: string; s?: string; q: number; u?: string; c?: string }> = [];
     let allStickers = true;
     // Prevent checkout for any sold-out one-of-one item
     for (const item of items) {
@@ -159,6 +170,19 @@ export async function POST(req: NextRequest) {
       }
     }
     for (const item of items) {
+      const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
+      const itemSize = typeof item.metadata?.size === "string" ? item.metadata.size : undefined;
+      const itemColor = typeof item.metadata?.color === "string" ? item.metadata.color : undefined;
+      const itemQty = typeof item.quantity === "number" ? item.quantity : 1;
+      if (itemSize) {
+        const stock = await assertEnoughStock(itemSlug, itemSize, itemQty, itemColor);
+        if (!stock.ok) {
+          return NextResponse.json({ error: stock.message }, { status: 409 });
+        }
+      }
+    }
+    for (const item of items) {
+      const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
       const resolvedPriceId = await resolvePriceId(item.priceId);
       const qty = typeof item.quantity === "number" ? item.quantity : 1;
       lineItems.push({ price: resolvedPriceId, quantity: qty });
@@ -166,8 +190,9 @@ export async function POST(req: NextRequest) {
         p: resolvedPriceId,
         s: typeof item.metadata?.size === "string" ? item.metadata.size : undefined,
         q: qty,
+        u: itemSlug || undefined,
+        c: typeof item.metadata?.color === "string" ? item.metadata.color : undefined,
       });
-      const itemSlug = typeof item.metadata?.slug === "string" ? item.metadata.slug : "";
       if (itemSlug !== "2-man-sticker") {
         allStickers = false;
       }
