@@ -9,7 +9,13 @@ type VideoItem = {
 
 const videos: VideoItem[] = [
   {
-    id:"bQBR0hCGSFI",
+    id: "O-ulCzyJC9A",
+    title: "EPISODE 1",
+    date: "May 6, 2026",
+    description: "Episode 1 of the weekly recap",
+  },
+  {
+    id: "bQBR0hCGSFI",
     title: "BAKING SAUCIES",
     date: "Nov 6, 2025",
     description: "Bryce and Cole try and bake brownies with no cocoa poweder or brownie mix",
@@ -20,7 +26,6 @@ const videos: VideoItem[] = [
     date: "Oct 6, 2025",
     description: "Bryce and Cole tell stories that still haunt and embarrass them.",
   },
-  
 ];
 
 export default function Videos() {

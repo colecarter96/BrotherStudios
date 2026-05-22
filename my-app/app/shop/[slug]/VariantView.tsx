@@ -8,6 +8,7 @@ import ProductPurchase from "@/app/components/ProductPurchase";
 import ProductDetails from "@/app/components/ProductDetails";
 import ProductSizeChart from "@/app/components/ProductSizeChart";
 import type { Product, ColorVariant, ImageSpec } from "../products";
+import AutoAspectImage from "../AutoAspectImage";
 import { useSearchParams } from "next/navigation";
 import {
   getInventoryDisplayForColorway,
@@ -119,18 +120,11 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
                   </div>
                 </div>
               ) : (
-                <div className="overflow-hidden">
-                  <Image
-                    src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
-                    alt={product.title}
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: "100%", height: "auto", transform: "scale(1.03)", transformOrigin: "center" }}
-                    className="block"
-                    priority
-                  />
-                </div>
+                <AutoAspectImage
+                  src={displayImages[0]?.src || imgToSrc(product.images?.[0]) || ""}
+                  alt={product.title}
+                  priority
+                />
               )}
             </>
           )}
@@ -138,19 +132,28 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
         {/* Desktop stack */}
         <div className="hidden md:block">
           <div className="space-y-0 pr-0">
-            {(displayImages.length ? displayImages : images).map((im, i) => (
-              <div key={i} className="relative w-full h-[92vh] overflow-hidden">
-                <Image
+            {(displayImages.length ? displayImages : images).map((im, i) =>
+              im.aspect === "auto" ? (
+                <AutoAspectImage
+                  key={i}
                   src={im.src}
                   alt={`${product.title} ${i + 1}`}
-                  fill
-                  sizes="100vw"
-                  className="object-contain bg-white"
-                  style={im.aspect === "auto" ? { transform: "scale(1.03)", transformOrigin: "center" } : undefined}
-                  loading="lazy"
+                  layout="viewport"
+                  priority={i === 0}
                 />
-              </div>
-            ))}
+              ) : (
+                <div key={i} className="relative w-full h-[92vh] overflow-hidden">
+                  <Image
+                    src={im.src}
+                    alt={`${product.title} ${i + 1}`}
+                    fill
+                    sizes="100vw"
+                    className="object-contain bg-white"
+                    loading="lazy"
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>

@@ -18,9 +18,9 @@ export type ShopCollectionFilter = ShopProductSegment | "all";
 
 type SegmentableProduct = { shopCollection?: ShopProductSegment };
 
-/** Home teaser on → shop is archive-only in nav + grid. */
+/** Home teaser on → shop is archive-only in nav + grid. (`0`, `false`, or unset = full shop nav.) */
 export function isDropTeaserMode(): boolean {
-  const v = process.env.NEXT_PUBLIC_DROP_TEASER;
+  const v = (process.env.NEXT_PUBLIC_DROP_TEASER ?? "").trim().toLowerCase();
   return v === "1" || v === "true";
 }
 

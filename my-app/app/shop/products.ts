@@ -182,48 +182,50 @@ export const products: Product[] = [
   //     gsm: 190,
   //   },
   // },
-  {
-    slug: "nepo-baby-tee",
-    title: "NEPO BABY TEE",
-    price: 65,
-    shopCollection: "issue1",
-    listingHref: "/landing/nepo-baby-tee",
-    initialInventory: { S: 25, M: 25, L: 25, XL: 25 },
-    inventoryEditionCap: 100,
-    images: [
-      { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
-      { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
-    ],
-    description:
-      "Limited tee only 100 made — 100% cotton, heavyweight distressed fabric. \nFits like our other tees: size down if between sizes.",
-    sizeType: "standard",
-    shippingSpeed: "7-14",
-    sizeChart: {
-      sizes: ["S", "M", "L", "XL"],
-      rows: [
-        { label: "Length", values: [27.17, 27.95, 28.74, 30.31] },
-        { label: "Chest", values: [21.65, 22.44, 23.23, 24.02] },
-        { label: "Sleeve length", values: [14.17, 14.96, 15.75, 16.54] },
-      ],
-    },
-    variants: [
-      {
-        color: "#000000",
-        label: "Black",
-        stripePriceId: "price_1TUCoYP6lKVtJIIMlgZViO6W",
-        images: [
-          { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
-          { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
-        ],
-      },
-    ],
-    details: {
-      fabric: "100% Cotton",
-      color: ["Black"],
-      care: "Machine wash cold, tumble dry low",
-      gsm: 430,
-    },
-  },
+
+  // {
+  //   slug: "nepo-baby-tee",
+  //   title: "NEPO BABY TEE",
+  //   price: 65,
+  //   shopCollection: "issue1",
+  //   listingHref: "/landing/nepo-baby-tee",
+  //   initialInventory: { S: 25, M: 25, L: 25, XL: 25 },
+  //   inventoryEditionCap: 100,
+  //   images: [
+  //     { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+  //     { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+  //   ],
+  //   description:
+  //     "Limited tee only 100 made — 100% cotton, heavyweight distressed fabric. \nFits like our other tees: size down if between sizes.",
+  //   sizeType: "standard",
+  //   shippingSpeed: "7-14",
+  //   sizeChart: {
+  //     sizes: ["S", "M", "L", "XL"],
+  //     rows: [
+  //       { label: "Length", values: [27.17, 27.95, 28.74, 30.31] },
+  //       { label: "Chest", values: [21.65, 22.44, 23.23, 24.02] },
+  //       { label: "Sleeve length", values: [14.17, 14.96, 15.75, 16.54] },
+  //     ],
+  //   },
+  //   variants: [
+  //     {
+  //       color: "#000000",
+  //       label: "Black",
+  //       stripePriceId: "price_1TUCoYP6lKVtJIIMlgZViO6W",
+  //       images: [
+  //         { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+  //         { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+  //       ],
+  //     },
+  //   ],
+  //   details: {
+  //     fabric: "100% Cotton",
+  //     color: ["Black"],
+  //     care: "Machine wash cold, tumble dry low",
+  //     gsm: 430,
+  //   },
+  // },
+  
   {
     slug: "expedition-tee",
     title: "EXPEDITION SHIRT",
@@ -363,8 +365,8 @@ export const products: Product[] = [
     price: 50,
     shopCollection: "archive",
     // Placeholder — replace counts / cap before selling
-    initialInventory: { S: 0, M: 0, L: 0, XL: 0 },
-    inventoryEditionCap: 5,
+    initialInventory: { S: 0, M: 2, L: 5, XL: 0 },
+    inventoryEditionCap: 7,
     images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"], //"/SS26/soccerShirtBack.webp"
     variants: [
       {

@@ -50,12 +50,12 @@ function ShopDropdownDesktop() {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 top-full z-50 mt-2 min-w-48  py-2 text-left text-sm font-semibold"
+          className="absolute right-0 top-full z-50 mt-2 min-w-48 py-2 text-left text-sm font-semibold"
         >
           <Link
             href={getFeaturedIssueShopHref()}
             role="menuitem"
-            className="block px-4 py-2 transition "
+            className="block px-4 py-2 transition"
             onClick={close}
           >
             {getFeaturedIssueLabel()}
@@ -63,12 +63,12 @@ function ShopDropdownDesktop() {
           <Link
             href={shopCollectionHref("archive")}
             role="menuitem"
-            className="block px-4 py-2 transition "
+            className="block px-4 py-2 transition"
             onClick={close}
           >
             ARCHIVE
           </Link>
-          <Link href={shopCollectionHref("all")} role="menuitem" className="block px-4 py-2 " onClick={close}>
+          <Link href={shopCollectionHref("all")} role="menuitem" className="block px-4 py-2" onClick={close}>
             ALL
           </Link>
         </div>
@@ -85,7 +85,7 @@ export default function Header() {
   return (
     <>
       <div className={`md:hidden fixed top-4 left-0 right-0 ${menuOpen ? "z-120" : "z-70"} px-4`}>
-        <div className={`flex items-center justify-between h-14 rounded-2xl px-4 `}>
+        <div className="flex items-center justify-between h-14 rounded-2xl px-4">
           <Link href="/" aria-label="Home">
             <Image src="/logo.svg" alt="Logo" width={80} height={32} />
           </Link>
@@ -148,11 +148,6 @@ export default function Header() {
                   </details>
                 </li>
               )}
-              <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:80ms]">
-                <Link href="/lookbook" onClick={() => setMenuOpen(false)}>
-                  Lookbook
-                </Link>
-              </li>
               <li className="opacity-0 animate-[slide-up_0.35s_ease-out_forwards] [animation-delay:200ms]">
                 <Link href="/contact" onClick={() => setMenuOpen(false)}>
                   Contact
@@ -168,7 +163,7 @@ export default function Header() {
         </div>
       )}
 
-      <header className={`hidden md:flex fixed top-0 left-0 right-0 z-50 bg-transparent h-16`}>
+      <header className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-transparent h-16">
         <div className="mx-auto w-[90vw] flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image src="/logo.svg" alt="Two Brothers" width={60} height={60} />
