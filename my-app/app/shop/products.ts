@@ -220,7 +220,7 @@ export const products: Product[] = [
   //   ],
   //   details: {
   //     fabric: "100% Cotton",
-  //     color: ["Black"],
+  //     color: ["Black"], 
   //     care: "Machine wash cold, tumble dry low",
   //     gsm: 430,
   //   },
