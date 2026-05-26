@@ -62,6 +62,15 @@ function soldFieldForColor(color: string): string {
   return `${COLOR_SOLD_PREFIX}${String(color).trim()}`;
 }
 
+function getVariantManualSold(slug: string, color: string | undefined | null): number | null {
+  if (!color) return null;
+  const p = products.find((x) => x.slug === slug);
+  if (!p) return null;
+  const v = (p.variants || []).find((vv) => (vv.color || "").toLowerCase() === String(color).toLowerCase());
+  const n = v && typeof v.manualSold === "number" ? Math.max(0, Math.floor(v.manualSold)) : null;
+  return n;
+}
+
 /**
  * For PDP: narrow full Redis map to sizes for the selected swatch.
  * Legacy size-only seeds return `full` unchanged.
@@ -289,7 +298,7 @@ export async function assertEnoughStock(
     }
   }
   // Enforce per-color caps when defined
-  if (redis) {
+  {
     const colorCap = getVariantCap(slug, color ?? undefined);
     // If any variant has a cap but color missing, ask user to pick a color
     const p = products.find((x) => x.slug === slug);
@@ -298,8 +307,13 @@ export async function assertEnoughStock(
       return { ok: false, message: "Select a color to continue." };
     }
     if (colorCap !== null) {
-      const rawColor = await redis.hget<string>(invKey(slug), soldFieldForColor(color!));
-      const soldColor = rawColor ? Math.max(0, Math.floor(Number(rawColor))) : 0;
+      // Prefer manual sold override if provided
+      const manualSold = getVariantManualSold(slug, color ?? undefined);
+      let soldColor = typeof manualSold === "number" ? manualSold : 0;
+      if (typeof manualSold !== "number" && redis) {
+        const rawColor = await redis.hget<string>(invKey(slug), soldFieldForColor(color!));
+        soldColor = rawColor ? Math.max(0, Math.floor(Number(rawColor))) : 0;
+      }
       const remainingColor = Math.max(0, colorCap - soldColor);
       if (remainingColor < quantity) {
         return { ok: false, message: remainingColor > 0 ? `Only ${remainingColor} left in that color.` : "Selected color is sold out." };
@@ -396,7 +410,6 @@ export async function applyInventoryFromCheckoutSession(session: {
 
 /** True when edition cap exists and all units are sold. */
 export async function isEditionSoldOut(slug: string): Promise<boolean> {
-  if (!redis) return false;
   const p = products.find((x) => x.slug === slug);
   if (!p) return false;
   // If per-color caps exist, sold-out when all capped variants are sold out
@@ -404,8 +417,12 @@ export async function isEditionSoldOut(slug: string): Promise<boolean> {
   if (cappedVariants.length > 0) {
     for (const v of cappedVariants) {
       const cap = Math.floor(v.inventoryCap as number);
-      const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(v.color));
-      const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+      const manual = typeof v.manualSold === "number" ? Math.max(0, Math.floor(v.manualSold)) : null;
+      let sold = manual ?? 0;
+      if (manual === null && redis) {
+        const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(v.color));
+        sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+      }
       if (sold < cap) return false;
     }
     return true;
@@ -413,6 +430,7 @@ export async function isEditionSoldOut(slug: string): Promise<boolean> {
   // Fallback to edition-wide cap if present
   const capTotal = getProductEditionCap(slug);
   if (capTotal === null) return false;
+  if (!redis) return false;
   const rawTotal = await redis.hget<string>(invKey(slug), EDITION_SOLD_FIELD);
   const soldTotal = rawTotal ? Math.max(0, Math.floor(Number(rawTotal))) : 0;
   return soldTotal >= capTotal;
@@ -420,9 +438,13 @@ export async function isEditionSoldOut(slug: string): Promise<boolean> {
 
 /** True when a specific color variant has an inventoryCap and sold >= cap. */
 export async function isColorwaySoldOut(slug: string, color: string): Promise<boolean> {
-  if (!redis) return false;
   const cap = getVariantCap(slug, color);
   if (cap === null) return false;
+  const manual = getVariantManualSold(slug, color);
+  if (typeof manual === "number") {
+    return manual >= cap;
+  }
+  if (!redis) return false;
   const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(color));
   const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
   return sold >= cap;
@@ -433,11 +455,14 @@ export async function getColorwayDisplayByCap(
   slug: string,
   color: string
 ): Promise<{ remaining: number; cap: number } | null> {
-  if (!redis) return null;
   const cap = getVariantCap(slug, color);
   if (cap === null) return null;
-  const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(color));
-  const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+  const manual = getVariantManualSold(slug, color);
+  let sold = typeof manual === "number" ? manual : 0;
+  if (typeof manual !== "number" && redis) {
+    const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(color));
+    sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+  }
   const remaining = Math.max(0, cap - sold);
   return { remaining, cap };
 }
