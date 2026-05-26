@@ -1,5 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertEnoughStock } from "@/lib/inventory";
+import type Stripe from "stripe";
+
+// Broad set of countries to allow global shipping address collection.
+// Adjust as needed; Stripe requires explicit ISO 3166-1 alpha-2 codes.
+const ALLOWED_COUNTRIES_GLOBAL: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] = [
+  "US","CA","MX",
+  "GB","IE","FR","DE","ES","IT","PT","NL","BE","CH","AT","SE","NO","DK","FI","PL","CZ","HU","RO","BG","HR","GR","SI","SK","EE","LV","LT","LU","MT","CY","IS","LI","AD","MC","SM","VA",
+  "AU","NZ",
+  "JP","KR","CN","HK","TW","SG","MY","TH","VN","PH","ID","IN",
+  "AE","SA","QA","KW","BH","OM","IL","TR",
+  "EG","MA","TN","ZA","NG","KE","GH","TZ","UG",
+  "AR","BR","CL","CO","PE","UY","PY","BO","VE","EC",
+  "CR","PA","GT","HN","SV","NI","DO","JM","BS","BB","TT",
+];
 
 type CheckoutLineItem = {
   priceId: string;
@@ -99,18 +113,9 @@ export async function POST(req: NextRequest) {
       if (await isSoldOut(itemSlug)) {
         return NextResponse.json({ error: "This item is sold out." }, { status: 409 });
       }
-      if (size) {
-        const stock = await assertEnoughStock(itemSlug, size, quantity, color);
-        if (!stock.ok) {
-          return NextResponse.json({ error: stock.message }, { status: 409 });
-        }
-      }
-      const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
-      const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
-      let shippingRateId =
-        itemSlug === "2-man-sticker" && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
-      if (isFreeShippingSlug(itemSlug)) {
-        shippingRateId = undefined;
+      const stock = await assertEnoughStock(itemSlug, size, quantity, color);
+      if (!stock.ok) {
+        return NextResponse.json({ error: stock.message }, { status: 409 });
       }
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
@@ -121,8 +126,9 @@ export async function POST(req: NextRequest) {
           },
         ],
         allow_promotion_codes: true,
-        shipping_address_collection: { allowed_countries: ["US"] },
-        shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+        shipping_address_collection: { allowed_countries: ALLOWED_COUNTRIES_GLOBAL },
+        // No shipping rate applied – free shipping for all items
+        shipping_options: undefined,
         metadata: {
           ...(itemSlug ? { slug: itemSlug } : {}),
           ...(size ? { size } : {}),
@@ -174,11 +180,9 @@ export async function POST(req: NextRequest) {
       const itemSize = typeof item.metadata?.size === "string" ? item.metadata.size : undefined;
       const itemColor = typeof item.metadata?.color === "string" ? item.metadata.color : undefined;
       const itemQty = typeof item.quantity === "number" ? item.quantity : 1;
-      if (itemSize) {
-        const stock = await assertEnoughStock(itemSlug, itemSize, itemQty, itemColor);
-        if (!stock.ok) {
-          return NextResponse.json({ error: stock.message }, { status: 409 });
-        }
+      const stock = await assertEnoughStock(itemSlug, itemSize, itemQty, itemColor);
+      if (!stock.ok) {
+        return NextResponse.json({ error: stock.message }, { status: 409 });
       }
     }
     for (const item of items) {
@@ -198,25 +202,17 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const shippingRateDefault = process.env.STRIPE_SHIPPING_RATE_ID; // optional
-    const shippingRateSticker = process.env.STRIPE_SHIPPING_RATE_ID_STICKER; // optional
-    let shippingRateId =
-      allStickers && shippingRateSticker ? shippingRateSticker : shippingRateDefault;
     const batchSlugs = items.map((item) =>
       typeof item.metadata?.slug === "string" ? item.metadata.slug : ""
     );
-    const allFreeShipping =
-      batchSlugs.length > 0 && batchSlugs.every((s) => isFreeShippingSlug(s));
-    if (allFreeShipping) {
-      shippingRateId = undefined;
-    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
       allow_promotion_codes: true,
-      shipping_address_collection: { allowed_countries: ["US"] },
-      shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+      shipping_address_collection: { allowed_countries: ALLOWED_COUNTRIES_GLOBAL },
+      // No shipping rate applied – free shipping for all items
+      shipping_options: undefined,
       metadata: {
         cart: JSON.stringify(cartMetaCompact),
       },

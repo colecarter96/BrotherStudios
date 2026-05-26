@@ -225,6 +225,222 @@ export const products: Product[] = [
   //     gsm: 430,
   //   },
   // },
+
+  // {
+  //   slug: "flag-tee",
+  //   title: "FLAG TEE",
+  //   price: 58,
+  //   shopCollection: "issue1",
+  //   listingHref: "/flag-tee",
+  //   inventoryEditionCap: 100,
+  //   images: [
+  //     { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+  //     { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+  //   ],
+  //   description:
+  //     "Limited tee only 100 made — 100% cotton, heavyweight distressed fabric. \nFits like our other tees: size down if between sizes.",
+  //   sizeType: "standard",
+  //   shippingSpeed: "7-14",
+  //   sizeChart: {
+  //     sizes: ["S", "M", "L", "XL"],
+  //     rows: [
+  //       { label: "Length", values: [27.17, 27.95, 28.74, 30.31] },
+  //       { label: "Chest", values: [21.65, 22.44, 23.23, 24.02] },
+  //       { label: "Sleeve length", values: [14.17, 14.96, 15.75, 16.54] },
+  //     ],
+  //   },
+  //   variants: [
+  //     {
+  //       color: "#000000",
+  //       label: "Black",
+  //       stripePriceId: "price_1TUCoYP6lKVtJIIMlgZViO6W",
+  //       images: [
+  //         { src: "/nepoBaby/nepoBabyBack.png", aspect: "auto" },
+  //         { src: "/nepoBaby/nepoBabyFront.png", aspect: "auto" },
+  //       ],
+  //     },
+  //   ],
+  //   details: {
+  //     fabric: "100% Cotton",
+  //     color: ["Black"],
+  //     care: "Machine wash cold, tumble dry low",
+  //     gsm: 430,
+  //   },
+  // },
+  {
+    slug: "flag-tee",
+    title: "FLAG TEE",
+    price: 58,
+    shopCollection: "issue1",
+    // Per-colorway stock (Upstash); tune counts + `inventoryCap` per swatch as needed
+    // inventoryEditionCap: 30,
+    images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+    variants: [
+      {
+        color: "black",
+        label: "Black",
+        images: [
+          { src: "/drop1/product/blackFlagFront.png", aspect: "auto" },
+          { src: "/drop1/product/blackFlagBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/blackFlagFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/blackFlagBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+        stripePriceId: "price_1TbDYXP6lKVtJIIM2X54TZus",
+        inventoryCap: 30,
+      },
+      {
+        color: "white",
+        label: "White",
+        images: [
+          { src: "/drop1/product/whiteFlagFront.png", aspect: "auto" },
+          { src: "/drop1/product/whiteFlagBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/whiteFlagFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/whiteFlagBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+        stripePriceId: "price_1TbDZ1P6lKVtJIIMxJDM7q7i",
+        inventoryCap: 30,
+      },
+    ],
+    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    description: "Our distressed wash tee featuring worn in detailing along the neck, sleeves, and hem. The front graphic reimagines the flag through a hand-painted lens, with surfboards forming the stripes and the Two Brothers logo set in place of the stars.\n\nSize down one size from your standard size.",
+    stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [28.74, 29.53, 30.12, 30.71, 31.30] },
+        { label: "Shoulder", values: [20.87, 21.26, 22.05, 22.44, 22.83] },
+        { label: "Chest", values: [22.44, 23.23, 24.02, 24.80, 25.59] },
+        { label: "Sleeve length", values: [10.24, 10.43, 10.63, 10.83] },
+      ],
+    },
+    details: {
+      fabric: "100% Cotton",
+      color: ["White", "Black"],
+      care: "Machine wash, tumble dry low",
+      gsm: 350,
+    },
+  },
+
+  {
+    slug: "stable-slub-tee",
+    title: "STABLE SLUB TEE",
+    price: 44,
+    shopCollection: "issue1",
+    // Per-colorway stock (Upstash); tune counts + `inventoryCap` per swatch as needed
+    // inventoryEditionCap: 30,
+    images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+    variants: [
+      {
+        color: "white",
+        label: "White",
+        images: [
+          { src: "/drop1/product/whiteHorseFront.png", aspect: "auto" },
+          { src: "/drop1/product/whiteHorseBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/whiteHorseFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/whiteHorseBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+        stripePriceId: "price_1TbDa6P6lKVtJIIMoGNHAOAQ",
+        inventoryCap: 30,
+      },
+      {
+        color: "black",
+        label: "Black",
+        images: [
+          { src: "/drop1/product/blackHorseFront.png", aspect: "auto" },
+          { src: "/drop1/product/blackHorseBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/blackHorseFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/blackHorseBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+        stripePriceId: "price_1TbDavP6lKVtJIIMUwV6FzpC",
+        inventoryCap: 30,
+      },
+      
+    ],
+    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    description: "Our lightweight slub cotton tee with a soft, textured feel. The back features two horses as a nod to Two Brothers, while the front is finished with a lucky horseshoe graphic for a simple hit of good fortune.\n\nSize down one size from your standard size.",
+    stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [27.56, 28.35, 29.13, 29.92] },
+        { label: "Shoulder", values: [21.85, 22.44, 23.03, 23.62] },
+        { label: "Chest", values: [22.83, 23.62, 24.41, 25.20] },
+        { label: "Sleeve length", values: [8.46, 8.66, 8.86, 9.06] },
+      ],
+    },
+    details: {
+      fabric: "100% Cotton",
+      color: ["White", "Black"],
+      care: "Machine wash, tumble dry low",
+      gsm: 190,
+    },
+  },
+
+  {
+    slug: "dominus-fecit-crest-tee",
+    title: "DOMINUS FECIT CREST TEE",
+    price: 54,
+    shopCollection: "issue1",
+    // Per-colorway stock (Upstash); tune counts + `inventoryCap` per swatch as needed
+    // inventoryEditionCap: 30,
+    images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+    variants: [
+      {
+        color: "brown",
+        label: "Brown",
+        images: [
+          { src: "/drop1/product/brownDominusFront.png", aspect: "auto" },
+          { src: "/drop1/product/brownDominusBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/brownDominusFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/brownDominusBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
+        stripePriceId: "price_1TbDXIP6lKVtJIIMs8oTNzGa",
+        inventoryCap: 30,
+      },
+      {
+        color: "black",
+        label: "Black",
+        images: [
+          { src: "/drop1/product/blackDominusFront.png", aspect: "auto" },
+          { src: "/drop1/product/blackDominusBack.png", aspect: "auto" },
+          { src: "/drop1/visuals/blackDominusFront.jpg", aspect: "5:7" },
+          { src: "/drop1/visuals/blackDominusBack.jpg", aspect: "5:7" },
+        ],
+        // images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
+        stripePriceId: "price_1TbDXwP6lKVtJIIMipyRPO6R",
+        inventoryCap: 30,
+      },
+      
+    ],
+    // images: ["/championFront.jpeg", "/championBack.jpg", "/championVisual.jpg"],
+    description: "Our two tone raglan long sleeve featuring the Baird family crest, drawn from our mother’s maiden name. Finished with a heritage-inspired graphic and classic contrast sleeves, the piece ties family history into the foundation of Two Brothers.\n\nSize down one size from your standard size.",
+    stripePriceId: "price_1T4pDDP6lKVtJIIM8Zz4S6bg",
+    sizeType: "standard",
+    shippingSpeed: "7-14",
+    sizeChart: {
+      sizes: ["S", "M", "L", "XL"],
+      rows: [
+        { label: "Length", values: [27.56, 28.35, 29.13, 29.92] },
+        { label: "Chest", values: [22.83, 23.62, 24.41, 25.20] },
+        { label: "Sleeve length", values: [29.92, 30.71, 31.50, 32.28] },
+      ],
+    },
+    details: {
+      fabric: "100% Cotton",
+      color: ["Black", "Brown"],
+      care: "Machine wash, tumble dry low",
+      gsm: 270,
+    },
+  },
   
   {
     slug: "expedition-tee",
@@ -365,8 +581,9 @@ export const products: Product[] = [
     price: 50,
     shopCollection: "archive",
     // Placeholder — replace counts / cap before selling
-    initialInventory: { S: 0, M: 2, L: 5, XL: 0 },
-    inventoryEditionCap: 7,
+    // initialInventory: { S: 0, M: 2, L: 5, XL: 0 },
+    // inventoryEditionCa p: 7,
+    soldOut: true,
     images: ["/SS26/soccerShirtFront.png", "/productPhotos/newBackImg.png", "/SS26/visuals/clubTeeFront.jpeg"], //"/SS26/soccerShirtBack.webp"
     variants: [
       {
@@ -405,8 +622,7 @@ export const products: Product[] = [
     title: "CHAMPIONSHIP TEE",
     price: 45,
     // Placeholder — sold out; adjust if restocked
-    initialInventory: { S: 0, M: 0, L: 0, XL: 0 },
-    inventoryEditionCap: 5,
+    // inventoryEditionCap: 5,
     soldOut: true,
     images: ["/SS26/championTeeBack.webp", "/SS26/championTeeFront.webp"],
     variants: [
@@ -448,9 +664,10 @@ export const products: Product[] = [
     title: "TWO X SEX PANTHERS SHIRT",
     price: 45,
     shopCollection: "archive",
+    soldOut: true,
     // Placeholder — replace counts / cap before selling
-    initialInventory: { S: 0, M: 0, L: 0, XL: 0 },
-    inventoryEditionCap: 20,
+    // initialInventory: { S: 0, M: 0, L: 0, XL: 0 },
+    // inventoryEditionCap: 20,
     images: ["/productPhotos/sexPanthersBack.webp", "/productPhotos/sexPanthersFront.webp", "/sexPVisual1.jpg"],
     variants: [
       {
@@ -491,7 +708,7 @@ export const products: Product[] = [
     title: "TWO MAN STICKER",
     price: 2.0,
     initialInventory: { sticker: 38},
-    inventoryEditionCap: 60,
+    // inventoryEditionCap: 60,
     shopCollection: "archive",
     images: ["/stickerStudio.png"],
     variants: [

@@ -15,7 +15,7 @@ import {
   isDropTeaserMode,
   parseShopCollectionParam,
 } from "@/lib/shopCollection";
-import { getInventoryForSlug, isShopListingSwatchDepleted } from "@/lib/inventory";
+import { getInventoryForSlug, isShopListingSwatchDepleted, isEditionSoldOut, isColorwaySoldOut } from "@/lib/inventory";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +29,12 @@ async function getSoldOutSlugs(): Promise<Set<string>> {
     .map((p: ProductNormalized) => p.slug);
   const oneOfOneSlugs = productsNormalized.filter((p: ProductNormalized) => p.oneOfOne).map((p: ProductNormalized) => p.slug);
   const sold = new Set<string>(manualSoldOutSlugs);
+  // Also include any products whose edition cap is fully sold via Upstash
+  await Promise.all(
+    productsNormalized.map(async (p) => {
+      if (await isEditionSoldOut(p.slug)) sold.add(p.slug);
+    })
+  );
   if (oneOfOneSlugs.length === 0) return sold;
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -99,10 +105,12 @@ function ProductShopCard({
   tile,
   soldOut,
   invBySlug,
+  soldOutColorPairs,
 }: {
   tile: ProductTile;
   soldOut: Set<string>;
   invBySlug: Map<string, Record<string, number> | null>;
+  soldOutColorPairs: Set<string>;
 }) {
   const { p, v } = tile;
   const imgAt = (idx: number): string | undefined => {
@@ -116,7 +124,9 @@ function ProductShopCard({
   const hasHover = Boolean(hoverImg);
   const productSoldOut = soldOut.has(p.slug);
   const live = invBySlug.get(p.slug);
-  const inventoryDepleted = isShopListingSwatchDepleted(p.initialInventory, live ?? undefined, v.color);
+  const inventoryDepleted =
+    isShopListingSwatchDepleted(p.initialInventory, live ?? undefined, v.color) ||
+    soldOutColorPairs.has(`${p.slug}|${v.color}`);
   const grayVisual = productSoldOut || inventoryDepleted;
   return (
     <VariantLink
@@ -164,6 +174,12 @@ export default async function Shop({ searchParams }: PageProps) {
     uniqueSlugs.map(async (slug) => [slug, await getInventoryForSlug(slug)] as const)
   );
   const invBySlug = new Map<string, Record<string, number> | null>(invEntries);
+  // Precompute sold-out colors using per-color caps
+  const uniqueSlugColors = visibleProducts.flatMap((p) => p.variants.map((v) => [p.slug, v.color] as const));
+  const soldOutPairsArr = await Promise.all(
+    uniqueSlugColors.map(async ([slug, color]) => [`${slug}|${color}`, await isColorwaySoldOut(slug, color)] as const)
+  );
+  const soldOutColorPairs = new Set<string>(soldOutPairsArr.filter(([, val]) => val).map(([key]) => key));
 
   const tiles: ProductTile[] = visibleProducts.flatMap((p) => p.variants.map((v, vi) => ({ p, v, vi })));
   const mobileSeq = buildMobileSequence(tiles);
@@ -182,6 +198,7 @@ export default async function Shop({ searchParams }: PageProps) {
                 tile={entry.tile}
                 soldOut={soldOut}
                 invBySlug={invBySlug}
+                soldOutColorPairs={soldOutColorPairs}
               />
             )
           )}
@@ -189,7 +206,13 @@ export default async function Shop({ searchParams }: PageProps) {
 
         <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:mx-[5%] gap-0 justify-items-stretch items-start min-h-[80dvh] mb-20">
           {tiles.map((tile) => (
-            <ProductShopCard key={`${tile.p.slug}__${tile.vi}`} tile={tile} soldOut={soldOut} invBySlug={invBySlug} />
+            <ProductShopCard
+              key={`${tile.p.slug}__${tile.vi}`}
+              tile={tile}
+              soldOut={soldOut}
+              invBySlug={invBySlug}
+              soldOutColorPairs={soldOutColorPairs}
+            />
           ))}
         </div>
       </div>

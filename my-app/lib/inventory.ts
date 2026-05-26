@@ -12,6 +12,10 @@ const redis =
 /** Separates variant `color` from size in `initialInventory` / Redis hash field names. */
 export const INVENTORY_COLOR_SIZE_SEP = "|";
 
+/** Field name within the inventory hash to track total units sold (size-agnostic). */
+const EDITION_SOLD_FIELD = "_sold";
+const COLOR_SOLD_PREFIX = "_sold|";
+
 function invKey(slug: string) {
   return `inv:${slug}`;
 }
@@ -34,6 +38,28 @@ export function inventoryUsesPerColorwayKeys(seed: Partial<Record<string, number
 /** Redis field / seed key for one color + size (must match variant `color` in `products.ts`). */
 export function inventoryFieldForVariant(color: string, size: string): string {
   return `${String(color).trim()}${INVENTORY_COLOR_SIZE_SEP}${String(size).trim()}`;
+}
+
+function getProductEditionCap(slug: string): number | null {
+  const p = products.find((x) => x.slug === slug);
+  const raw = p?.inventoryEditionCap;
+  return typeof raw === "number" && Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : null;
+}
+
+function isProductManualSoldOut(slug: string): boolean {
+  const p = products.find((x) => x.slug === slug);
+  return Boolean(p?.soldOut);
+}
+
+function getVariantCap(slug: string, color: string | undefined | null): number | null {
+  if (!color) return null;
+  const p = products.find((x) => x.slug === slug);
+  const cap = p?.variants?.find((v) => (v.color || "").toLowerCase() === String(color).toLowerCase())?.inventoryCap;
+  return typeof cap === "number" && Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : null;
+}
+
+function soldFieldForColor(color: string): string {
+  return `${COLOR_SOLD_PREFIX}${String(color).trim()}`;
 }
 
 /**
@@ -178,8 +204,24 @@ export async function getInventoryForSlug(slug: string): Promise<Record<string, 
 /** Remaining units (sum of tracked fields) vs edition cap for “x/y left” UI. */
 export async function getInventoryDisplayForSlug(slug: string): Promise<{ remaining: number; cap: number } | null> {
   const p = products.find((x) => x.slug === slug);
-  const seed = p?.initialInventory;
-  if (!p || !seed || Object.keys(seed).length === 0) return null;
+  if (!p) return null;
+
+  // If an edition cap is defined, prefer size-agnostic tracking: remaining = cap - sold
+  const capFromProduct = getProductEditionCap(slug);
+  if (capFromProduct !== null) {
+    if (!redis) {
+      // Without Redis, we cannot know sold; show full cap remaining to avoid blocking purchases in dev
+      return { remaining: capFromProduct, cap: capFromProduct };
+    }
+    const raw = await redis.hget<string>(invKey(slug), EDITION_SOLD_FIELD);
+    const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+    const remaining = Math.max(0, capFromProduct - sold);
+    return { remaining, cap: capFromProduct };
+  }
+
+  // Otherwise, fall back to size-based aggregation from seeds
+  const seed = p.initialInventory;
+  if (!seed || Object.keys(seed).length === 0) return null;
 
   const byField = await getInventoryForSlug(slug);
   if (!byField) return null;
@@ -194,9 +236,6 @@ export async function getInventoryDisplayForSlug(slug: string): Promise<{ remain
   for (const k of keys) {
     const v = seed[k];
     if (typeof v === "number" && Number.isFinite(v) && v > 0) cap += Math.floor(v);
-  }
-  if (typeof p.inventoryEditionCap === "number" && p.inventoryEditionCap > 0) {
-    cap = Math.floor(p.inventoryEditionCap);
   }
 
   return { remaining, cap };
@@ -235,6 +274,39 @@ export async function assertEnoughStock(
   quantity: number,
   color?: string | null
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  // Respect manual soldOut override
+  if (isProductManualSoldOut(slug)) {
+    return { ok: false, message: "Sold out." };
+  }
+  // Enforce edition cap first (size-agnostic), if defined
+  const cap = getProductEditionCap(slug);
+  if (cap !== null && redis) {
+    const raw = await redis.hget<string>(invKey(slug), EDITION_SOLD_FIELD);
+    const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+    const remaining = Math.max(0, cap - sold);
+    if (remaining < quantity) {
+      return { ok: false, message: remaining > 0 ? `Only ${remaining} left.` : "Sold out." };
+    }
+  }
+  // Enforce per-color caps when defined
+  if (redis) {
+    const colorCap = getVariantCap(slug, color ?? undefined);
+    // If any variant has a cap but color missing, ask user to pick a color
+    const p = products.find((x) => x.slug === slug);
+    const anyVariantHasCap = (p?.variants || []).some((v) => typeof v.inventoryCap === "number" && v.inventoryCap > 0);
+    if (anyVariantHasCap && (!color || color === "")) {
+      return { ok: false, message: "Select a color to continue." };
+    }
+    if (colorCap !== null) {
+      const rawColor = await redis.hget<string>(invKey(slug), soldFieldForColor(color!));
+      const soldColor = rawColor ? Math.max(0, Math.floor(Number(rawColor))) : 0;
+      const remainingColor = Math.max(0, colorCap - soldColor);
+      if (remainingColor < quantity) {
+        return { ok: false, message: remainingColor > 0 ? `Only ${remainingColor} left in that color.` : "Selected color is sold out." };
+      }
+    }
+  }
+
   const seed = getProductInventorySeed(slug);
   if (!seed || !redis) return { ok: true };
 
@@ -273,8 +345,21 @@ export async function applyInventoryFromCheckoutSession(session: {
     const field = resolveInventoryField(slug, size, color || undefined);
     if (field) {
       await redis.hincrby(invKey(slug), field, -qty);
+      await redis.hincrby(invKey(slug), EDITION_SOLD_FIELD, qty);
+      if (color) {
+        await redis.hincrby(invKey(slug), soldFieldForColor(color), qty);
+      }
       return;
     }
+  }
+
+  // Size-agnostic single-item checkout: increment edition-wide sold
+  if (slug && !md.cart) {
+    await redis.hincrby(invKey(slug), EDITION_SOLD_FIELD, qty);
+    if (color) {
+      await redis.hincrby(invKey(slug), soldFieldForColor(color), qty);
+    }
+    return;
   }
 
   const cartRaw = md.cart;
@@ -294,9 +379,65 @@ export async function applyInventoryFromCheckoutSession(session: {
     const lineSize = typeof line.s === "string" ? line.s : "";
     const lineColor = typeof line.c === "string" ? line.c : "";
     const lineQty = typeof line.q === "number" && line.q > 0 ? line.q : 1;
-    if (!lineSlug || !lineSize) continue;
-    const field = resolveInventoryField(lineSlug, lineSize, lineColor || undefined);
-    if (!field) continue;
-    await redis.hincrby(invKey(lineSlug), field, -lineQty);
+    if (!lineSlug) continue;
+    if (lineSize) {
+      const field = resolveInventoryField(lineSlug, lineSize, lineColor || undefined);
+      if (field) {
+        await redis.hincrby(invKey(lineSlug), field, -lineQty);
+      }
+    }
+    // Always increment edition-wide sold counter regardless of size tracking
+    await redis.hincrby(invKey(lineSlug), EDITION_SOLD_FIELD, lineQty);
+    if (lineColor) {
+      await redis.hincrby(invKey(lineSlug), soldFieldForColor(lineColor), lineQty);
+    }
   }
+}
+
+/** True when edition cap exists and all units are sold. */
+export async function isEditionSoldOut(slug: string): Promise<boolean> {
+  if (!redis) return false;
+  const p = products.find((x) => x.slug === slug);
+  if (!p) return false;
+  // If per-color caps exist, sold-out when all capped variants are sold out
+  const cappedVariants = (p.variants || []).filter((v) => typeof v.inventoryCap === "number" && v.inventoryCap > 0);
+  if (cappedVariants.length > 0) {
+    for (const v of cappedVariants) {
+      const cap = Math.floor(v.inventoryCap as number);
+      const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(v.color));
+      const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+      if (sold < cap) return false;
+    }
+    return true;
+  }
+  // Fallback to edition-wide cap if present
+  const capTotal = getProductEditionCap(slug);
+  if (capTotal === null) return false;
+  const rawTotal = await redis.hget<string>(invKey(slug), EDITION_SOLD_FIELD);
+  const soldTotal = rawTotal ? Math.max(0, Math.floor(Number(rawTotal))) : 0;
+  return soldTotal >= capTotal;
+}
+
+/** True when a specific color variant has an inventoryCap and sold >= cap. */
+export async function isColorwaySoldOut(slug: string, color: string): Promise<boolean> {
+  if (!redis) return false;
+  const cap = getVariantCap(slug, color);
+  if (cap === null) return false;
+  const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(color));
+  const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+  return sold >= cap;
+}
+
+/** Display helper for one color variant when per-color cap is present. */
+export async function getColorwayDisplayByCap(
+  slug: string,
+  color: string
+): Promise<{ remaining: number; cap: number } | null> {
+  if (!redis) return null;
+  const cap = getVariantCap(slug, color);
+  if (cap === null) return null;
+  const raw = await redis.hget<string>(invKey(slug), soldFieldForColor(color));
+  const sold = raw ? Math.max(0, Math.floor(Number(raw))) : 0;
+  const remaining = Math.max(0, cap - sold);
+  return { remaining, cap };
 }

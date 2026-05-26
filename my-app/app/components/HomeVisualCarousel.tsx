@@ -52,14 +52,6 @@ export default function HomeVisualCarousel() {
             >
               SHOP
             </Link>
-            <div className="flex items-center gap-1">
-              {IMAGES.map((img, i) => (
-                <span
-                  key={img.src}
-                  className={`h-[3px] w-5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
-                />
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -96,14 +88,6 @@ export default function HomeVisualCarousel() {
             >
               SHOP
             </Link>
-            <div className="flex items-center gap-1">
-              {IMAGES.map((img, i) => (
-                <span
-                  key={img.src}
-                  className={`h-[3px] w-5 rounded-full ${i === index ? "bg-white" : "bg-white/45"}`}
-                />
-              ))}
-            </div>
           </div>
         </div>
       </section>
