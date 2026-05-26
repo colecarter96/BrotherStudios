@@ -399,20 +399,9 @@ export default function NepoBabyLanding({ product, inventoryBySize, inventoryDis
               <span className="ml-2 text-lg transition-transform group-open:rotate-45">+</span>
             </summary>
             <div className="mt-3 text-sm md:text-base">
-              {product.shippingSpeed === "7-14" ? (
-                <p>
-                  Domestic (USA): 1–3 business day handling plus a 7–14 day production window for this item.
-                  USPS/UPS with tracking. Free shipping may be offered on select items or promotions.
-                </p>
-              ) : (
-                <p>
-                  Domestic (USA): 1–3 business day handling. USPS/UPS with tracking. Typical delivery window 3–5
-                  business days after shipment. Free shipping may be offered on select items or promotions.
-                </p>
-              )}
-              <p className="mt-2">
-                International: limited pilot. Some items may ship free; others can incur higher costs depending on
-                weight and region. Duties/taxes are typically paid by the recipient unless stated otherwise.
+              <p>
+                Free global shipping. We’re a small brand — please allow 7–14 days for shipping.
+                All orders include tracking.
               </p>
               <p className="mt-2">
                 Full details:{" "}

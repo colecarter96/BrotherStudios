@@ -8,8 +8,9 @@ export async function GET(req: NextRequest) {
   }
   const counts = await getInventoryForSlug(slug);
   const display = await getInventoryDisplayForSlug(slug);
+  // counts reflect size-tracked inventory; display can still exist for edition-cap-only products
   if (!counts) {
-    return NextResponse.json({ slug, tracked: false, counts: null, display: null }, { status: 200 });
+    return NextResponse.json({ slug, tracked: false, counts: null, display }, { status: 200 });
   }
   return NextResponse.json({ slug, tracked: true, counts, display }, { status: 200 });
 }

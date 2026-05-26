@@ -22,9 +22,11 @@ type Props = {
   /** Full Redis-backed map (size keys, or `color|SIZE` for per-colorway). */
   inventoryBySize?: Record<string, number> | null;
   inventoryDisplay?: { remaining: number; cap: number } | null;
+  manualSoldOut?: boolean;
+  colorDisplayByCap?: Record<string, { remaining: number; cap: number } | null> | undefined;
 };
 
-export default function VariantView({ product, soldOut, inventoryBySize, inventoryDisplay }: Props) {
+export default function VariantView({ product, soldOut, inventoryBySize, inventoryDisplay, manualSoldOut, colorDisplayByCap }: Props) {
   const variants: ColorVariant[] | undefined = product.variants;
   const hasVariants = Array.isArray(variants) && variants.length > 0;
   const [selectedColor, setSelectedColor] = useState<string>(hasVariants ? variants![0].color : "");
@@ -84,6 +86,9 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
   );
 
   const inventoryDisplayForSwatch = useMemo(() => {
+    if (colorDisplayByCap && selectedColor && colorDisplayByCap[selectedColor]) {
+      return colorDisplayByCap[selectedColor]!;
+    }
     const seed = product.initialInventory;
     const live = inventoryBySize;
     if (!seed || Object.keys(seed).length === 0) return inventoryDisplay ?? null;
@@ -101,6 +106,7 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
     selectedColor,
     inventoryDisplay,
     currentVariant?.inventoryCap,
+    colorDisplayByCap,
   ]);
 
   return (
@@ -164,7 +170,7 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
           <h1 className="order-1 text-lg md:text-xl font-semibold tracking-tighter min-w-0 shrink md:shrink-0">
             {product.title}
           </h1>
-          {inventoryDisplayForSwatch && (
+          {inventoryDisplayForSwatch && !manualSoldOut && (
             <p
               className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
               aria-live="polite"
@@ -229,20 +235,9 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
               <span className="ml-2 text-lg transition-transform group-open:rotate-45">+</span>
             </summary>
             <div className="mt-3 text-sm md:text-base">
-              {product.shippingSpeed === "7-14" ? (
-                <p>
-                  Domestic (USA): 1–3 business day handling plus a 7–14 day production window for this item.
-                  USPS/UPS with tracking. Free shipping may be offered on select items or promotions.
-                </p>
-              ) : (
-                <p>
-                  Domestic (USA): 1–3 business day handling. USPS/UPS with tracking. Typical delivery window 3–5
-                  business days after shipment. Free shipping may be offered on select items or promotions.
-                </p>
-              )}
-              <p className="mt-2">
-                International: limited pilot. Some items may ship free; others can incur higher costs depending
-                on weight and region. Duties/taxes are typically paid by the recipient unless stated otherwise.
+              <p>
+                Free global shipping. We’re a small brand — please allow 7–14 days for shipping.
+                All orders include tracking.
               </p>
               <p className="mt-2">
                 Full details:{" "}

@@ -64,7 +64,9 @@ describe('POST /api/checkout', () => {
     expect(args.metadata.slug).toBe('nepo-baby-tee');
     expect(args.payment_intent_data.metadata.slug).toBe('nepo-baby-tee');
     expect(args.shipping_options).toBeUndefined();
-    expect(args.shipping_address_collection).toEqual({ allowed_countries: ['US'] });
+    expect(Array.isArray(args.shipping_address_collection.allowed_countries)).toBe(true);
+    expect(args.shipping_address_collection.allowed_countries.length).toBeGreaterThan(1);
+    expect(args.shipping_address_collection.allowed_countries).toContain('US');
   });
 
   it('uses return_to for cancel_url when safe', async () => {

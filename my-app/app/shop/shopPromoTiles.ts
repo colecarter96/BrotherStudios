@@ -10,7 +10,8 @@ export type ShopPromoTile = {
 };
 
 export const SHOP_PROMO_TILES: ShopPromoTile[] = [
-  { src: "/SS26/visuals/climbingTeeBackBlack.jpeg", alt: "Two Brothers", href: "/shop/expedition-tee" },
+  { src: "/drop1/visuals/blackFlagBack.jpg", alt: "Two Brothers", href: "/shop/flag-tee"  },
+  { src: "/drop1/visuals/whiteHorseBack.jpg", alt: "Two Brothers", href: "/shop/stable-slub-tee" },
   { src: "/SS26/visuals/climbingTeeBackWhite.jpeg", alt: "Two Brothers", href: "/shop/expedition-tee" },
-  { src: "/sexPVisual1.jpg", alt: "Two Brothers", href: "/shop/expedition-tee/sex-panthers-tee"  },
+  
 ];

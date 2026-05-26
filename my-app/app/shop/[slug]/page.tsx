@@ -9,7 +9,7 @@ import ProductDetails from "@/app/components/ProductDetails";
 import ProductSizeChart from "@/app/components/ProductSizeChart";
 import VariantView from "./VariantView";
 import AutoAspectImage from "../AutoAspectImage";
-import { getInventoryForSlug, getInventoryDisplayForSlug } from "@/lib/inventory";
+import { getInventoryForSlug, getInventoryDisplayForSlug, isEditionSoldOut, getColorwayDisplayByCap } from "@/lib/inventory";
 
 export const dynamic = "force-dynamic";
 
@@ -53,9 +53,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (product.listingHref) {
     redirect(product.listingHref);
   }
-  const soldOut = Boolean(product.soldOut) || (await isSoldOut(product.slug, product.oneOfOne));
+  const manualSoldOut = Boolean(product.soldOut);
+  const soldOut =
+    manualSoldOut ||
+    (await isSoldOut(product.slug, product.oneOfOne)) ||
+    (await isEditionSoldOut(product.slug));
   const inventoryBySize = await getInventoryForSlug(product.slug);
   const inventoryDisplay = await getInventoryDisplayForSlug(product.slug);
+  const colorDisplayByCap =
+    Array.isArray(product.variants) && product.variants.length > 0
+      ? Object.fromEntries(
+          await Promise.all(
+            product.variants.map(async (v) => [v.color, await getColorwayDisplayByCap(product.slug, v.color)])
+          )
+        )
+      : undefined;
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   if (hasVariants) {
     return (
@@ -66,6 +78,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             soldOut={soldOut}
             inventoryBySize={inventoryBySize}
             inventoryDisplay={inventoryDisplay}
+            manualSoldOut={manualSoldOut}
+            colorDisplayByCap={colorDisplayByCap}
           />
         </section>
         <Footer />
@@ -145,7 +159,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <h1 className="order-1 text-xl md:text-xl font-semibold tracking-tighter mb-0 min-w-0 shrink md:shrink-0">
               {product.title}
             </h1>
-            {inventoryDisplay && (
+            {inventoryDisplay && !manualSoldOut && (
               <p
                 className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
                 aria-live="polite"
@@ -204,20 +218,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <span className="ml-2 text-xl transition-transform group-open:rotate-45">+</span>
               </summary>
               <div className="mt-3 text-sm md:text-base">
-                {product.shippingSpeed === "7-14" ? (
-                  <p>
-                    Domestic (USA): 1–3 business day handling plus a 7–14 day production window for this item.
-                    USPS/UPS with tracking. Free shipping may be offered on select items or promotions.
-                  </p>
-                ) : (
-                  <p>
-                    Domestic (USA): 1–3 business day handling. USPS/UPS with tracking. Typical delivery window 3–5
-                    business days after shipment. Free shipping may be offered on select items or promotions.
-                  </p>
-                )}
-                <p className="mt-2">
-                  International: limited pilot. Some items may ship free; others can incur higher costs depending
-                  on weight and region. Duties/taxes are typically paid by the recipient unless stated otherwise.
+                <p>
+                  Free global shipping. We’re a small brand — please allow 7–14 days for shipping.
+                  All orders include tracking.
                 </p>
                 <p className="mt-2">
                   Full details:{" "}
