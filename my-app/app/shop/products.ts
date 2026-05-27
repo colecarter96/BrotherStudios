@@ -348,7 +348,7 @@ export const products: Product[] = [
         // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
         stripePriceId: "price_1TbDa6P6lKVtJIIMoGNHAOAQ",
         inventoryCap: 30,
-        manualSold: 1,
+        manualSold: 3,
       },
       {
         color: "black",
@@ -408,7 +408,7 @@ export const products: Product[] = [
         // images: ["/SS26/climbingTeeWhiteFront.webp", "/SS26/climbingTeeWhiteBack.webp", "/SS26/visuals/climbingTeeFrontWhite.jpeg", "/SS26/visuals/climbingTeeBackWhite.jpeg"],
         stripePriceId: "price_1TbDXIP6lKVtJIIMs8oTNzGa",
         inventoryCap: 30,
-        manualSold: 3,
+        manualSold: 2,
       },
       {
         color: "black",
