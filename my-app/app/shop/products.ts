@@ -362,6 +362,7 @@ export const products: Product[] = [
         // images: ["/SS26/climbingTeeBlackFront.webp", "/SS26/climbingTeeBlackBack.webp", "/SS26/visuals/climbingTeeFrontBlack.png", "/SS26/visuals/climbingTeeBackBlack.jpeg"],
         stripePriceId: "price_1TbDavP6lKVtJIIMUwV6FzpC",
         inventoryCap: 30,
+        manualSold: 1
       },
       
     ],
