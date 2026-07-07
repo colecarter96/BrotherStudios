@@ -170,6 +170,7 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
           <h1 className="order-1 text-lg md:text-xl font-semibold tracking-tighter min-w-0 shrink md:shrink-0">
             {product.title}
           </h1>
+          {/*
           {inventoryDisplayForSwatch && !manualSoldOut && (
             <p
               className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
@@ -178,6 +179,7 @@ export default function VariantView({ product, soldOut, inventoryBySize, invento
               {inventoryDisplayForSwatch.remaining}/{inventoryDisplayForSwatch.cap} left
             </p>
           )}
+          */}
           <p className="order-3 md:order-2 w-full md:w-auto text-lg md:text-xl font-semibold tracking-tighter md:mt-0">
             ${product.price.toFixed(2)}
           </p>

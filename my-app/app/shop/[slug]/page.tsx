@@ -159,6 +159,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <h1 className="order-1 text-xl md:text-xl font-semibold tracking-tighter mb-0 min-w-0 shrink md:shrink-0">
               {product.title}
             </h1>
+            {/*
             {inventoryDisplay && !manualSoldOut && (
               <p
                 className="order-2 md:order-3 mt-0.5 text-sm md:mt-0.5 md:text-base font-semibold tracking-tight text-black/70 tabular-nums whitespace-nowrap shrink-0 md:whitespace-normal"
@@ -167,6 +168,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 {inventoryDisplay.remaining}/{inventoryDisplay.cap} left
               </p>
             )}
+            */}
             <p className="order-3 md:order-2 w-full md:w-auto text-lg md:text-lg font-semibold tracking-tighter mt-0 md:mt-0">
               ${product.price.toFixed(2)}
             </p>
