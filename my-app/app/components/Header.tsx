@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import BagButton from "./BagButton";
 import BagDrawer from "./BagDrawer";
 import {
@@ -78,9 +79,14 @@ function ShopDropdownDesktop() {
 }
 
 export default function Header() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
   const dropTeaserOn = isDropTeaserMode();
+
+  if (pathname?.startsWith("/mediakit")) {
+    return null;
+  }
 
   return (
     <>
