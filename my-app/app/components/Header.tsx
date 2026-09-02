@@ -80,13 +80,13 @@ function ShopDropdownDesktop() {
 
 export default function Header() {
   const pathname = usePathname();
-  // Hide header on brand kit page
-  if (pathname && pathname.startsWith("/brandkit")) {
-    return null;
-  }
   const [menuOpen, setMenuOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
   const dropTeaserOn = isDropTeaserMode();
+
+  if (pathname?.startsWith("/mediakit")) {
+    return null;
+  }
 
   return (
     <>

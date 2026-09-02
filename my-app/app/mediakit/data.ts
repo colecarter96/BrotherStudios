@@ -7,7 +7,7 @@ export type PlatformAccount = {
   likes?: number | null;
 };
 
-export type BrandKitData = {
+export type MediaKitData = {
   brandName: string;
   tagline?: string;
   /** Optional hero background image. Provide later; gradient fallback used if absent. */
@@ -63,9 +63,9 @@ export type BrandKitData = {
 
 // Edit follower counts over time to keep stats fresh.
 // You can also add/remove items or update links here without touching page code.
-const BRANDKIT_DATA: BrandKitData = {
+const MEDIAKIT_DATA: MediaKitData = {
   brandName: "Bryce & Cole Carter",
-  tagline: "Creators, storytellers, and brand partners.",
+  tagline: "Creators, storytellers, and lifelong learners.",
   heroImage: "/BryceColePhoto.webp",
   location: "San Diego, California",
   availability: "Available for travel worldwide",
@@ -98,31 +98,31 @@ const BRANDKIT_DATA: BrandKitData = {
     // { title: "Our latest", image: "/drop1/visuals/blackFlagFront.jpg", href: "https://www.youtube.com/@bryceandcolecarter" },
   ],
   pillars: [
-    { title: "Short-form Culture", blurb: "TikTok & Reels across travel, fashion, humor; fast, high‑velocity moments." },
-    { title: "Adventure Stories", blurb: "Surf trips, road adventures, sport, outdoors; compelling short narratives." },
-    { title: "Long‑form YouTube", blurb: "Weekly vlogs and destination stories with memorable arcs." },
-    { title: "Brand Assets", blurb: "Versatile imagery, vertically‑native edits, and usage across your channels." },
+    { title: "Short Form Culture", blurb: "Short form videos around travel, fashion, humor, and dancing. Fast, high velocity moments." },
+    { title: "Adventure Stories", blurb: "Surf trips, road adventures, sport, outdoors. Compelling short narratives." },
+    { title: "Long Form YouTube", blurb: "Weekly vlogs and destination stories with memorable arcs and documentation." },
+    { title: "Brand Assets", blurb: "Versatile imagery, vertically native edits, and usage across your channels." },
   ],
   partnershipFormats: [
     {
       title: "Discovery",
       description:
-        "A first-look format introducing your product or brand through real, in-the-moment content — travel, training, or everyday use",
+        "A first look format introducing your product or brand through real, in the moment content. Travel, training, or everyday use",
     },
     {
       title: "Challenge",
       description:
-        "A test-your-limits concept that puts your gear through real conditions on camera, built for high engagement and shareability",
+        "A test the limits concept that puts your gear through real conditions on camera, built for high engagement and shareability",
     },
     {
       title: "Story",
       description:
-        "A narrative-driven piece centered on growth, adventure, or transformation — built to resonate emotionally, not just sell",
+        "A narrative driven piece centered on growth, adventure, or transformation. Built to resonate emotionally, not just sell",
     },
     {
       title: "YouTube Anchors",
       description:
-        "Long-form, evergreen video content designed to drive sustained brand visibility long after the initial release",
+        "Long form, evergreen video content designed to drive sustained brand visibility long after the initial release",
     },
     {
       title: "UGC Packages",
@@ -171,5 +171,5 @@ const BRANDKIT_DATA: BrandKitData = {
   },
 };
 
-export default BRANDKIT_DATA;
+export default MEDIAKIT_DATA;
 

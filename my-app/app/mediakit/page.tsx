@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import DATA, { type PlatformAccount } from "./data";
-import styles from "./brandkit.module.css";
+import CopyEmailButton from "./CopyEmailButton";
+import styles from "./mediakit.module.css";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 function formatCompact(n: number | null | undefined): string {
   if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return "—";
@@ -23,11 +24,16 @@ function sumFollowers(accounts: PlatformAccount[]): number {
   );
 }
 
+function LinkArrow() {
+  return <span aria-hidden="true"> ↗</span>;
+}
+
 function AccountRow({ a }: { a: PlatformAccount }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-black/8 last:border-0">
       <Link href={a.url} target="_blank" className="text-sm md:text-base hover:opacity-70 transition-opacity">
         @{a.handle}
+        <LinkArrow />
       </Link>
       <div className="text-right">
         <div className="text-sm md:text-base font-medium tabular-nums">{formatCompact(a.followers)}</div>
@@ -65,7 +71,7 @@ function AudienceStatRow({ label, pct }: { label: string; pct: number }) {
   );
 }
 
-export default async function BrandKitPage() {
+export default async function MediaKitPage() {
   const data = DATA;
   const tiktok = sumFollowers(data.accounts.tiktok);
   const ig = sumFollowers(data.accounts.instagram);
@@ -99,13 +105,15 @@ export default async function BrandKitPage() {
             {data.tagline ? (
               <p className="mt-4 text-base md:text-lg text-black/70 max-w-xl leading-relaxed">{data.tagline}</p>
             ) : null}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-col items-start">
               <Link
                 href={`mailto:${data.contacts.email}?subject=Partnership%20Inquiry%20-%20${encodeURIComponent(data.brandName)}`}
                 className="inline-flex items-center justify-center px-5 py-3 bg-black text-white font-semibold text-sm md:text-base"
               >
                 Partner with us
+                <LinkArrow />
               </Link>
+              <CopyEmailButton email={data.contacts.email} />
             </div>
             <div className="mt-5">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/50 mb-2">View content</p>
@@ -119,6 +127,7 @@ export default async function BrandKitPage() {
                     className="underline underline-offset-4 hover:opacity-70 transition-opacity"
                   >
                     YouTube @{a.handle}
+                    <LinkArrow />
                   </a>
                 ))}
                 {data.accounts.tiktok.map((a) => (
@@ -130,6 +139,7 @@ export default async function BrandKitPage() {
                     className="underline underline-offset-4 hover:opacity-70 transition-opacity"
                   >
                     TikTok @{a.handle}
+                    <LinkArrow />
                   </a>
                 ))}
               </div>
@@ -171,15 +181,7 @@ export default async function BrandKitPage() {
           <p className="text-sm md:text-base text-black/80 leading-relaxed whitespace-pre-line max-w-3xl">
             {data.about}
           </p>
-          {Array.isArray(data.tags) && data.tags.length > 0 ? (
-            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
-              {data.tags.map((t) => (
-                <span key={t} className="text-sm md:text-base font-semibold">
-                  {t}
-                </span>
-              ))}
-            </div>
-          ) : null}
+          
         </section>
 
         <div className="my-12 md:my-16">
@@ -420,7 +422,10 @@ export default async function BrandKitPage() {
                       </div>
                     ) : (
                       <div className="p-4">
-                        <div className="text-sm md:text-base font-semibold">{f.title || "Featured"}</div>
+                        <div className="text-sm md:text-base font-semibold">
+                          {f.title || "Featured"}
+                          <LinkArrow />
+                        </div>
                       </div>
                     )}
                   </Link>
@@ -440,12 +445,16 @@ export default async function BrandKitPage() {
             <p className="text-xl md:text-2xl font-semibold tracking-tight">Let&apos;s build something together.</p>
             <p className="mt-2 text-sm md:text-base text-black/60">{data.contacts.email}</p>
           </div>
-          <Link
-            href={`mailto:${data.contacts.email}?subject=Partnership%20Inquiry%20-%20${encodeURIComponent(data.brandName)}`}
-            className="inline-flex items-center justify-center px-5 py-3 bg-black text-white font-semibold text-sm md:text-base shrink-0"
-          >
-            Start a partnership
-          </Link>
+          <div className="shrink-0 flex flex-col items-start">
+            <Link
+              href={`mailto:${data.contacts.email}?subject=Partnership%20Inquiry%20-%20${encodeURIComponent(data.brandName)}`}
+              className="inline-flex items-center justify-center px-5 py-3 bg-black text-white font-semibold text-sm md:text-base shrink-0"
+            >
+              Start a partnership
+              <LinkArrow />
+            </Link>
+            <CopyEmailButton email={data.contacts.email} />
+          </div>
         </section>
       </div>
     </main>
